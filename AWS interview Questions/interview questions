@@ -1,0 +1,1054 @@
+1. What is the difference between an AWS Region and an Availability Zone (AZ), and how do they work together?
+
+What it means:
+
+In AWS, each Region is divided into multiple Availability Zones (AZs).
+These AZs are like separate data centers within the same region.
+
+Key Point 1: AZs are connected with fast networks
+
+AWS connects all AZs inside a region using low-latency, high-throughput networks.
+
+Low-latency → Data travels very fast between AZs.
+
+High-throughput → Large amounts of data can be transferred quickly.
+
+This means your applications can communicate between AZs almost instantly.
+
+Key Point 2: Deploying across multiple AZs increases reliability
+
+If you deploy your application/resources in only one AZ, and that AZ goes down (power issue, network failure, etc.), your application becomes unavailable.
+
+But if you deploy across multiple AZs, then:
+
+If AZ-1 fails → AZ-2 will continue running.
+
+Your application stays available.
+
+Users don’t face downtime.
+
+This is called high availability and fault tolerance.
+
+Example:
+
+Suppose you deploy:
+
+EC2 instance in AZ-A
+
+Another EC2 instance in AZ-B
+
+Load balancer distributes traffic to both
+
+If AZ-A fails:
+
+Load balancer automatically sends traffic to the instance in AZ-B
+
+Your application continues running without interruption
+
+In simple words:
+
+AZs are separate, but connected very fast.
+Placing your resources in multiple AZs protects your application from failures and ensures it stays online even if one AZ goes down.
+
+---
+
+2. AWS Shared Responsibility Model – Explained Simply
+
+The AWS Shared Responsibility Model defines what AWS is responsible for and what the customer is responsible for when using cloud services.
+
+1️⃣ AWS Responsibility – “Security of the Cloud”
+
+AWS protects the entire cloud environment, including:
+
+Physical data centers
+
+Hardware (servers, storage, networking)
+
+Global infrastructure
+
+Virtualization layers
+
+AWS managed services security
+
+This means AWS ensures the cloud platform itself is secure.
+
+2️⃣ Customer Responsibility – “Security in the Cloud”
+
+Customers must secure everything they build inside the cloud, including:
+
+Data stored in AWS
+
+User access and identity (IAM)
+
+Application-level security
+
+Operating system updates (for EC2)
+
+Network configuration (security groups, NACLs)
+
+Encryption settings
+
+This means customers secure what they run on AWS.
+
+How Responsibilities Change Based on Service Type
+📌 IaaS (Infrastructure as a Service)
+
+Example: EC2, EBS, VPC
+
+Customer manages:
+
+OS patches and updates
+
+Security configurations
+
+Applications
+
+Data
+
+Network rules
+
+AWS manages:
+
+Physical hardware
+
+Network
+
+Storage
+
+Virtualization layer
+
+➡️ More responsibility for the customer.
+
+📌 PaaS (Platform as a Service)
+
+Example: RDS, Elastic Beanstalk
+
+AWS manages:
+
+Platform
+
+OS
+
+Database engine
+
+Infrastructure
+
+Customer manages:
+
+Data
+
+Access control
+
+Application logic
+
+➡️ Responsibility is shared more equally.
+
+📌 SaaS / Serverless
+
+Example: Lambda, DynamoDB, S3
+
+AWS manages:
+
+Infrastructure
+
+Runtime
+
+OS
+
+Scaling
+
+Customer manages:
+
+Code
+
+Data
+
+IAM permissions
+
+➡️ Minimum responsibility for the customer.
+
+Simple Summary
+
+AWS secures the cloud.
+
+Customers secure their applications and data inside the cloud.
+
+---
+
+3. What is an EC2 instance?
+
+An EC2 instance is a virtual server hosted in AWS that provides scalable compute capacity.
+You can choose your own:
+
+Operating system
+Storage
+CPU and memory configuration
+Networking
+Software stack
+
+It behaves like a normal server but runs in the cloud and can scale up or down anytime.
+
+Factors to Consider When Choosing an EC2 Instance Type
+
+When selecting an EC2 instance type, you choose based on workload requirements. The main factors include:
+
+1️⃣ CPU / Compute Requirements
+
+If your application needs high processing power (e.g., batch processing, video encoding), choose:
+
+Compute-optimized instances (C family)
+
+If workloads are light or variable, choose:
+
+Burstable instances (T family) → These earn CPU credits and handle occasional spikes.
+
+2️⃣ Memory Requirements
+
+If your application requires large amounts of RAM (e.g., in-memory caching, big databases), choose:
+
+Memory-optimized instances (R, X family)
+
+3️⃣ Storage Type and Performance
+
+If you need fast disk I/O (e.g., databases, analytics):
+
+Choose storage-optimized instances (I, D family)
+
+Or select EBS-optimized options for faster disk performance.
+
+4️⃣ Network Performance
+
+For applications that need high throughput or low latency (e.g., load balancers, data streaming):
+
+Choose instances with enhanced networking or higher network bandwidth.
+
+5️⃣ Workload Pattern (Steady vs. Variable)
+
+Burstable (T-series) → Good for low/medium workloads with occasional spikes.
+
+Fixed/high-performance (C, M, R families) → Best for steady, predictable workloads.
+
+6️⃣ Pricing Model
+
+Pick based on cost and flexibility:
+
+On-Demand:
+
+No commitment
+Pay-as-you-go
+Best for short-term or unpredictable workloads
+
+Reserved Instances / Savings Plans:
+
+Commit for 1 or 3 years
+Up to 72% cost savings
+Best for long-term, steady workloads
+
+Spot Instances:
+
+Lowest cost
+Can be interrupted anytime
+Best for batch jobs or fault-tolerant workloads
+
+---
+
+4. ✅ What is Amazon S3?
+
+Amazon S3 (Simple Storage Service) is a fully managed object storage service used to store any amount of data—from a few bytes to petabytes.
+You can use S3 for:
+
+Backups
+
+Archives
+
+Data lakes
+
+Big data analytics
+
+Log storage
+
+Hosting static websites
+
+Storing images, videos, files, etc.
+
+S3 stores data as objects inside buckets (similar to folders).
+
+✅ Durability vs Availability (Very Important in Interviews)
+
+S3 provides two strong guarantees:
+
+1️⃣ Durability – “Your data will not be lost.”
+
+S3 offers 11 nines durability, written as:
+
+99.999999999% durability (11 nines)
+
+This means:
+
+AWS almost guarantees your data will never be lost.
+
+Even if a disk fails or a server crashes, your data is safe.
+
+How S3 achieves durability:
+
+Automatically replicates your object across multiple AZs (Availability Zones)
+
+Constantly monitors and repairs data
+
+Performs checksum validations
+
+Even if one AZ completely fails, your data remains safe in another.
+
+2️⃣ Availability – “You can access your data when you need it.”
+
+S3 Standard provides ~99.99% availability.
+
+This means:
+
+You may face downtime for only a few minutes per year.
+
+This ensures your data is accessible almost all the time.
+
+Different S3 storage classes offer different availability:
+
+S3 Standard: 99.99%
+
+S3 Standard-IA: 99.9%
+
+S3 One Zone-IA: 99.5%
+
+Glacier: Lower availability (retrieval takes minutes to hours)
+
+🧠 Simple Example to Understand Durability vs Availability
+
+Imagine storing your important files in three different lockers across three buildings:
+
+✔ Durability
+Even if one building catches fire, your files still exist in the other buildings → data is safe.
+
+✔ Availability
+If one building is temporarily closed, you can still access your files from other buildings → data is accessible.
+
+---
+
+5. ✅ What is a VPC (Virtual Private Cloud)?
+
+A VPC is your own private network inside AWS.
+It behaves like a traditional on-premises network but runs in the AWS cloud.
+
+With a VPC, you control:
+
+Your IP address ranges
+Subnets
+Routing
+Internet access
+Security rules
+
+It gives complete control over how your AWS resources communicate inside and outside AWS.
+
+✅ Why do we use a VPC? (Purpose)
+
+A VPC lets you:
+
+Isolate your workloads
+Secure your applications
+Control incoming/outgoing traffic
+Create public and private environments
+Connect to on-premises networks
+
+In simple words → VPC = Your own secure network inside AWS.
+
+✅ Core Components of a VPC (Explained Simply)
+
+Below are the most important parts:
+
+1️⃣ Subnets – Divide your VPC
+
+A subnet is a small section inside your VPC.
+
+There are two types:
+
+Public subnet:
+
+Has internet access
+
+Used for EC2, ALB, Bastion, etc.
+
+Private subnet:
+
+No direct internet access
+
+Used for databases, backend servers
+
+2️⃣ Route Tables – Define where traffic goes
+
+A route table tells the network where to send traffic.
+
+Examples:
+
+Route internet traffic to Internet Gateway
+
+Route private traffic to NAT Gateway
+
+Route internal traffic inside VPC
+
+Think of it as Google Maps for your VPC: it tells packets which path to take.
+
+3️⃣ Internet Gateway (IGW) – Enables public internet access
+
+Attached to the VPC to give public subnets:
+
+Inbound access from internet
+
+Outbound access to internet
+
+Without IGW → no internet.
+
+4️⃣ NAT Gateway – Internet for private subnets
+
+Private subnets cannot directly access the internet.
+
+So NAT Gateway allows:
+
+Outbound internet access (for patching, updates)
+
+But blocks inbound traffic
+
+Used mainly for backend servers and databases.
+
+5️⃣ Security Groups (SG) – Instance-level firewall
+
+Stateful
+(If you allow inbound, outbound is automatically allowed)
+
+Applied to EC2, RDS, etc.
+
+Controls what traffic can reach an instance.
+
+Example:
+
+Allow port 80 from anywhere
+Allow SSH only from your IP
+
+6️⃣ Network ACLs (NACLs) – Subnet-level firewall
+
+Stateless
+(Inbound and outbound rules must be added separately)
+
+Acts as a second layer of security
+
+Controls traffic for entire subnets
+
+Example:
+
+Allow all internal traffic
+
+Deny dangerous ports
+
+7️⃣ Additional Components (optional but common)
+
+VPC Peering: Connect two VPCs
+VPN / Direct Connect: Connect AWS VPC to on-prem network
+Elastic IP (EIP): Static public IP
+
+⭐ In One Line:
+
+A VPC is a private, secure, customizable network inside AWS containing subnets, route tables, gateways, and firewalls to control how your resources communicate.
+
+---
+
+6. What is IAM, and why is it critical for security? Differentiate between an IAM User, Group, and Role.
+
+IAM, or Identity and Access Management, is AWS’s central service for controlling who can access AWS resources and what actions they can perform.
+It plays a critical role in cloud security because it enforces the principle of least privilege—meaning every user or service gets only the permissions they absolutely need and nothing more.
+
+IAM protects your AWS environment from unauthorized access, accidental misuse, and security breaches by managing authentication and authorization across the entire account.
+
+IAM defines three main identity types:
+
+1. IAM User
+
+An IAM User represents a real person or an application that requires long-term access.
+Users have:
+
+Long-term credentials, such as passwords or access keys
+
+Specific permissions assigned directly or through groups
+
+Example: A developer logging into the AWS console or a CI/CD system using access keys.
+
+2. IAM Group
+
+An IAM Group is a collection of users.
+Instead of assigning permissions to each individual user, you assign them to a group.
+
+This helps:
+
+Manage permissions easily
+
+Keep things consistent
+
+Apply policies to multiple users at once
+
+Example: A “Developers” group with read-only EC2 access.
+
+3. IAM Role
+
+An IAM Role is different from a user.
+Roles do not have long-term credentials.
+Instead, they provide temporary security credentials that AWS automatically rotates.
+
+Roles are used by:
+
+AWS services like EC2, Lambda
+
+Users who need temporary elevated access
+
+Cross-account access
+
+Example: An EC2 instance assuming a role to read/write data to an S3 bucket without storing access keys inside the instance.
+
+---
+
+7. What is the difference between stopping and terminating an EC2 instance?
+
+✅ Stopping vs. Terminating an EC2 Instance
+
+An EC2 instance behaves like a virtual computer.
+When you stop it, it’s like turning off your laptop.
+When you terminate it, it’s like throwing your laptop away permanently.
+
+🔹 1. Stopping an EC2 Instance (Temporary Shutdown)
+
+Stopping means the instance is shut down but not deleted.
+
+When you stop an instance:
+
+The machine turns off, just like shutting down a computer
+
+The root EBS volume stays attached
+All data on the EBS volume is preserved
+The instance can be started again anytime
+No EC2 compute charges while stopped
+EBS storage charges still apply (because your disk still exists)
+
+Example:
+
+You stop your EC2 instance overnight to save compute cost →
+Next morning → You start it again and everything is exactly as before.
+
+🔹 2. Terminating an EC2 Instance (Permanent Deletion)
+
+Terminating means the instance is deleted forever.
+
+When you terminate an instance:
+
+The instance is completely removed
+The root EBS volume is deleted by default
+All data is lost unless you changed the setting to keep the volume
+You cannot restart the instance again
+All charges stop after termination (including compute and storage)
+
+Example:
+If you terminate an EC2 test environment → everything (instance + disk) is removed permanently.
+
+---
+
+8. ✅ What is an Amazon Machine Image (AMI)?
+
+An Amazon Machine Image (AMI) is a pre-configured template that contains everything needed to launch an EC2 instance.
+
+Think of an AMI as a blueprint or master image for creating virtual servers.
+
+You can launch multiple EC2 instances from the same AMI, each having the same:
+
+Operating system
+
+Software
+
+Configuration
+
+🧩 Why is an AMI Important?
+
+It allows AWS to:
+
+Quickly launch consistent servers
+
+Clone existing environments
+
+Deploy scalable systems
+
+Roll out updates or new versions easily
+
+For example:
+If you want 10 identical web servers → you launch them from the same AMI.
+
+✅ What Does an AMI Contain? (3 Key Components)
+1️⃣ Root Volume Template
+
+This is the core part of an AMI.
+
+It includes:
+
+Operating System (Linux, Windows, Ubuntu, RHEL, etc.)
+
+Application server (Apache, Nginx, Tomcat, etc.)
+
+Any required software, dependencies, configurations
+
+Basically, everything needed for an EC2 instance to boot and run.
+
+2️⃣ Launch Permissions
+
+These control who can use the AMI.
+
+An AMI can be:
+
+Private → only your AWS account can use it
+
+Shared → specific AWS accounts can use it
+
+Public → anyone on AWS can use it
+
+This is useful when:
+
+Companies share base images
+
+Dev teams share custom AMIs
+
+Public AMIs like Amazon Linux are shared by AWS
+
+3️⃣ Block Device Mapping
+
+This defines:
+
+The root volume (EBS or Instance Store)
+
+Any additional storage volumes to attach at launch
+
+Example:
+
+Root volume: 30GB EBS
+
+Additional volume: 100GB EBS for logs
+
+So, block device mapping tells EC2 what disks to attach and how to configure them.
+
+🧠 Simple Analogy
+
+An AMI is like a mobile phone backup.
+When you restore from a backup:
+
+All apps
+
+Settings
+
+OS version
+
+Data
+are restored exactly the same.
+
+Same with AMI → It restores an EC2 instance in the same state.
+
+⭐ In One Line:
+An AMI is a complete server template—containing OS, software, permissions, and storage mappings—used to launch EC2 instances quickly and consistently.
+
+---
+
+9. ✅ What is the Purpose of Amazon CloudWatch?
+
+Amazon CloudWatch is AWS’s monitoring and observability service.
+Its main purpose is to help you:
+
+Monitor your AWS resources and applications
+Track performance and usage
+Detect issues in real time
+Get alerts when something goes wrong
+Take automated actions to fix or respond to problems
+
+CloudWatch gives you a complete operational view of your system, helping you keep applications healthy and optimized.
+
+✅ Key Capabilities of CloudWatch (Explained Simply)
+
+CloudWatch mainly works by collecting metrics, logs, events, and triggering alarms.
+
+1️⃣ Metrics – Performance Measurements
+
+Metrics are numeric values collected from AWS services and your own applications.
+
+Examples of AWS metrics:
+
+EC2: CPUUtilization, DiskReadOps
+RDS: FreeStorageSpace
+S3: NumberOfObjects
+
+You can also send your own custom metrics, like:
+
+RequestCount
+
+ErrorRate
+
+Number of active users
+
+Metrics help you see how your system behaves over time.
+
+2️⃣ Logs – Centralized Log Storage & Analysis
+
+CloudWatch Logs collect log files from:
+
+EC2 instances
+Lambda functions
+CloudTrail
+Applications
+
+You can:
+
+Search logs for errors
+Analyze patterns
+Troubleshoot issues
+Retain logs for compliance
+
+It acts like one centralized place for all logs.
+
+3️⃣ Alarms – Alerts & Automated Actions
+
+CloudWatch Alarms let you set thresholds on any metric.
+
+Examples:
+
+If CPU goes above 80% → send an alert
+If disk space is low → run a Lambda function
+If a server is unhealthy → trigger Auto Scaling
+
+Alarms can notify you through:
+
+Email
+SMS
+SNS
+Slack (via integration)
+
+And can also automate actions like:
+
+Stop/Start EC2 instances
+Scale up/down Auto Scaling groups
+
+---
+
+10. ✅ Horizontal vs Vertical Scaling (Easy Explanation)
+
+Scaling helps your application handle more traffic or workload.
+There are two ways to scale: Vertical and Horizontal.
+
+🔹 1️⃣ Vertical Scaling (Scale Up)
+
+Vertical scaling means increasing the power of a single server.
+
+How?
+
+Upgrade to a bigger EC2 instance
+
+More CPU
+More RAM
+Faster disk
+
+Example:
+t2.micro → upgrade to → t2.large → upgrade to → m5.2xlarge
+
+🔹 2️⃣ Horizontal Scaling (Scale Out)
+
+Horizontal scaling means adding more servers instead of upgrading one.
+
+How?
+
+Add more EC2 instances
+Put them behind a Load Balancer
+Use Auto Scaling Groups to add/remove servers automatically
+
+Example:
+1 server → 3 servers → 10 servers → 100 servers
+
+---
+
+11. You need to provide an EC2 instance in a private subnet with access to the internet to download software patches. How would you achieve this securely?
+
+💡 Problem
+
+You have:
+
+An EC2 instance in a private subnet (no public IP, no direct internet).
+
+It needs internet access only for outbound traffic (like downloading patches, updates).
+
+But you don’t want it exposed to the internet (no direct inbound traffic).
+
+✅ Solution: Use a NAT Gateway in a Public Subnet
+
+Create a NAT Gateway
+
+Place it in a public subnet (a subnet that has a route to the Internet Gateway).
+
+Attach an Elastic IP to the NAT Gateway.
+
+This NAT device will act like a middleman for internet traffic.
+
+Update Private Subnet Route Table
+
+Go to the route table of the private subnet.
+
+Add a route:
+
+Destination: 0.0.0.0/0 (means “all internet traffic”)
+
+Target: NAT Gateway
+
+Now, whenever the EC2 instance in the private subnet wants to reach the internet, it will send traffic to the NAT Gateway.
+
+How the Traffic Flows
+
+EC2 (private IP) → sends request to NAT Gateway
+
+NAT Gateway → replaces private IP with its public IP (Elastic IP) and forwards to the internet
+
+Internet → sends response back to NAT’s public IP
+
+NAT Gateway → maps it back to the original private IP of the EC2 and sends it into the VPC
+
+✅ The key point:
+
+Connections must start from inside (from the EC2).
+
+Outside systems cannot directly start a connection to the private EC2, because it has no public IP and no direct route.
+
+🔐 Why is this secure?
+
+The EC2 instance is in a private subnet → no direct internet access, no public IP.
+
+Only outbound connections are allowed via NAT.
+
+Inbound connections from the internet are blocked by design, since:
+
+There’s no route from Internet Gateway → private subnet.
+
+NAT Gateway does not accept new connections initiated from outside.
+
+🆚 Alternative: NAT Instance
+
+You can also use a NAT Instance instead of a NAT Gateway:
+
+It’s just an EC2 instance configured to act like NAT.
+
+But:
+
+You must patch, scale, manage it yourself.
+
+Can be a single point of failure unless you handle HA.
+
+NAT Gateway is managed, scalable, and more reliable, so it’s preferred in real projects and interviews.
+
+🔁 How to say it in one interview-style answer
+
+“I’ll keep the EC2 in a private subnet and give it outbound internet access using a NAT Gateway. I’ll place the NAT Gateway in a public subnet with an Elastic IP and update the private subnet’s route table to send 0.0.0.0/0 traffic to the NAT Gateway. This way, the instance can download patches from the internet, but no inbound connections from the internet can reach it directly, keeping it secure.”
+
+---
+
+12. ✅ Differences between S3, EBS, and EFS (Explained Clearly)
+1. Amazon S3 – Object Storage
+
+S3 stores data as objects (files + metadata) in buckets.
+Accessible over HTTP/HTTPS, not mountable like a disk.
+Designed for high durability (11 nines) and unlimited scalability.
+You can store any amount of data, and S3 automatically manages redundancy.
+
+Use Cases:
+
+Backups and archives
+
+Static website hosting (HTML, images, videos)
+
+Big data / analytics / data lakes
+
+Application logs
+
+2. Amazon EBS – Block Storage
+
+EBS provides block-level storage, like a virtual hard disk.
+
+It attaches to a single EC2 instance at a time (except in multi-attach for specific volumes).
+
+Supports low latency, high IOPS workloads.
+
+Perfect for OS disks, databases, and transactional apps.
+
+Data persists even if the EC2 instance stops.
+
+Use Cases:
+
+EC2 boot volume
+
+Databases like MySQL, PostgreSQL, MongoDB
+
+Applications needing fast read/write performance
+
+Any workload requiring block-level storage
+
+3. Amazon EFS – File Storage
+
+EFS is a fully managed NFS file system.
+
+It can be mounted on multiple EC2 instances at the same time.
+
+Automatically scales storage capacity as files are added.
+
+Great for shared workloads and multi-server architectures.
+
+---
+
+13. When would you choose a relational database like Amazon RDS versus a NoSQL database like DynamoDB?
+
+“I would choose Amazon RDS when the application needs structured relational data, ACID transactions, and complex SQL queries—such as e-commerce, financial systems, or CRM applications.
+
+I’d use DynamoDB when I need high scalability, low latency, and flexible schema for workloads with simple key-value or document access patterns—such as user profiles, IoT data, gaming apps, or session management.”
+
+---
+
+14. ✅ What is an Elastic Load Balancer (ELB)?
+
+An Elastic Load Balancer (ELB) is an AWS-managed service that automatically distributes incoming application traffic across multiple targets such as EC2 instances, containers, and Lambda functions.
+
+It improves:
+
+Availability → spreads traffic across healthy targets
+
+Fault tolerance → avoids overloaded or unhealthy instances
+
+Scalability → handles varying traffic automatically
+
+ELB also performs health checks, so it only sends traffic to healthy resources.
+
+🚀 Types of Load Balancers in AWS
+
+1. Application Load Balancer (ALB)
+
+Works at Layer 7 (HTTP/HTTPS).
+
+Understands application-level content.
+
+Supports content-based routing:
+
+URL path–based routing (e.g., /api, /images)
+
+Host-based routing (e.g., app.example.com, api.example.com)
+
+Header-based routing
+
+Ideal for microservices, containers, and serverless architectures.
+
+Use Cases:
+
+Web applications
+
+Microservices behind Amazon ECS/EKS
+
+Routing traffic to multiple backends
+
+2. Network Load Balancer (NLB)
+
+Works at Layer 4 (TCP, UDP, TLS).
+
+Extremely fast—handles millions of requests per second.
+
+Has static IP addresses and supports Elastic IPs.
+
+Very low latency suitable for real-time workloads.
+
+Use Cases:
+
+High-performance, low-latency applications
+
+Gaming, IoT, streaming
+
+Load balancing TCP/UDP traffic
+
+---
+
+15. ✅ What is an Auto Scaling Group (ASG)?
+
+An Auto Scaling Group (ASG) is an AWS service that automatically adjusts the number of EC2 instances in your application based on demand.
+It ensures:
+
+You have enough instances during high traffic
+
+You save cost by reducing instances during low demand
+
+Your application remains fault-tolerant (replaces unhealthy instances automatically)
+
+In simple words:
+ASG = automatic capacity management + cost optimization + high availability.
+
+🔧 Key Components Needed to Configure an ASG
+
+1. Launch Template / Launch Configuration
+
+This defines how your EC2 instances should look.
+It includes:
+
+AMI (OS image)
+
+Instance type
+
+Security groups
+
+Key pair
+
+User data script
+
+IAM role
+
+This acts as a blueprint for launching new instances.
+
+2. Auto Scaling Group (ASG) Settings
+
+The ASG itself defines:
+
+Minimum capacity (minimum number of instances always running)
+
+Maximum capacity (hard limit of instances)
+
+Desired capacity (initial number of instances)
+
+VPC subnets where instances will launch
+
+Health checks (EC2 or ELB)
+
+The ASG ensures that the desired and minimum number of instances are always maintained.
+
+3. Scaling Policies (How ASG decides to scale)
+
+ASG can scale using 3 policy types:
+
+a. Target Tracking Scaling (most common)
+
+You set a target metric (e.g., maintain CPU at 50%).
+ASG automatically scales up/down to keep that target level.
+
+b. Step or Simple Scaling
+
+Triggered by CloudWatch alarms.
+Example:
+
+If CPU > 70% for 5 mins → add 2 instances
+
+If CPU < 30% for 10 mins → remove 1 instance
+
+c. Scheduled Scaling
+
+Used when traffic is predictable.
+Example:
+
+Scale up at 9 AM
+
+Scale down at 10 PM
+
+🎯 Interview-Friendly Summary
+
+“An Auto Scaling Group automatically adds or removes EC2 instances based on demand, helping maintain performance and reduce costs. To configure an ASG, you need a Launch Template or Launch Configuration that defines the instance settings, an Auto Scaling Group that defines the min/max/desired capacity and subnet placement, and scaling policies—such as target tracking, step scaling, or scheduled scaling—to control how and when the ASG scales.”

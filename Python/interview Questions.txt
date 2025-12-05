@@ -1,0 +1,1618 @@
+1. Is Python a compiled language or an interpreted language?
+
+Python is an interpreted language, not a compiled one — but with a small twist.
+
+Here’s the simple explanation 👇
+
+When you run a Python program, Python first compiles your code into bytecode (a lower-level, platform-independent code).
+
+Then, the Python interpreter (like CPython) reads and executes that bytecode line by line.
+
+So you can think of it like this:
+
+🧠 Python is compiled first (to bytecode) and then interpreted (executed line by line).
+
+✅ Example:
+When you run
+
+python my_program.py
+
+Python converts my_program.py → my_program.pyc (bytecode).
+
+Then the interpreter runs that bytecode.
+
+In short:
+
+Python is interpreted because the code is executed by an interpreter, not directly by the machine.
+
+--------------
+
+2. What is a dynamically typed language?
+In a dynamically typed language, the data type of a variable is determined at runtime, not at compile time.
+No need to declare data types manually; Python automatically detects it based on the assigned value.
+Examples of dynamically typed languages: Python, JavaScript.
+Examples of statically typed languages: C, C++, Java.
+Dynamically typed languages are easier and faster to code.
+Statically typed languages are usually faster to execute due to type checking at compile time.
+
+----------------
+
+3. What are Built-in data types in Python? 
+
+In Python, built-in data types are the basic types of values that Python already knows how to work with — you don’t need to define them yourself.
+
+Here’s a simple breakdown 👇
+
+🧱 1. Numeric Types
+
+Used for numbers.
+
+int → Whole numbers (e.g., 5, -3)
+
+float → Decimal numbers (e.g., 3.14, -2.5)
+
+complex → Numbers with real and imaginary parts (e.g., 2 + 3j)
+
+🧵 2. Sequence Types
+
+Used for storing ordered collections.
+
+str → String (text), e.g., "Hello"
+
+list → Ordered, changeable collection, e.g., [1, 2, 3]
+
+tuple → Ordered, unchangeable collection, e.g., (1, 2, 3)
+
+📦 3. Set Types
+
+Used for unique, unordered collections.
+
+set → {1, 2, 3}
+
+frozenset → Like a set, but cannot be changed
+
+📖 4. Mapping Type
+
+dict → Key-value pairs, e.g., {"name": "Prem", "age": 25}
+
+🧩 5. Boolean Type
+
+bool → Only True or False
+
+⚙️ 6. None Type
+
+NoneType → Represents the absence of a value, e.g., None
+
+----------------
+
+4. What is a break, continue and pass in Python?
+
+1. break
+
+👉 Stops the loop completely and jumps out of it.
+
+Example:
+
+for i in range(5):
+    if i == 3:
+        break
+    print(i)
+
+
+🧩 Output:
+
+0
+1
+2
+
+
+➡️ When i becomes 3, the break stops the loop.
+
+🟨 2. continue
+
+👉 Skips the current iteration and goes to the next one.
+
+Example:
+
+for i in range(5):
+    if i == 2:
+        continue
+    print(i)
+
+
+🧩 Output:
+
+0
+1
+3
+4
+
+
+➡️ When i is 2, it skips print(i) and moves to the next loop.
+
+🟩 3. pass
+
+👉 Does nothing — it’s just a placeholder when you need a statement but don’t want any action yet.
+
+Example:
+
+for i in range(5):
+    if i == 2:
+        pass  # do nothing
+    print(i)
+
+
+🧩 Output:
+
+0
+1
+2
+3
+4
+
+
+➡️ pass is ignored by Python — useful when writing code you’ll fill in later.
+
+--------------------------
+
+5. What is the difference between a Set and Dictionary?
+
+Set: A collection of unique values	
+dict: A collection of key-value pairs
+Syntax	{1, 2, 3}	{"name": "Prem", "age": 25}
+🧠 2. Structure
+
+Set: Only stores values, and all must be unique.
+
+my_set = {1, 2, 3, 3}
+print(my_set)   # {1, 2, 3}  → duplicates removed
+
+
+Dictionary: Stores key : value pairs.
+
+my_dict = {"name": "Prem", "age": 25}
+print(my_dict["name"])  # Output: Prem
+
+⚙️ 3. Accessing Elements
+
+Set: You can’t access items using an index or key (only loop through).
+
+for x in my_set:
+    print(x)
+
+
+Dictionary: You can access values using keys.
+
+print(my_dict["age"])  # 25
+
+🧮 4. Mutability
+
+Both are mutable, meaning you can add or remove elements.
+
+Set: my_set.add(4)
+
+Dict: my_dict["city"] = "Hyderabad"
+
+🚫 5. Duplicates
+
+Set: No duplicate values allowed.
+
+Dictionary: Keys must be unique, but values can repeat.
+
+-----------
+
+6. What is a lambda function?
+
+A lambda function in Python is a small, anonymous function — meaning it doesn’t have a name.
+This function can have any number of parameters but, can have just one statement.
+
+square = lambda x: x * x
+print(square(5))   #
+
+✅ Example with filter():
+
+numbers = [1, 2, 3, 4, 5]
+even = list(filter(lambda x: x % 2 == 0, numbers))
+print(even)   
+
+----------
+
+7. What is a Variable Scope in Python?
+
+Variable Scope in Python means where a variable can be accessed or used in your code.
+
+In simple words — scope decides the “visibility” of a variable.
+
+There are 4 types of variable scopes in Python, known as the LEGB rule:
+
+L – Local:
+Variables created inside a function.
+👉 You can use them only inside that function.
+
+def my_func():
+    x = 10   # local variable
+    print(x)
+
+my_func()
+# print(x)  # ❌ Error: x not defined outside the function
+
+
+E – Enclosing:
+Variables in an outer function, used by an inner function.
+
+def outer():
+    y = 20
+    def inner():
+        print(y)  # can access outer variable
+    inner()
+outer()
+
+
+G – Global:
+Variables created outside any function — available everywhere in the file.
+
+z = 30
+def show():
+    print(z)
+show()
+print(z)
+
+
+B – Built-in:
+Names that are already defined in Python (like len, print, etc.).
+
+-------------
+
+8. What is docstring in Python?
+
+A docstring in Python is a special type of comment used to explain what a function, class, or module does.
+
+It helps others (and you) understand your code easily.
+
+✅ How to write a docstring:
+Use triple quotes (""" ... """) just below the function or class definition.
+
+Example:
+
+def add(a, b):
+    """This function adds two numbers and returns the result."""
+    return a + b
+
+print(add(3, 5))
+
+
+✅ How to access a docstring:
+You can see it using the __doc__ attribute:
+
+print(add.__doc__)
+# Output: This function adds two numbers and returns the result.
+
+
+👉 In simple words:
+
+A docstring is a short explanation written inside triple quotes that describes what a function or class does. It’s mainly used for documentation.
+
+---------------
+
+9. What is the difference between Python Arrays and Lists?
+
+lists: Built-In
+Array: We have import from array.
+
+my_list = [1, "apple", 3.5]
+print(my_list)
+
+# Array
+from array import array
+my_array = array('i', [1, 2, 3])
+print(my_array)
+👉 In simple words:
+
+A list can hold anything (numbers, strings, etc.) and is used most of the time.
+An array can hold only one data type and is used when you need to handle lots of numbers efficiently.
+
+-----------------
+
+10. What are Modules and Packages in Python?
+
+Module
+
+A module in Python is just a file that contains Python code — like functions, classes, or variables — that you can reuse in other programs.
+
+✅ Example:
+Suppose you have a file math_utils.py:
+
+# math_utils.py
+def add(a, b):
+    return a + b
+
+
+You can use this code in another file:
+
+import math_utils
+
+print(math_utils.add(3, 5))  # Output: 8
+
+
+👉 In short:
+
+A module is a single Python file (.py) that you can import and use in other programs.
+
+📦 Package
+
+A package is a collection of modules grouped together in a folder.
+It helps organize your code better when you have many modules.
+
+✅ Example structure:
+
+my_package/
+│
+├── __init__.py
+├── math_utils.py
+└── string_utils.py
+
+
+
+You can use it like this:
+
+from my_package import math_utils
+print(math_utils.add(2, 3))
+
+
+👉 In short:
+
+A package is a folder that contains multiple modules (and an __init__.py file).
+
+-------------
+
+11. What is the difference between xrange and range functions?
+
+✅ Example (Python 2 style)
+
+# range()
+for i in range(5):
+    print(i)
+# Creates a list [0, 1, 2, 3, 4]
+
+# xrange()
+for i in xrange(5):
+    print(i)
+# Creates numbers one by one (generator)
+
+
+✅ In Python 3:
+
+for i in range(5):
+    print(i)
+# Works like xrange — generates numbers one at a time
+
+
+👉 In simple words:
+
+In Python 2, xrange() was more memory-efficient than range().
+In Python 3, range() was improved to work like xrange(), so xrange() no longer exists.
+
+------------
+
+12. What is Dictionary Comprehension?
+
+Example 1 – Simple dictionary comprehension
+squares = {x: x**2 for x in range(1, 6)}
+print(squares)
+
+Output:
+
+{1: 1, 2: 4, 3: 9, 4: 16, 5: 25}
+
+Here, each number x becomes a key, and its square x**2 becomes the value.
+
+✅ Example 2 – Filtering items
+even_squares = {x: x**2 for x in range(1, 6) if x % 2 == 0}
+print(even_squares)
+
+Output:
+
+{2: 4, 4: 16}
+
+👉 In simple words:
+
+Dictionary comprehension lets you create a new dictionary in one short line instead of writing long for loops.
+
+-------------
+
+13. What is the difference between a shallow copy and a deep copy?
+
+. Shallow Copy
+
+A shallow copy creates a new object, but it does not copy the inner objects — it just references them.
+
+✅ Example:
+
+import copy
+
+list1 = [[1, 2], [3, 4]]
+list2 = copy.copy(list1)
+
+list2[0][0] = 99
+
+print(list1)  # [[99, 2], [3, 4]]
+print(list2)  # [[99, 2], [3, 4]]
+
+Both lists changed because they share the same inner lists.
+
+👉 In short:
+
+Shallow copy copies only the outer object, not the nested objects inside it.
+
+🧠 2. Deep Copy
+
+A deep copy creates a completely new copy of the object and all its nested elements.
+
+✅ Example:
+
+import copy
+
+list1 = [[1, 2], [3, 4]]
+list2 = copy.deepcopy(list1)
+
+list2[0][0] = 99
+
+print(list1)  # [[1, 2], [3, 4]]
+print(list2)  # [[99, 2], [3, 4]]
+
+Here, changes in list2 do not affect list1.
+
+👉 In short:
+
+Deep copy copies everything — the object and all nested objects — so they are completely independent.
+
+-----------------
+
+14. What are Decorators?
+
+Let’s say you have a function:
+
+def say_hello():
+    print("Hello, Prem!")
+
+When you call it:
+
+say_hello()
+
+Output:
+Hello, Prem!
+
+Simple — nothing fancy.
+
+🧠 Step 2: Now imagine you want to add something extra
+
+For example — you want to print a line before and after saying hello.
+
+You can do this by writing a new function that wraps the old one:
+
+def add_message(func):
+    def wrapper():
+        print("Before the function runs...")
+        func()   # calling the original function
+        print("After the function runs...")
+    return wrapper
+
+
+Here:
+
+add_message is a decorator function.
+
+It takes another function (func) as input.
+
+It adds extra behavior before and after that function runs.
+
+🧩 Step 3: Use the decorator
+
+Instead of doing this manually:
+
+say_hello = add_message(say_hello)
+say_hello()
+
+
+You can just use the @ symbol:
+
+@add_message
+def say_hello():
+    print("Hello, Prem!")
+
+
+Now when you call:
+
+say_hello()
+
+
+Output:
+
+Before the function runs...
+Hello, Prem!
+After the function runs...
+
+🧠 Step 4: What’s happening behind the scenes
+
+When you write:
+
+@add_message
+def say_hello():
+    print("Hello!")
+
+
+Python automatically does this:
+
+say_hello = add_message(say_hello)
+
+
+So the decorator “wraps” your function with new behavior — like a gift wrapper around a present 🎁.
+
+✅ Step 5: Where decorators are used in real projects
+
+Logging – track when a function runs.
+
+Authentication – check if a user is logged in before running a function.
+
+Timing – measure how long a function takes to run.
+
+Flask/Django – for routes like @app.route('/').
+
+💡 Simple Interview Answer:
+
+“A decorator in Python is a special function that allows us to add extra behavior to another function without changing its code.
+It works by taking a function as input, adding something around it, and returning a new function.
+We use the @decorator_name syntax before the function definition.”
+
+-------------
+
+15. How do you debug a Python program?
+
+🧠 What does debugging mean?
+
+Debugging means finding and fixing errors (bugs) in your Python code.
+Python gives you several tools and methods to do this easily.
+
+✅ 1. Using print statements (most common way)
+
+You can use print() to check what your code is doing at each step.
+
+Example:
+
+def divide(a, b):
+    print("a:", a, "b:", b)   # debug info
+    return a / b
+
+print(divide(10, 2))
+
+
+If something goes wrong, print statements help you see variable values and find where the issue is.
+
+🟡 Simple but not ideal for large programs.
+
+✅ 2. Using the built-in pdb (Python Debugger)
+
+Python has a built-in debugger called pdb which allows you to:
+
+Stop the program at a specific line
+
+Check variable values
+
+Step through the code line by line
+
+Example:
+
+import pdb
+
+def divide(a, b):
+    pdb.set_trace()   # pause execution here
+    return a / b
+
+divide(10, 0)
+
+
+Common pdb commands:
+
+n → go to next line
+
+s → step into a function
+
+c → continue execution
+
+q → quit debugger
+
+p variable → print variable value
+
+🧩 Best for serious debugging.
+
+✅ 3. Using an IDE Debugger (like VS Code, PyCharm, or IDLE)
+
+Modern IDEs have a graphical debugger:
+
+You can set breakpoints (places where the program stops).
+
+You can inspect variables.
+
+You can step through the code line by line.
+
+💡 This is the easiest and most visual way for beginners.
+
+✅ 4. Using Logging (for bigger projects)
+
+Instead of using print everywhere, use the logging module:
+
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
+logging.debug("Starting the division function...")
+
+def divide(a, b):
+    logging.info(f"Dividing {a} by {b}")
+    return a / b
+
+
+Logging can record info, warnings, and errors in files — helpful for debugging after deployment.
+
+-----------------
+
+16. What are Iterators in Python?
+
+🧩 What is an Iterator?
+
+An iterator in Python is an object that allows you to go through (iterate over) elements one at a time.
+
+It remembers where it left off — so you can get the next item until there are no items left.
+
+✅ Example:
+numbers = [1, 2, 3]
+it = iter(numbers)   # create an iterator
+
+print(next(it))  # Output: 1
+print(next(it))  # Output: 2
+print(next(it))  # Output: 3
+# print(next(it))  # ❌ Raises StopIteration (no more items)
+
+
+Here:
+
+iter() → converts the list into an iterator object.
+
+next() → gives the next item from the iterator.
+
+When no items are left, it raises a StopIteration error.
+
+🧠 In simple words:
+
+An iterator is an object that lets you loop through data one element at a time.
+
+✅ Example with a loop:
+
+You don’t usually use next() directly — you use a for loop:
+
+for num in [1, 2, 3]:
+    print(num)
+
+
+Under the hood, Python automatically:
+
+Calls iter() on the list
+
+Repeatedly calls next() on the iterator
+
+Stops when StopIteration is raised
+
+💡 Interview Answer (simple):
+
+“An iterator in Python is an object that returns data one element at a time when we call next() on it.
+It is created using the iter() function, and when there are no more elements, it raises a StopIteration exception.
+A for loop internally uses iterators to go through items in a sequence.”
+
+---------------
+
+17. What is a Generator?
+
+A generator in Python is a special type of function that lets you generate values one at a time, instead of returning them all at once.
+
+It’s used when you have a large amount of data and don’t want to store everything in memory.
+
+✅ How to create a generator
+
+You create a generator using the yield keyword instead of return.
+
+Example:
+
+def count_up_to(n):
+    i = 1
+    while i <= n:
+        yield i    # pauses here and returns the value
+        i += 1
+
+
+Now, you can use it like this:
+
+numbers = count_up_to(5)
+
+print(next(numbers))  # 1
+print(next(numbers))  # 2
+print(next(numbers))  # 3
+
+
+Each time you call next(), the function resumes from where it left off — it doesn’t restart.
+
+🧠 In simple words:
+
+A generator is a function that remembers where it left off and gives you the next value when needed — it doesn’t store all values in memory.
+
+💡 Interview Answer (simple):
+
+“A generator in Python is a function that uses yield instead of return to produce values one by one.
+It doesn’t store all the values in memory — it generates them on the fly when needed.
+Generators are useful for handling large data or streams efficiently.”
+
+-------------
+
+18. Does Python supports multiple Inheritance?
+
+Yes, Python supports Multiple Inheritance.
+✅ Example:
+class Father:
+    def driving(self):
+        print("Father knows driving.")
+
+class Mother:
+    def cooking(self):
+        print("Mother knows cooking.")
+
+class Child(Father, Mother):
+    def playing(self):
+        print("Child loves playing football.")
+
+# Create object of Child
+obj = Child()
+
+# Access methods from both parents and the child
+obj.driving()   # From Father
+obj.cooking()   # From Mother
+obj.playing()   # From Child
+
+
+🧾 Output:
+
+Father knows driving.
+Mother knows cooking.
+Child loves playing football.
+
+🧠 Explanation:
+
+The Child class inherits from both Father and Mother.
+
+It automatically gets access to their methods (driving() and cooking()).
+
+You can also add the child’s own method (playing()).
+
+💡 In simple words:
+
+In multiple inheritance, the child class can use methods from all parent classes, along with its own methods.
+If parent methods have different names, they all work independently — no conflict.
+
+💡 Interview Answer (simple):
+
+“Yes, Python supports multiple inheritance.
+It means a class can inherit from more than one parent class.
+If there are methods with the same name, Python follows the Method Resolution Order (MRO) — it checks from left to right.”
+
+---------------
+
+19. What is Polymorphism in Python?
+
+Polymorphism means “many forms.”
+In Python, it allows the same function or method name to behave differently depending on the object that calls it.
+
+👉 In simple words:
+
+Polymorphism lets you use the same function name for different types of objects.
+
+✅ Example 1 – Same method name, different behavior
+class Dog:
+    def sound(self):
+        return "Bark"
+
+class Cat:
+    def sound(self):
+        return "Meow"
+
+# Using the same method name for different objects
+for animal in [Dog(), Cat()]:
+    print(animal.sound())
+
+
+Output:
+
+Bark
+Meow
+
+
+🔹 Both classes have a method named sound(),
+but each one behaves differently for its object.
+
+✅ Example 2 – Polymorphism with inheritance
+class Bird:
+    def intro(self):
+        print("There are many types of birds.")
+    def flight(self):
+        print("Most birds can fly.")
+
+class Penguin(Bird):
+    def flight(self):
+        print("Penguins cannot fly.")
+
+obj1 = Bird()
+obj2 = Penguin()
+
+obj1.intro()
+obj1.flight()
+
+obj2.intro()
+obj2.flight()
+
+
+Output:
+
+There are many types of birds.
+Most birds can fly.
+There are many types of birds.
+Penguins cannot fly.
+
+
+🔹 Here, the flight() method is overridden in the child class to behave differently —
+this is called runtime polymorphism or method overriding.
+
+✅ Example 3 – Polymorphism with built-in functions
+print(len("Hello"))   # String → counts characters
+print(len([1, 2, 3])) # List → counts elements
+
+
+🔹 The same function len() behaves differently depending on the data type —
+that’s polymorphism too!
+
+💡 Interview Answer (simple):
+
+“Polymorphism in Python means having the same function or method name behave differently for different objects.
+It allows flexibility in code — the same interface can work with different types of data or classes.
+For example, the len() function works for both strings and lists, and classes can override parent methods to change behavior.”
+
+-----------
+
+20. Define encapsulation in Python?
+
+Encapsulation means wrapping data (variables) and methods (functions) together into a single unit (class) and restricting direct access to some parts of the object.
+
+👉 In simple words:
+
+Encapsulation is like putting data inside a capsule so that it can’t be changed directly — only through controlled methods.
+
+✅ Example:
+class Car:
+    def __init__(self):
+        self.__speed = 0   # private variable
+
+    def accelerate(self):
+        self.__speed += 10
+
+    def brake(self):
+        self.__speed -= 10
+
+    def get_speed(self):
+        return self.__speed
+
+car = Car()
+car.accelerate()
+car.accelerate()
+print(car.get_speed())   # Access speed using method
+
+# Direct access will not work
+# print(car.__speed)  ❌ This will cause an error
+
+
+Output:
+
+20
+
+🧠 Explanation:
+
+__speed is a private variable (cannot be accessed directly outside the class).
+
+You can change or read it only through the methods (accelerate, brake, get_speed).
+
+This protects the data from being modified accidentally.
+
+🪄 Encapsulation helps:
+
+Protect data from direct access.
+
+Control how data is changed.
+
+Make code cleaner and safer.
+
+💡 Interview Answer (simple):
+
+“Encapsulation in Python means hiding the internal details of a class and only exposing necessary parts.
+It’s done by making variables private (using __) and accessing them through public methods like getters and setters.”
+
+--------------
+
+21. What is Data Abstraction?
+
+Data Abstraction means showing only the necessary details to the user and hiding the complex internal logic.
+
+👉 In simple words:
+
+Abstraction is about what an object does, not how it does it.
+
+✅ Real-life Example:
+
+Think of a TV remote —
+You can press buttons to change channels or volume,
+but you don’t know the complex circuits working inside.
+That’s abstraction — you only see the useful part.
+
+✅ Example in Python:
+
+In Python, abstraction is usually done using abstract classes and methods (from the abc module).
+
+from abc import ABC, abstractmethod
+
+class Vehicle(ABC):
+    @abstractmethod
+    def start(self):
+        pass  # Abstract method (only declared, not defined)
+
+class Car(Vehicle):
+    def start(self):
+        print("Car engine started with key.")
+
+class Bike(Vehicle):
+    def start(self):
+        print("Bike started with self-start button.")
+
+# obj = Vehicle()  ❌ Can't create object of abstract class
+car = Car()
+bike = Bike()
+
+car.start()
+bike.start()
+
+
+Output:
+
+Car engine started with key.
+Bike started with self-start button.
+
+🧠 Explanation:
+
+Vehicle is an abstract class — it provides a template for its subclasses.
+
+start() is an abstract method — every subclass must define it.
+
+This hides how the start mechanism works and only exposes what it does (the interface).
+
+💡 Interview Answer (simple):
+
+“Data abstraction in Python means hiding complex implementation details and showing only the essential features.
+It can be achieved using abstract classes and abstract methods from the abc module.
+This helps in designing clean and reusable code where subclasses define their own specific behavior.”
+
+-----------------
+
+22. How is memory management done in Python?
+
+What is Memory Management?
+
+Memory management means how Python allocates, tracks, and frees up memory while your program runs — so that memory is used efficiently and no data is wasted.
+
+✅ 1. Python has an Automatic Memory Management System
+
+You don’t need to manually allocate or free memory (like in C or C++).
+Python’s memory manager and garbage collector handle it automatically.
+
+✅ 2. Memory Allocation in Python
+
+Python divides memory into two parts:
+
+Stack memory → for local variables inside functions.
+
+Heap memory → for objects like lists, dictionaries, classes, etc.
+
+When you create a variable or an object, Python automatically allocates space for it in the heap.
+
+-----------------------------
+
+23. 🗂️ File Handling in Python
+
+File handling allows you to create, read, write, and delete files using Python.
+It’s important for saving data permanently (unlike variables which are lost when the program ends).
+
+🔹 Basic File Operations
+Mode	Description
+'r'	Read mode (default). Opens file for reading – file must exist.
+'w'	Write mode. Creates a new file or overwrites existing file.
+'a'	Append mode. Adds data to the end of the file.
+'x'	Create mode. Creates a new file; fails if file already exists.
+'r+'	Read and write mode.
+'t'	Text mode (default).
+'b'	Binary mode (for images, etc.).
+📖 1. Reading a File
+# Open file in read mode
+file = open("example.txt", "r")
+
+# Read full content
+content = file.read()
+print(content)
+
+# Close the file
+file.close()
+
+
+Or read line by line:
+
+file = open("example.txt", "r")
+for line in file:
+    print(line.strip())
+file.close()
+
+✍️ 2. Writing to a File
+# Opens (or creates) file and overwrites content
+file = open("example.txt", "w")
+file.write("Hello, this is a new line.")
+file.close()
+
+➕ 3. Appending to a File
+file = open("example.txt", "a")
+file.write("\nThis line is added later.")
+file.close()
+
+✅ 4. Using with Statement (Best Practice)
+
+Using with automatically closes the file after use.
+
+with open("example.txt", "r") as file:
+    data = file.read()
+    print(data)
+
+🧾 5. Reading and Writing Files Together
+with open("example.txt", "r+") as file:
+    content = file.read()
+    file.write("\nNew content added after reading.")
+
+🧰 6. Deleting a File
+
+Use the os module:
+
+import os
+
+if os.path.exists("example.txt"):
+    os.remove("example.txt")
+else:
+    print("File not found.")
+
+🧠 Summary
+
+open() → to open a file
+
+read(), write(), append() → to work with file data
+
+Always close the file (or use with)
+
+os → to handle file operations like delete or check existence
+
+🧾 Example: Copy Contents from One File to Another
+📁 Step 1: Create a file (source.txt)
+
+Let’s say source.txt contains:
+
+Hello, this is the source file.
+We are learning file handling in Python.
+
+💻 Step 2: Python Program
+# Open the source file in read mode
+with open("source.txt", "r") as src:
+    # Read all contents
+    content = src.read()
+
+# Open the destination file in write mode
+with open("destination.txt", "w") as dest:
+    # Write the content to the new file
+    dest.write(content)
+
+print("File copied successfully!")
+
+🧠 Explanation:
+
+with open("source.txt", "r") as src: → Opens the source file for reading.
+content = src.read() → Reads the entire file content into a variable.
+with open("destination.txt", "w") as dest: → Opens or creates a new file for writing.
+dest.write(content) → Writes the content into the new file.
+with → Automatically closes both files after use.
+
+✅ Output:
+
+After running the program:
+A new file named destination.txt will be created.
+It will have the same content as source.txt.
+
+---------------------------------
+
+24. 🧠 Understanding Multithreading in Python
+🔹 What is Multithreading?
+
+Multithreading means running multiple parts (threads) of a program concurrently.
+
+Each thread runs independently but shares the same memory space.
+
+In Python, threads are handled by the threading module.
+
+Threads are useful for:
+
+Downloading multiple files simultaneously
+
+Reading/writing files while doing other work
+💻 Example: Two Classes Inheriting from Thread
+
+Here we’ll define two custom thread classes, both doing different tasks — and they’ll run concurrently.
+
+from threading import *
+import time
+
+# First class inheriting Thread
+class PrintNumbers(Thread):
+    def run(self):
+        for i in range(1, 6):
+            print(f"Number Thread: {i}")
+            time.sleep(1)
+
+# Second class inheriting Thread
+class PrintLetters(Thread):
+    def run(self):
+        for ch in ['A', 'B', 'C', 'D', 'E']:
+            print(f"Letter Thread: {ch}")
+            time.sleep(1)
+
+# Create objects of both classes
+t1 = PrintNumbers()
+t2 = PrintLetters()
+
+# Start both threads
+t1.start()
+t2.start()
+
+# Wait for both to finish
+t1.join()
+t2.join()
+
+print("Main thread completed.")
+
+🧾 Output Example (Interleaved):
+Number Thread: 1
+Letter Thread: A
+Number Thread: 2
+Letter Thread: B
+Number Thread: 3
+Letter Thread: C
+Number Thread: 4
+Letter Thread: D
+Number Thread: 5
+Letter Thread: E
+Main thread completed.
+
+
+(Output order may vary — because both threads run concurrently.)
+
+🧩 Explanation
+
+class PrintNumbers(Thread)
+→ Inherits from the Thread class.
+→ Defines a run() method — contains code executed when thread starts.
+
+class PrintLetters(Thread)
+→ Another child class of Thread.
+→ Runs independently from the first.
+
+start()
+→ Starts the thread — internally calls the run() method in a new thread.
+
+join()
+→ Waits until the thread completes before continuing with the main thread.
+
+⚙️ How Multithreading Works Here
+
+The main thread creates two child threads (t1, t2).
+
+Both run simultaneously — while one prints numbers, the other prints letters.
+
+The order may vary each time you run the program — this is the nature of concurrency.
+
+🧠 Key Takeaways
+
+Threads share the same memory space (unlike processes).
+
+Use Thread class and override run() to define custom thread behavior.
+
+start() launches a thread; join() waits for it to finish.
+
+Ideal for I/O-bound tasks like networking, database, file operations, etc.
+Running background tasks (like timers or status updates)
+
+---------------------------------------
+
+25. 💡 What is Asynchronous Programming?
+
+Normally, Python executes code line by line — one task must finish before the next starts.
+That’s called synchronous execution.
+
+But in asynchronous programming, Python can start a new task before the previous one finishes, allowing multiple tasks (like network calls or I/O operations) to run concurrently.
+
+This helps improve speed and efficiency, especially for I/O-heavy tasks like:
+
+Fetching data from APIs
+Reading/writing files
+Database queries
+
+⚙️ Keywords: async and await
+
+These are the core keywords used to write asynchronous code in Python.
+
+🔹 async
+
+Used to define a function as asynchronous.
+
+Syntax:
+
+async def my_function():
+    ...
+
+An async function doesn’t run immediately — it returns a coroutine (an object that can be awaited).
+
+🔹 await
+
+Used inside an async function to pause the function until another asynchronous operation completes.
+
+Syntax:
+
+result = await some_async_function()
+
+
+It tells Python: “Wait here for this async task to finish before continuing.”
+
+🧠 Simple Example:
+
+Let’s compare normal (synchronous) vs asynchronous code 👇
+
+🚫 Normal Code (Synchronous):
+import time
+
+def fetch_data():
+    print("Fetching data...")
+    time.sleep(2)   # simulates a delay
+    print("Data fetched")
+
+def main():
+    fetch_data()
+    fetch_data()
+
+main()
+
+
+🕒 Output:
+
+Fetching data...
+Data fetched
+Fetching data...
+Data fetched
+
+
+➡ Total time = 4 seconds (runs one after another)
+
+✅ Asynchronous Version:
+import asyncio
+
+async def fetch_data():
+    print("Fetching data...")
+    await asyncio.sleep(2)   # non-blocking delay
+    print("Data fetched")
+
+async def main():
+    # Run both tasks concurrently
+    await asyncio.gather(fetch_data(), fetch_data())
+
+asyncio.run(main())
+
+
+
+🕒 Output:
+
+Fetching data...
+Fetching data...
+Data fetched
+Data fetched
+
+
+➡ Total time = only 2 seconds (both run together!)
+
+🚀 When to Use async/await:
+
+Use async/await when your program:
+Makes network calls (APIs, web scraping)
+Does file or database I/O
+Waits for delays or background tasks
+
+But avoid async for CPU-heavy tasks (like complex calculations) — those need multiprocessing or threading instead.
+
+🗣️ Interview-Safe Summary:
+
+“async and await are used in Python for asynchronous programming.
+async defines a coroutine, and await pauses it until another async task finishes.
+This helps run multiple I/O-bound tasks concurrently, improving performance without blocking the main thread.”
+
+🧠 Example — Downloading Data Using async and await
+import asyncio
+
+async def download_data(server_name, seconds):
+    print(f"Starting download from {server_name}...")
+    await asyncio.sleep(seconds)   # Simulates a network delay
+    print(f"Finished downloading from {server_name} in {seconds} seconds")
+
+async def main():
+    # Run all downloads concurrently
+    await asyncio.gather(
+        download_data("Server A", 3),
+        download_data("Server B", 2),
+        download_data("Server C", 1)
+    )
+
+# Run the main coroutine
+asyncio.run(main())
+
+🖥️ Output:
+Starting download from Server A...
+Starting download from Server B...
+Starting download from Server C...
+Finished downloading from Server C in 1 seconds
+Finished downloading from Server B in 2 seconds
+Finished downloading from Server A in 3 seconds
+
+⚙️ How it Works:
+
+All three downloads start at the same time.
+Python doesn’t block; it waits (await) only when needed.
+Total time ≈ 3 seconds (not 6), since tasks run concurrently.
+
+-------------------------
+26. 
+🔹 Basic Level
+1. How do you create an array/list in Python?
+arr = [10, 20, 30]
+
+2. How do you access an element from a list?
+arr[1]   # Output: 20
+
+3. How do you update a value inside a list?
+arr[1] = 200
+
+4. How do you append an item to a list?
+arr.append(40)
+
+5. How do you remove an item from a list?
+arr.remove(20)
+
+6. How to find the length of a list?
+len(arr)
+
+🔹 Intermediate Level
+7. How do you insert an element at a specific position?
+arr.insert(2, 99)
+
+8. How do you extend a list with another list?
+arr.extend([5, 6, 7])
+
+9. How do you reverse a list?
+arr.reverse()
+# OR
+arr[::-1]
+
+10. How do you sort a list?
+arr.sort()
+# OR
+sorted(arr)
+
+11. How do you remove the last element?
+arr.pop()
+
+12. How do you check if an item exists in a list?
+if 10 in arr:
+    print("Found")
+
+13. How do you count occurrences of an element?
+arr.count(10)
+
+🔹 Advanced Level
+14. How do you loop through a list with index?
+for index, value in enumerate(arr):
+    print(index, value)
+
+15. How do you filter a list?
+
+Using lambda:
+
+result = list(filter(lambda x: x > 10, arr))
+
+16. How do you map a list (apply function to each element)?
+result = list(map(lambda x: x * 2, arr))
+
+17. How do you create a list using list comprehension?
+squares = [x*x for x in arr]
+
+18. How do you remove duplicates from a list?
+unique = list(set(arr))
+
+19. How do you flatten a 2D list?
+flat = [item for sublist in arr for item in sublist]
+
+20. How do you copy a list (without reference)?
+new_arr = arr.copy()
+# OR
+new_arr = arr[:]
+
+🔹 Bonus: Array vs List in Python
+Is there an actual array in Python?
+
+Yes — using the array module:
+
+import array
+arr = array.array('i', [10, 20, 30])
+
+---------------------------------------
+
+27. ✅ How to Handle Exceptions in Python
+🔹 Use try–except
+
+You put the risky code in try, and if an error occurs, Python jumps to except.
+
+Example
+try:
+    x = 10 / 0
+except ZeroDivisionError:
+    print("You cannot divide by zero!")
+
+🔹 General Syntax
+try:
+    # code that may cause an error
+except ErrorType:
+    # what to do if that error happens
+
+🔹 Handling Multiple Exceptions
+try:
+    num = int("abc")
+except ValueError:
+    print("Invalid number")
+except TypeError:
+    print("Wrong type used")
+
+🔹 Catching All Exceptions
+
+(Not recommended always, but useful sometimes)
+
+try:
+    a = 5 / 0
+except Exception as e:
+    print("Error:", e)
+
+
+e shows the actual error message.
+
+🔹 Using else
+
+Runs only when no exception occurs.
+
+try:
+    x = int("10")
+except ValueError:
+    print("Error converting")
+else:
+    print("No error! Value =", x)
+
+🔹 Using finally
+
+Runs always — even if there is an exception.
+
+Useful for closing files, database connections, etc.
+
+try:
+    file = open("example.txt")
+    data = file.read()
+except FileNotFoundError:
+    print("File not found")
+finally:
+    print("Cleaning up...")
+    file.close()
+
+🔹 Raise Your Own Exception
+x = -1
+if x < 0:
+    raise ValueError("x cannot be negative")
+
+⭐ Full Example (All Parts)
+try:
+    num = int(input("Enter a number: "))
+except ValueError:
+    print("Please enter a valid number!")
+else:
+    print("Square is:", num * num)
+finally:
+    print("Program completed.")
+
+----------------------
+
+28. ✅ 1. json.loads() — Convert JSON STRING → Python Dictionary
+
+loads() = load string
+
+📌 Takes a JSON string and converts it into Python data.
+
+Example:
+import json
+
+json_string = '{"name": "Prem", "age": 25, "language": "Python"}'
+
+data = json.loads(json_string)
+
+print(data)
+print(type(data))
+
+✅ Output:
+{'name': 'Prem', 'age': 25, 'language': 'Python'}
+<class 'dict'>
+
+
+✔ The JSON string becomes a Python dictionary.
+
+✅ 2. json.dumps() — Convert Python Dictionary → JSON STRING
+
+dumps() = dump (Python object) to string
+
+📌 Takes Python data and converts it into JSON-formatted string.
+
+Example:
+import json
+
+data = {
+    "name": "Prem",
+    "age": 25,
+    "language": "Python"
+}
+
+json_output = json.dumps(data)
+
+print(json_output)
+print(type(json_output))
+
+✅ Output:
+{"name": "Prem", "age": 25, "language": "Python"}
+<class 'str'>
+
+
+✔ The Python dictionary becomes a JSON string.
+
+📌 Add Formatting (Pretty JSON)
+
+Use indent= to make readable JSON.
+
+print(json.dumps(data, indent=4))
+
+
+Output:
+
+{
+    "name": "Prem",
+    "age": 25,
+    "language": "Python"
+}

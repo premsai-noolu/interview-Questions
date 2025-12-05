@@ -1,0 +1,1876 @@
+1. How does React.js work?
+
+⚙️ 1. React builds components
+
+React lets you break your UI into small, reusable pieces called components.
+Each component is like a function that returns what the screen should look like.
+
+👉 Example:
+
+function Welcome() {
+return <h1>Hello, world!</h1>;
+}
+
+🧱 2. Components return JSX
+
+JSX looks like HTML but is actually JavaScript.
+React uses JSX to describe how the UI should appear.
+
+🧠 3. React creates a Virtual DOM
+
+When you write components, React doesn’t directly change the real web page (the real DOM).
+Instead, it first creates a Virtual DOM — a lightweight copy of the real DOM.
+
+🔄 4. React updates efficiently
+
+When something changes (like data or state):
+
+React compares the new Virtual DOM with the old one (this is called reconciliation).
+
+It finds what has actually changed.
+
+Then it updates only that part of the real DOM — not the whole page.
+
+👉 This makes React fast and efficient.
+
+🔁 5. One-way data flow
+
+Data in React flows from parent to child through props.
+This makes it easier to track and debug how data moves.
+
+✅ In short:
+
+React works by:
+
+Building UI using components
+
+Using JSX to describe how it looks
+
+Maintaining a Virtual DOM
+
+Updating the real DOM efficiently when things change
+
+That’s how React makes web apps fast, modular, and easy to manage 🚀
+
+---
+
+2. What is state in React and how do you update it?
+
+State is like a component’s memory — it holds data that can change over time.
+
+When the state changes, React automatically re-renders the component to show the new data on the screen.
+
+🧠 Example:
+import React, { useState } from "react";
+
+function Counter() {
+const [count, setCount] = useState(0); // state variable
+
+return (
+
+<div>
+<h1>Count: {count}</h1>
+<button onClick={() => setCount(count + 1)}>Increase</button>
+</div>
+);
+}
+
+🧩 What’s happening here:
+
+count → is the state variable (current value).
+
+setCount → is the function to update that value.
+
+useState(0) → sets the initial state to 0.
+
+When you click the button:
+
+setCount(count + 1) updates the state.
+
+React sees the change → re-renders the component → and shows the new count.
+
+---
+
+3. What are props and default props in React?
+
+🧩 Props in React
+
+Props (short for properties) are like function arguments — they let you pass data from one component to another (usually from a parent to a child).
+
+Think of them as the inputs to a component.
+
+👉 Example:
+
+function Welcome(props) {
+return <h1>Hello, {props.name}!</h1>;
+}
+
+// Passing props
+<Welcome name="Prem" />
+
+Here:
+
+name is a prop.
+
+The Welcome component gets props.name = "Prem" and displays:
+👉 Hello, Prem!
+
+⚙️ Default Props
+
+Default props are fallback values that a component uses if no prop is passed.
+
+👉 Example:
+
+function Welcome(props) {
+return <h1>Hello, {props.name}!</h1>;
+}
+
+Welcome.defaultProps = {
+name: "Guest"
+};
+
+// Usage
+<Welcome /> // Output: Hello, Guest!
+<Welcome name="Prem" /> // Output: Hello, Prem!
+
+So,
+
+If you don’t pass a prop → it uses the default value.
+
+If you do pass one → it uses your value instead.
+
+---
+
+3. What is JSX and how is it converted into JavaScript?
+
+💡 What is JSX?
+
+JSX stands for JavaScript XML.
+It lets you write HTML-like code inside JavaScript when building React components.
+
+👉 Example:
+
+const element = <h1>Hello, Prem!</h1>;
+
+Even though it looks like HTML, it’s not HTML — it’s a special syntax that React understands.
+
+JSX makes your code easier to write and read because it lets you describe what your UI should look like directly in your JavaScript code.
+
+⚙️ How JSX is converted into JavaScript
+
+Browsers cannot understand JSX directly, so it must be converted (transpiled) into regular JavaScript before running in the browser.
+
+This conversion is done by Babel (a popular JavaScript compiler).
+
+🧠 Example of conversion
+
+JSX:
+
+const element = <h1>Hello, Prem!</h1>;
+
+After Babel converts it:
+
+const element = React.createElement("h1", null, "Hello, Prem!");
+
+⚡ What happens next
+
+React.createElement() creates a virtual DOM object (not a real HTML element).
+
+React uses this virtual DOM to figure out what to render on the real web page efficiently.
+
+✅ In short:
+
+JSX → A syntax to write HTML-like code in JavaScript.
+
+Babel → Converts JSX into React.createElement() JavaScript code.
+
+React → Uses that to build and update the virtual DOM, which updates the real DOM efficiently.
+
+---
+
+4. 💡 What are Fragments in React?
+
+Fragments are like invisible containers in React.
+They let you group multiple elements together without adding extra HTML tags to the DOM.
+
+🧠 Why we need Fragments
+
+In React, a component must return only one parent element.
+If you try to return multiple elements side by side, you’ll get an error.
+
+❌ Example (invalid):
+
+function App() {
+return (
+
+<h1>Hello</h1>
+<p>Welcome to React!</p>
+);
+}
+
+✅ With Fragment:
+
+function App() {
+return (
+<React.Fragment>
+
+<h1>Hello</h1>
+<p>Welcome to React!</p>
+</React.Fragment>
+);
+}
+
+✨ Shortcut syntax
+
+You can use a short form for fragments:
+
+function App() {
+return (
+<>
+
+<h1>Hello</h1>
+<p>Welcome to React!</p>
+</>
+);
+}
+
+This does the same thing but is cleaner and more common.
+
+⚙️ What happens in the DOM
+
+Fragments don’t create an extra <div> or wrapper tag —
+React just renders the child elements directly, keeping the DOM clean.
+
+---
+
+5. What is the difference between controlled and uncontrolled components?
+
+⚙️ 1. Controlled Components
+
+A controlled component is a form element (like <input>, <textarea>, etc.) whose value is controlled by React state.
+
+That means:
+
+The form data is stored in React state, not in the DOM.
+
+You use useState() (or this.state in class components) to manage the input’s value.
+
+Every time the user types something, React updates the state → re-renders the input.
+
+👉 Example:
+
+import React, { useState } from "react";
+
+function ControlledInput() {
+const [name, setName] = useState("");
+
+return (
+
+<div>
+<input
+type="text"
+value={name} // value comes from state
+onChange={(e) => setName(e.target.value)} // updates state
+/>
+<p>Hello, {name}</p>
+</div>
+);
+}
+
+✅ Key idea: React controls the input value using its state.
+
+⚙️ 2. Uncontrolled Components
+
+An uncontrolled component is where the form data is handled by the DOM itself, not React state.
+
+You use a ref to directly access the DOM value when needed.
+
+👉 Example:
+
+import React, { useRef } from "react";
+
+function UncontrolledInput() {
+const inputRef = useRef();
+
+const handleSubmit = () => {
+alert(`Hello, ${inputRef.current.value}`);
+};
+
+return (
+
+<div>
+<input type="text" ref={inputRef} /> {/_ value stored in DOM _/}
+<button onClick={handleSubmit}>Submit</button>
+</div>
+);
+}
+
+✅ Key idea: The input manages its own value — React just reads it when needed.
+
+---
+
+6. 12. How does the useState hook work?
+
+The useState hook allows you to add state to functional components. It returns a state variable and a setter function to update that state. When the state changes, React re-renders the component with the updated value.
+
+Example:
+
+import { useState } from 'react';
+
+function Counter() {
+const [count, setCount] = useState(0);
+
+return (
+
+<div>
+<p>Count: {count}</p>
+<button onClick={() => setCount(count + 1)}>Increment</button>
+</div>
+);
+}
+In this example:
+
+count is the current state value.
+setCount is the function used to update state.
+0 is the initial value when the component mounts. When setCount is called, React re-renders Counter with the new count value.
+
+---
+
+7. What is useEffect in React and what is the role of its dependency array?
+
+💡 What is useEffect in React?
+
+useEffect is a Hook that lets you perform side effects in your React components.
+
+🧠 Side effects mean anything that affects something outside the component, such as:
+
+Fetching data from an API
+
+Manipulating the DOM directly
+
+Setting up timers or intervals
+
+Subscribing/unsubscribing to events
+
+⚙️ Syntax:
+useEffect(() => {
+// Side effect logic here
+});
+
+🧩 Example 1: Basic useEffect
+import React, { useState, useEffect } from "react";
+
+function Example() {
+const [count, setCount] = useState(0);
+
+useEffect(() => {
+console.log("Component rendered or updated!");
+});
+
+return (
+
+<div>
+<p>Count: {count}</p>
+<button onClick={() => setCount(count + 1)}>Increase</button>
+</div>
+);
+}
+
+👉 Every time the component renders (even after updates), the code inside useEffect runs.
+So here, the message logs every time count changes.
+
+🎯 Role of the Dependency Array
+
+useEffect can take a second argument — an array of dependencies.
+
+useEffect(() => {
+// Side effect logic
+}, [dependencies]);
+
+The dependency array tells React when to run the effect.
+
+🔍 3 main ways the dependency array affects behavior:
+Case Code Example When it runs
+
+1. No dependency array useEffect(() => {...}); Runs after every render (initial + updates)
+2. Empty dependency array useEffect(() => {...}, []); Runs only once (when the component mounts)
+3. With dependencies useEffect(() => {...}, [count]); Runs only when count changes
+   🧠 Example 2: useEffect with dependency
+   useEffect(() => {
+   console.log("Count changed!");
+   }, [count]);
+
+✅ This will run only when count changes, not on every render.
+
+🧹 Cleanup function (optional)
+
+If your effect sets up something like a timer or subscription, you should clean it up to avoid memory leaks.
+
+useEffect(() => {
+const timer = setInterval(() => console.log("Running..."), 1000);
+
+return () => {
+clearInterval(timer); // Cleanup when component unmounts or re-runs
+};
+}, []);
+
+---
+
+8. What is the useContext hook and when should you use it?
+
+useContext is a Hook that lets you access data from a React Context directly in a component — without having to pass props manually at every level.
+
+It helps you share data easily between components without "prop drilling".
+
+🧩 What is Prop Drilling?
+
+Prop drilling means passing data from a parent → to child → to grandchild, even when only the deepest child needs it.
+
+Example (without context):
+
+function App() {
+const username = "Prem";
+return <Parent username={username} />;
+}
+
+function Parent({ username }) {
+return <Child username={username} />;
+}
+
+function Child({ username }) {
+return <h1>Hello, {username}</h1>;
+}
+
+Here, the username prop has to be passed through every layer, even if only Child needs it — this becomes messy in large apps.
+
+⚙️ React Context + useContext = Easy Sharing
+
+With Context, you can store shared data in one place,
+and with useContext, you can easily access it from any component — no prop drilling needed.
+
+🧠 Example: Using useContext
+import React, { createContext, useContext } from "react";
+
+// 1️⃣ Create the context
+const UserContext = createContext();
+
+// 2️⃣ Provide the context value
+function App() {
+return (
+<UserContext.Provider value="Prem">
+<Child />
+</UserContext.Provider>
+);
+}
+
+// 3️⃣ Consume the context value
+function Child() {
+const username = useContext(UserContext); // access context directly
+return <h1>Hello, {username}!</h1>;
+}
+
+✅ Output:
+
+Hello, Prem!
+
+🧩 When to use useContext
+
+Use it when:
+
+You need to share data across multiple components, especially at different levels of the component tree.
+
+Example use cases:
+
+Current user info (login data)
+
+Theme (light/dark mode)
+
+Language or localization settings
+
+Global app settings or preferences
+
+⚠️ When not to use it
+
+Avoid overusing context for data that changes very frequently (like input values or counters),
+because it can cause unnecessary re-renders in all components using that context.
+
+✅ In short:
+Concept Description
+useContext React Hook that lets you read data from a context directly.
+Purpose Avoids prop drilling — passes data without going through every component.
+Used with createContext() and <Context.Provider>
+When to use For global data like user, theme, or language.
+
+👉 Simple summary:
+useContext = “A shortcut to access shared data (context) anywhere in your component tree — without passing props manually.”
+
+---
+
+9. What is useReducer in React?
+
+useReducer is a React Hook used to manage complex state logic — especially when your state updates depend on multiple conditions or previous state values.
+
+It works like a mini Redux built into React.
+
+🔹 Syntax
+const [state, dispatch] = useReducer(reducer, initialState);
+
+reducer → a function that decides how to update the state
+
+initialState → starting state value
+
+dispatch → a function to trigger (dispatch) an action that changes the state
+
+🧠 How it works (step-by-step)
+
+You define a reducer function — it takes the current state and an action, and returns the new state.
+
+You call useReducer and get back state and dispatch.
+
+When something happens (like a button click), you call dispatch({ type: "something" }).
+
+React runs the reducer function and updates the state accordingly.
+
+✅ Example 1: Counter using useReducer
+import React, { useReducer } from "react";
+
+// 1️⃣ Define reducer function
+function reducer(state, action) {
+switch (action.type) {
+case "increment":
+return { count: state.count + 1 };
+case "decrement":
+return { count: state.count - 1 };
+default:
+return state;
+}
+}
+
+// 2️⃣ Use it in component
+function Counter() {
+const [state, dispatch] = useReducer(reducer, { count: 0 });
+
+return (
+
+<div>
+<h2>Count: {state.count}</h2>
+<button onClick={() => dispatch({ type: "increment" })}>+</button>
+<button onClick={() => dispatch({ type: "decrement" })}>-</button>
+</div>
+);
+}
+
+export default Counter;
+
+🧩 How it works:
+
+state.count holds the current value.
+When you click +, it dispatches {type: "increment"}.
+The reducer returns {count: previousCount + 1}.
+
+---
+
+10. 🧩 What is useRef in React?
+
+useRef is a React Hook that lets you:
+
+Access DOM elements directly, and
+
+Store mutable values that persist between renders without causing re-renders.
+
+👉 In simple words:
+
+It’s like a container (or box) that holds a value in its .current property.
+That value stays the same even if the component re-renders.
+
+🧠 Syntax
+const myRef = useRef(initialValue);
+
+myRef is an object like { current: initialValue }.
+
+You can change it anytime:
+
+myRef.current = newValue;
+
+Changing .current does not trigger a re-render.
+
+✅ Example 1: Accessing a DOM element
+import React, { useRef } from "react";
+
+function InputFocus() {
+const inputRef = useRef();
+
+const handleFocus = () => {
+inputRef.current.focus(); // ✅ Focuses the input element
+};
+
+return (
+
+<div>
+<input ref={inputRef} type="text" placeholder="Type here..." />
+<button onClick={handleFocus}>Focus Input</button>
+</div>
+);
+}
+
+export default InputFocus;
+
+🧩 Explanation:
+
+useRef() gives you a reference object.
+
+You attach it to <input> using ref={inputRef}.
+
+Now inputRef.current points to the actual DOM node.
+
+You can call DOM methods like .focus().
+
+✅ Example 2: Storing a mutable value
+import React, { useRef, useState } from "react";
+
+function RenderCounter() {
+const [count, setCount] = useState(0);
+const renderCount = useRef(0);
+
+renderCount.current = renderCount.current + 1;
+
+return (
+
+<div>
+<p>Count: {count}</p>
+<p>Component rendered: {renderCount.current} times</p>
+<button onClick={() => setCount(count + 1)}>Increase</button>
+</div>
+);
+}
+
+🧠 Here, renderCount.current stores how many times the component has rendered —
+and it does not cause re-renders when updated.
+
+---
+
+11. 🧩 What is useMemo in React?
+
+useMemo is a React Hook that helps you optimize performance by remembering (caching) the result of an expensive calculation — so React doesn’t have to redo it every time the component re-renders.
+
+👉 In simple terms:
+
+useMemo “remembers” the output of a function until its dependencies change.
+
+🧠 Syntax
+const memoizedValue = useMemo(() => {
+// some expensive calculation
+return result;
+}, [dependencies]);
+
+The function inside useMemo runs only when something in the dependency array changes.
+
+Otherwise, React uses the cached value from the previous render.
+
+import React, { useState, useMemo } from "react";
+
+function WithUseMemo() {
+const [count, setCount] = useState(0);
+const [text, setText] = useState("");
+
+const expensiveCalculation = (num) => {
+console.log("Calculating...");
+let total = 0;
+for (let i = 0; i < 1000000000; i++) {
+total += i;
+}
+return total + num;
+};
+
+// ✅ useMemo caches the result until `count` changes
+const total = useMemo(() => expensiveCalculation(count), [count]);
+
+return (
+
+<div>
+<p>Expensive Result: {total}</p>
+<button onClick={() => setCount(count + 1)}>Increment ({count})</button>
+<input value={text} onChange={(e) => setText(e.target.value)} />
+</div>
+);
+}
+
+export default WithUseMemo;
+🧠 Now:
+
+The expensive function runs only when count changes.
+Typing in the input (text) won’t trigger it again.
+
+✅ Result: Better performance 🚀
+
+---
+
+12. 🧩 What is useCallback in React?
+
+useCallback is a React Hook that lets you save (or memoize) a function, so that the same function instance is reused between re-renders — unless its dependencies change.
+
+💬 In simple words:
+
+useCallback remembers a function so that it doesn’t get recreated every time your component re-renders.
+
+import React, { useState, useCallback } from "react";
+
+function Counter({ onClick }) {
+console.log("Child re-rendered");
+return <button onClick={onClick}>Increment</button>;
+}
+
+function App() {
+const [count, setCount] = useState(0);
+const [text, setText] = useState("");
+
+// ✅ useCallback memoizes the function
+const handleClick = useCallback(() => {
+setCount((prev) => prev + 1);
+}, []);
+
+return (
+
+<div>
+<h2>Count: {count}</h2>
+<Counter onClick={handleClick} />
+<input value={text} onChange={(e) => setText(e.target.value)} />
+</div>
+);
+}
+
+export default App;
+🧠 Now:
+
+handleClick function is the same across re-renders.
+
+Typing in the input won’t cause the Counter to re-render.
+
+✅ Better performance!
+
+---
+
+13. 🧩 What are Custom Hooks in React?
+
+A Custom Hook is your own hook — a reusable function that uses one or more built-in React hooks (useState, useEffect, etc.) to share logic between components.
+
+💬 In simple words:
+
+A custom hook lets you extract reusable logic from a component into a separate function so you can use it again and again.
+
+🧠 Why do we need them?
+
+Sometimes, you have the same logic repeated in multiple components — for example:
+
+fetching data from an API
+
+managing form input
+
+handling timers, scrolls, etc.
+
+Instead of copying the same code everywhere, you can put that logic inside a custom hook.
+
+🧱 How to create a custom hook
+
+A custom hook is just a normal JavaScript function.
+
+Its name must start with “use” (like useFetch, useCounter, useForm).
+
+Inside it, you can use other hooks like useState, useEffect, etc.
+
+✅ Example 1: Creating a Custom Hook (useCounter)
+import { useState } from "react";
+
+// 👇 Custom Hook
+function useCounter(initialValue = 0) {
+const [count, setCount] = useState(initialValue);
+
+const increment = () => setCount((c) => c + 1);
+const decrement = () => setCount((c) => c - 1);
+const reset = () => setCount(initialValue);
+
+return { count, increment, decrement, reset };
+}
+
+export default useCounter;
+
+🧩 Using it in a component:
+import React from "react";
+import useCounter from "./useCounter";
+
+function CounterComponent() {
+const { count, increment, decrement, reset } = useCounter(5);
+
+return (
+
+<div>
+<h2>Count: {count}</h2>
+<button onClick={increment}>+</button>
+<button onClick={decrement}>-</button>
+<button onClick={reset}>Reset</button>
+</div>
+);
+}
+
+export default CounterComponent;
+
+✅ Now:
+
+You can use useCounter() in any component.
+
+Logic is clean, reusable, and easy to maintain.
+
+✅ Example 2: Custom Hook for Fetching Data (useFetch)
+import { useState, useEffect } from "react";
+
+function useFetch(url) {
+const [data, setData] = useState(null);
+const [loading, setLoading] = useState(true);
+
+useEffect(() => {
+fetch(url)
+.then((res) => res.json())
+.then((data) => {
+setData(data);
+setLoading(false);
+});
+}, [url]);
+
+return { data, loading };
+}
+
+export default useFetch;
+
+Using it:
+import React from "react";
+import useFetch from "./useFetch";
+
+function App() {
+const { data, loading } = useFetch("https://jsonplaceholder.typicode.com/users");
+
+if (loading) return <p>Loading...</p>;
+
+return (
+
+<ul>
+{data.map((user) => (
+<li key={user.id}>{user.name}</li>
+))}
+</ul>
+);
+}
+
+export default App;
+
+---
+
+14. 🧩 What are the Rules of Hooks in React?
+
+React has two main rules for using Hooks.
+These rules make sure that React knows when and how to run hooks correctly.
+
+✅ Rule 1: Only call hooks at the top level
+
+Don’t call hooks inside loops, conditions, or nested functions.
+Always call them at the top of your component or custom hook.
+
+✅ Rule 2: Only call hooks from React functions
+
+Call hooks only from:
+
+React functional components, or
+
+Custom hooks (your own hooks starting with use).
+
+---
+
+15. What is State Management in React?
+
+State management means controlling how data (state) is stored, updated, and shared between components in a React app.
+
+Think of state as the app’s “memory” —
+
+⚙️ Why do we need State Management?
+
+Because in React, components often need to share or update data.
+Managing this flow of data in a clean and predictable way = state management.
+
+✅ 1. Local State
+💬 Simple definition:
+
+Local state is data managed inside one component only.
+
+🌐 2. Global State
+💬 Simple definition:
+
+Global state is data that needs to be shared between multiple components.
+
+Example:
+If you have a shopping cart, and both the Cart and Navbar need to show the total items —
+you can’t keep that data local. It should be global.
+
+---
+
+16. 🧩 What are State Management Solutions in React/Next.js?
+
+State management solutions are tools or libraries that help you store, update, and share state (data) across your React or Next.js app — especially when it becomes too complex for just useState or useContext.
+
+✅ 1. React’s Built-in Options
+🔹 useState
+
+For simple, local state (inside one component).
+
+Example: form inputs, counters.
+
+🔹 useReducer
+
+Good for complex state logic in a single component (like a mini Redux).
+
+Example: when state updates depend on previous state or multiple actions.
+
+🔹 Context API
+
+For global state (shared between components).
+
+Great for small to medium apps.
+
+Common use: Theme, Auth, Language, Cart.
+
+🧱 2. Popular External Libraries
+⚡ Redux / Redux Toolkit
+
+Most popular global state manager.
+
+Good for large apps with lots of shared data.
+
+Uses a central store and actions/reducers.
+
+🪶 Zustand
+
+Lightweight and simple alternative to Redux.
+
+Uses a store and feels like React’s useState.
+
+---
+
+17. When should you use Redux over Context API?
+
+🧠 Context API vs Redux — Basic Idea
+🔹 Context API
+
+Built into React (no extra library)
+
+Good for small to medium apps
+
+Used for simple global data like theme, language, or user login
+
+🔹 Redux
+
+External library for predictable state management
+
+Best for large or complex apps
+
+Manages shared state, async logic, and debugging much better
+
+🧠 In short (Interview answer):
+
+You should use Context API for small apps or simple global data like theme or auth.
+But use Redux when your app has complex shared state, frequent updates, or needs debugging and middleware support.
+
+---
+
+18. What is the difference between Client State and Server State?
+
+🧠 1. Client State (Frontend State)
+
+➡️ Stored and managed inside the browser (React app itself).
+It doesn’t come from a server — it’s created and changed by the user or app logic.
+
+🌐 2. Server State (Backend Data)
+
+➡️ Data that lives on a server, and your app fetches it using APIs (like fetch() or axios).
+You don’t directly control this data — it depends on the backend.
+
+🔹 Examples:
+User data from /api/user
+Product list from database
+Posts or comments fetched from a server
+Data that can change outside your app (e.g., another user updates it)
+
+🧩 In short (Interview answer):
+
+Client state is data managed inside your React app (like form inputs or UI state).
+Server state is data fetched from a backend (like users or posts), which may change outside your app and needs to be synchronized through APIs.
+
+basic example:
+🧩 What’s happening:
+
+Server State: Component fetches user data from the API using useEffect.
+
+Client State: User types in the search box.
+React filters the users list (fetched from server) using the client state (search).
+So both states work together:
+The server provides data.
+The client controls how that data is displayed or filtered.
+
+---
+
+19. 🧠 What is the Context API in React?
+
+➡️ The Context API is a feature in React that lets you share data between components — without having to pass props manually at every level.
+
+It helps you avoid "prop drilling" — that’s when you pass props from parent → child → grandchild → great-grandchild, just to get data to a deep component.
+
+🌐 Using Context API (Cleaner Way)
+import React, { createContext, useContext } from "react";
+
+// 1️⃣ Create Context
+const UserContext = createContext();
+
+function App() {
+return (
+// 2️⃣ Provide the data
+<UserContext.Provider value="Prem">
+<Parent />
+</UserContext.Provider>
+);
+}
+
+function Parent() {
+return <Child />;
+}
+
+function Child() {
+return <GrandChild />;
+}
+
+function GrandChild() {
+// 3️⃣ Consume the data
+const user = useContext(UserContext);
+return <h1>Hello, {user}</h1>;
+}
+
+export default App;
+
+🧠 How it works:
+
+createContext() → creates a Context object.
+
+Provider → makes the data available to all child components.
+
+useContext() → allows any child to access that data directly, without prop drilling.
+
+🎯 When to Use Context API
+
+✅ Use it when you want to share data that many components need, like:
+
+User authentication info (logged in user)
+Theme (dark/light mode)
+App language
+Global settings
+
+🧾 In short (Interview Answer)
+
+The Context API in React allows data to be shared globally across components without passing props manually through every level.
+It solves the problem of prop drilling by using a Provider to supply data and the useContext hook to consume it in child components.
+
+---
+
+20. 🧠 What is Persistent State?
+
+Persistent state means data that stays saved even after the page is refreshed or the user closes and reopens the app.
+
+Normally, React’s state (useState, useReducer) is temporary — it’s lost when you refresh the page.
+
+So we need to store it somewhere permanent, like:
+
+Browser storage (LocalStorage, SessionStorage)
+
+IndexedDB (for large data)
+
+Backend/database (for user-specific data)
+
+Cookies (for small authentication data)
+
+💾 1. Using Local Storage (most common way)
+
+LocalStorage saves key–value pairs in the browser and doesn’t expire.
+
+import React, { useState, useEffect } from "react";
+
+function PersistentCounter() {
+// 🧠 Load initial value from localStorage (if any)
+const [count, setCount] = useState(() => {
+const saved = localStorage.getItem("count");
+return saved ? JSON.parse(saved) : 0;
+});
+
+// 💾 Save to localStorage whenever count changes
+useEffect(() => {
+localStorage.setItem("count", JSON.stringify(count));
+}, [count]);
+
+return (
+
+<div>
+<h2>Count: {count}</h2>
+<button onClick={() => setCount(count + 1)}>Increment</button>
+<button onClick={() => setCount(0)}>Reset</button>
+</div>
+);
+}
+
+export default PersistentCounter;
+
+✅ Now if you refresh the page, the count will stay the same.
+
+🧭 2. Using Session Storage
+
+Similar to LocalStorage, but data is cleared when you close the browser tab.
+
+sessionStorage.setItem("key", "value");
+sessionStorage.getItem("key");
+
+🟢 Good for temporary session data (like form progress).
+
+🧠 In short (Interview answer):
+
+Persistent state means saving data so it remains after a page reload.
+You can handle it in React using localStorage, sessionStorage, or by saving to a backend database.
+Tools like Redux Persist or Zustand persist make this easier in larger apps.
+
+---
+
+21. What is the difference between derived state and computed state in React?
+
+🧠 1. Derived State (from Props or Other State)
+
+➡️ Derived state means a piece of state that is based on (or copied from) another state or prop.
+
+You’re storing it separately in the component — even though you could calculate it from existing data.
+
+🧩 Example of Derived State
+function Cart({ items }) {
+// ❌ Derived state — total can be calculated from items
+const [total, setTotal] = useState(0);
+
+useEffect(() => {
+const newTotal = items.reduce((sum, item) => sum + item.price, 0);
+setTotal(newTotal);
+}, [items]);
+
+return <p>Total: ₹{total}</p>;
+}
+
+Here, total is derived from items.
+We’re storing it in state unnecessarily — which can cause bugs or out-of-sync issues if we forget to update it.
+
+✅ Better way: Compute it directly instead of storing it:
+
+const total = items.reduce((sum, item) => sum + item.price, 0);
+
+⚙️ 2. Computed State
+
+➡️ Computed state is not stored in useState.
+Instead, it’s calculated on the fly (derived at render time) based on other state or props.
+
+🧩 Example of Computed State
+function Cart({ items }) {
+// 🧠 items is the only real state/prop
+const total = items.reduce((sum, item) => sum + item.price, 0); // computed
+
+return <p>Total: ₹{total}</p>;
+}
+
+Here:
+total is computed, not stored.
+It always stays in sync with items.
+No extra state or side effect is needed.
+
+---
+
+22. How can you optimize state updates for performance in React?
+
+Every time you update state in React, React re-renders that component — and all its child components (unless optimized).
+Too many unnecessary re-renders can slow down your app, especially in large applications.
+
+So we need to optimize how and when state updates happen.
+⚡ 1. Keep state minimal and local
+
+Only store what you actually need in state.
+If a value can be calculated from another state or prop, don’t store it separately.
+
+⚙️ 2. Use functional updates for dependent state
+
+If your new state depends on the previous state, use the functional form of setState — it’s faster and safer.
+
+🧩 Example:
+
+setCount(prev => prev + 1);
+
+Instead of:
+
+setCount(count + 1);
+
+This avoids potential stale state issues during batching.
+
+🧩 3. Batch multiple state updates
+
+React automatically batches state updates inside event handlers — but if you’re updating state in async code (like setTimeout, promises), you can use React’s automatic batching (React 18+).
+
+🧩 Example:
+
+setCount(c => c + 1);
+setName("Prem");
+// React 18 batches these — one re-render only ✅
+
+💡 4. Use useMemo for expensive calculations
+
+If you’re performing heavy computations based on state, memoize the result so React doesn’t re-calculate unnecessarily.
+
+⚙️ 5. Use useCallback for stable functions
+
+Passing inline functions as props can trigger re-renders of child components unnecessarily.
+Use useCallback to memoize them.
+
+⚙️ 7. Lift state up only when necessary
+
+Don’t keep all state in parent components — it causes many unnecessary re-renders in children.
+Keep state as close to where it’s used as possible.
+
+🚀 8. Use libraries for complex state
+
+For large apps, managing all state in React components can cause frequent updates.
+Use libraries like:
+
+Zustand
+Redux Toolkit
+Recoil
+
+---
+
+23. 🧩 What does “asynchronous state updates” mean?
+
+When you call setState (or setCount, etc. using useState),
+React doesn’t immediately update the state.
+
+Instead, it schedules an update and re-renders later.
+This makes state updates asynchronous — meaning, you can’t rely on the state value right after calling setState.
+
+✅ How to handle this correctly
+
+1. Use Functional Updates
+
+If your new state depends on the previous state,
+always use the functional form of setState.
+
+setCount(prev => prev + 1);
+
+2. Use useEffect to Respond After State Updates
+
+If you need to perform something after state changes (like logging or making an API call),
+use the useEffect hook.
+
+useEffect(() => {
+console.log("Count changed:", count);
+}, [count]);
+
+This runs after React finishes updating the DOM.
+
+4. Batching in React 18
+
+In React 18+, multiple state updates inside the same event handler are batched automatically, meaning React does one re-render at the end.
+
+const handleClick = () => {
+setCount(c => c + 1);
+setName("Prem");
+// ✅ React batches these — only one render
+};
+
+But if updates happen in an async callback (like setTimeout), React still batches them automatically in React 18.
+
+🚀 In short (Interview Answer):
+
+React state updates are asynchronous — React batches them for performance.
+To handle this, use functional updates (setCount(prev => prev + 1)) when depending on the previous value, and use useEffect when you need to react to a state change after it’s applied.
+
+---
+
+24. 👇
+
+🧠 What is the Virtual DOM?
+
+The Virtual DOM (VDOM) is a lightweight copy of the real DOM (Document Object Model).
+It’s just a JavaScript object that represents what the real DOM should look like.
+
+🏗 How React Uses the Virtual DOM
+
+Here’s the step-by-step process 👇
+
+1️⃣ Initial Render
+
+When your React app starts, React creates a Virtual DOM tree from your JSX.
+Then, it renders that structure to the real DOM (in the browser).
+
+2️⃣ When State or Props Change
+React creates a new Virtual DOM tree that reflects the new UI.
+It then compares the new Virtual DOM with the previous Virtual DOM — this process is called “diffing”.
+
+3️⃣ Efficient Update (Reconciliation)
+
+React figures out which parts actually changed.
+It updates only those parts in the real DOM — instead of re-rendering the entire page.
+This is called reconciliation, and it makes React super fast ⚡
+
+📊 Example
+
+Let’s say your component looks like this:
+
+function App() {
+const [count, setCount] = useState(0);
+
+return (
+
+<div>
+<h1>Hello Prem</h1>
+<p>Count: {count}</p>
+<button onClick={() => setCount(count + 1)}>Increment</button>
+</div>
+);
+}
+
+When count changes:
+React builds a new Virtual DOM with the updated count.
+It compares it to the old Virtual DOM.
+It sees that only the <p> tag changed.
+React updates just that part in the real DOM — not the entire page.
+
+🧩 In short (Interview Answer):
+
+The Virtual DOM is a lightweight copy of the real DOM that React uses to track UI changes efficiently.
+When state or props change, React updates the Virtual DOM first, compares it with the previous version (diffing), and then updates only the parts of the real DOM that actually changed — improving performance.
+
+---
+
+25. 🧠 What is React.memo?
+
+React.memo is a higher-order component (HOC) that helps prevent unnecessary re-renders of a component.
+
+In short:
+
+🪄 React.memo makes React remember (memoize) the output of a component — and re-render it only if its props change.
+
+🧩 Why is this useful?
+
+In React, when a parent component re-renders, all of its child components also re-render — even if their props didn’t change.
+
+This can cause performance issues if the child components are heavy (like large lists, charts, etc.).
+
+React.memo helps by skipping re-renders for components whose props stay the same.
+
+⚙️ Example
+
+Without React.memo 👇
+
+function Child({ name }) {
+console.log("Child rendered");
+return <h2>Hello {name}</h2>;
+}
+
+function Parent() {
+const [count, setCount] = useState(0);
+return (
+<>
+<button onClick={() => setCount(count + 1)}>Increment {count}</button>
+<Child name="Prem" />
+</>
+);
+}
+
+➡️ Even though the name prop never changes,
+the Child component will re-render every time Parent re-renders.
+
+✅ With React.memo
+const Child = React.memo(function Child({ name }) {
+console.log("Child rendered");
+return <h2>Hello {name}</h2>;
+});
+
+Now, when you click the button:
+
+Parent re-renders ✅
+
+But Child does not re-render 🚫 (because its props didn’t change)
+
+⚡ Why this improves performance
+
+Fewer unnecessary renders
+Faster UI updates
+Better performance for large apps or heavy components
+
+🚀 In short (Interview Answer):
+
+React.memo is used to prevent unnecessary re-renders of functional components.
+It remembers (memoizes) the component’s output and only re-renders it if its props have changed, helping improve performance.
+
+---
+
+26. ⚡ If a React app is slow, here are the key techniques to optimize it:
+
+🧩 1. Prevent Unnecessary Re-renders
+
+React re-renders components when props or state change — even if the output is the same.
+
+✅ Solutions:
+
+Use React.memo for functional components
+
+Use useCallback for memoizing functions
+
+Use useMemo for expensive calculations
+
+Example:
+
+const Child = React.memo(({ data }) => <div>{data}</div>);
+
+🧠 2. Optimize State Management
+
+Keep state as local as possible — don’t store everything in a top-level parent or context.
+
+✅ Tips:
+
+Lift state up only when necessary
+
+Avoid re-rendering the whole tree for small updates
+
+Use libraries like Zustand, Jotai, or Redux Toolkit efficiently
+
+🖼️ 3. Code Splitting and Lazy Loading
+
+Don’t load everything at once — split your code into smaller bundles.
+
+✅ Use:
+
+const Profile = React.lazy(() => import('./Profile'));
+<Suspense fallback={<p>Loading...</p>}>
+<Profile />
+</Suspense>
+
+This loads Profile only when needed, improving initial load time.
+
+⚙️ 4. Memoize Expensive Computations
+
+If a function or calculation is heavy, memoize it using useMemo.
+
+✅ Example:
+
+const sortedData = useMemo(() => heavySortFunction(data), [data]);
+
+This avoids recalculating unless data actually changes.
+
+5. 🧩 The Problem — Large Lists Slow Down React
+
+Imagine you have a list of 10,000 items (like user names or messages).
+
+If you write this:
+
+{items.map(item => <div>{item.name}</div>)}
+
+React will try to render all 10,000 items in the DOM at once 😫
+
+That means:
+
+The browser creates 10,000 <div> elements.
+
+The DOM becomes huge.
+
+Scrolling and rendering become very slow.
+
+🧠 The Idea Behind Virtualization (Windowing)
+
+Instead of rendering everything at once,
+React can only render what’s visible on the screen — like a “window” into your list.
+
+Think of it like Instagram or Facebook feeds:
+Even though you can scroll infinitely, the app doesn’t load every post from the start — it only shows what you see on screen and a few nearby posts.
+
+🪄 That’s called “Windowing” or “Virtualization”
+👉 What happens:
+
+Only a small portion of the list (say 20–30 items) is rendered.
+
+When you scroll, React removes old items and adds new ones that come into view.
+
+The user feels like the full list is there — but only a few items actually exist in the DOM at any moment.
+
+📷 6. Optimize Images and Assets
+
+Use compressed images
+
+Use lazy loading for images (<img loading="lazy" />)
+
+Use CDN for static assets
+
+⚡ 7. Avoid Inline Functions and Objects
+
+Inline functions and objects create new references on every render, causing child components to re-render.
+
+✅ Use:
+
+const handleClick = useCallback(() => { ... }, []);
+
+📉 8. Use React DevTools and Profiler
+
+Use the React Profiler (in browser DevTools) to:
+
+Identify slow components
+
+Check which components re-render unnecessarily
+
+🕒 9. Debounce or Throttle User Input
+
+Avoid updating state on every keystroke.
+
+✅ Example:
+
+const debouncedSearch = useCallback(debounce(handleSearch, 500), []);
+
+🚀 10. Production Build Optimization
+
+Run npm run build for production — it minifies code and removes dev checks.
+
+Use caching and gzip compression on your server.
+
+🧾 In short (Interview Summary Answer):
+
+To optimize a slow React app, I would first identify bottlenecks using the React Profiler. Then I’d reduce unnecessary re-renders with React.memo, useCallback, and useMemo. I’d also implement code-splitting, list virtualization, and lazy loading for performance. Additionally, I’d optimize assets, limit state scope, and ensure the app runs in a production build.
+
+---
+
+27. 🧩 What is Code Splitting?
+
+Normally, when you build a React app, all your code is bundled together into one big JavaScript file (bundle.js).
+
+✅ That means:
+When a user opens your app, the browser downloads the entire bundle — even the code for pages or features they might never visit.
+
+❌ This makes your app slow to load initially.
+
+⚙️ Code Splitting fixes this.
+
+It means splitting your code into smaller chunks (files) that load only when needed.
+
+So instead of one big bundle, you get:
+
+main.js (for homepage)
+about.js (for About page)
+profile.js (for Profile page)
+
+When the user goes to /profile, React loads only profile.js — on demand.
+This reduces the initial loading time and improves performance. 🚀
+
+---
+
+28. 🧠 What is Lazy Loading?
+
+Lazy loading is how React implements code splitting.
+
+It means React loads a component only when it’s actually needed, instead of at the beginning.
+
+🪄 Example (Without Lazy Loading)
+import Profile from './Profile'; // always loaded
+
+function App() {
+return <Profile />;
+}
+
+Here, the Profile component loads immediately, even if the user never visits it. ❌
+
+✅ Example (With Lazy Loading)
+import React, { Suspense, lazy } from 'react';
+
+const Profile = lazy(() => import('./Profile'));
+
+function App() {
+return (
+<Suspense fallback={<p>Loading...</p>}>
+<Profile />
+</Suspense>
+);
+}
+
+🧠 What happens:
+
+React doesn’t load Profile until it’s actually rendered.
+
+While loading, React shows the fallback (Loading...).
+
+Once it’s downloaded, React displays the component.
+
+⚡ Why It’s Useful
+
+✅ Benefits of Code Splitting + Lazy Loading:
+
+Faster initial page load 🚀
+
+Less data downloaded upfront
+
+Improved user experience
+
+Scales better for large apps
+
+🧾 In short (Interview Answer):
+
+Code splitting means breaking your app’s code into smaller bundles that load only when needed.
+Lazy loading is the technique React uses to load components on demand — improving performance and reducing initial load time.
+
+---
+
+29. What is the difference between React.PureComponent and React.Component?
+
+🧩 React.Component
+It’s the normal React class component.
+It re-renders every time its parent re-renders — even if the props or state didn’t actually change.
+
+You have to manually control when to re-render (e.g., by using shouldComponentUpdate).
+
+Example:
+
+class MyComponent extends React.Component {
+render() {
+console.log("Rendered!");
+return <div>{this.props.name}</div>;
+}
+}
+
+✅ It will render every time, even if name stays the same.
+
+⚡ React.PureComponent
+
+It is just like React.Component, but smarter.
+
+It automatically checks if the props or state changed (shallow comparison).
+
+If nothing changed, it skips re-rendering — which makes it faster.
+
+Example:
+
+class MyPureComponent extends React.PureComponent {
+render() {
+console.log("Rendered!");
+return <div>{this.props.name}</div>;
+}
+}
+
+✅ It will not re-render if name is the same as before.
+
+---
+
+30. 🧩 What is the key prop in react lists?
+
+When you render a list in React (using .map()), each element needs a unique key prop.
+Example:
+
+{items.map(item => (
+
+  <li key={item.id}>{item.name}</li>
+))}
+
+⚙️ Why is key important?
+
+React uses the Virtual DOM to compare the old and new UI when something changes.
+When rendering lists, React needs a way to identify each item — that’s what key does.
+
+It helps React know which items changed, added, or removed.
+
+📊 Example (Without keys):
+
+<ul>
+  <li>A</li>
+  <li>B</li>
+  <li>C</li>
+</ul>
+
+If you insert a new item at the top (X), React doesn’t know which <li> changed —
+it may re-render all items unnecessarily.
+
+✅ Example (With keys):
+
+<ul>
+  <li key="A">A</li>
+  <li key="B">B</li>
+  <li key="C">C</li>
+</ul>
+
+Now React knows:
+
+A new key “X” was added at the top
+
+Keys “A”, “B”, “C” still exist
+👉 It only re-renders the new item, not the whole list.
+
+---
+
+31. How do you conditionally render list items in React?
+
+It means show some list items only if a condition is true —
+for example, showing only active users, or hiding items that are empty.
+
+⚙️ Common ways to do it in React lists:
+
+1. Using .filter() before .map()
+
+This is the cleanest way.
+
+const users = [
+{ name: "Prem", active: true },
+{ name: "Sai", active: false },
+{ name: "Noolu", active: true },
+];
+
+// Show only active users
+
+<ul>
+  {users
+    .filter(user => user.active)
+    .map(user => (
+      <li key={user.name}>{user.name}</li>
+    ))}
+</ul>
+
+✅ Only “Prem” and “Noolu” will appear.
+
+2. Using a condition inside .map()
+
+You can check the condition inside map() and return something only if it’s true.
+
+<ul>
+  {users.map(user =>
+    user.active ? <li key={user.name}>{user.name}</li> : null
+  )}
+</ul>
+
+✅ If the condition is false, React just skips that item (returns null).
+
+3. Using short-circuit (&&)
+
+If you only want to render an item when something is true:
+
+<ul>
+  {users.map(user => (
+    user.active && <li key={user.name}>{user.name}</li>
+  ))}
+</ul>
+
+✅ && means “if the left side is true, show the right side”.
+
+---
+
+32. How do you update or remove an item from a list in React state?
+    🧠 React rule:
+
+In React, you never change (mutate) state directly.
+Instead, you create a new array and then update the state with it.
+
+🧩 Example list:
+const [items, setItems] = useState(["Apple", "Banana", "Cherry"]);
+
+🍏 1. Updating an item
+
+Say you want to change “Banana” to “Mango”.
+
+You can use .map() to create a new array where only one item is changed.
+
+const updateItem = (oldItem, newItem) => {
+setItems(items.map(item => (item === oldItem ? newItem : item)));
+};
+
+When you call:
+
+updateItem("Banana", "Mango");
+
+Now the list becomes:
+
+["Apple", "Mango", "Cherry"]
+
+✅ React re-renders the UI automatically.
+
+🍒 2. Removing an item
+
+You can use .filter() to remove something.
+
+const removeItem = (itemToRemove) => {
+setItems(items.filter(item => item !== itemToRemove));
+};
+
+When you call:
+
+removeItem("Apple");
+
+Now the list becomes:
+
+["Banana", "Cherry"]
+
+🧩 3. Adding an item
+
+Just for completeness 😊
+
+const addItem = (newItem) => {
+setItems([...items, newItem]);
+};
+
+⚠️ Remember:
+
+Don’t do this: items.push("Mango") — ❌ (mutates the array)
+Do this: setItems([...items, "Mango"]) — ✅ (creates a new one)
+
+---
+
+33. How are forms handled in React compared to plain HTML?
+
+In plain HTML, forms handle data automatically — when you submit, the browser collects all the input values and sends them to a server (usually reloading the page).
+Example (HTML):
+
+<form action="/submit" method="POST">
+  <input type="text" name="username" />
+  <button type="submit">Submit</button>
+</form>
+
+➡️ The browser handles everything — you don’t control the data directly in JavaScript.
+
+In React, forms are handled manually using state.
+You control the input values using state variables and event handlers, so React always knows what’s in the form.
+Example (React):
+import { useState } from "react";
+
+function MyForm() {
+const [username, setUsername] = useState("");
+
+const handleSubmit = (e) => {
+e.preventDefault(); // stops page reload
+console.log(username); // handle data manually
+};
+
+return (
+
+<form onSubmit={handleSubmit}>
+<input
+type="text"
+value={username}
+onChange={(e) => setUsername(e.target.value)}
+/>
+<button type="submit">Submit</button>
+</form>
+);
+}
+
+➡️ In React:
+You control inputs using state (value + onChange).
+
+You prevent the default form behavior (page reload).
+
+You decide what happens when the form is submitted (e.g., send data with fetch or axios).
+
+🟢 In short:
+HTML forms: Browser handles the data.
+React forms: You handle the data using state and events.

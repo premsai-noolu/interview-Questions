@@ -1,0 +1,554 @@
+1. What is Node.js and how it works?
+
+🌟 What is Node.js?
+
+Node.js is a runtime environment that lets you run JavaScript outside the browser, mainly on the server side.
+
+➡️ Normally, JavaScript runs only inside browsers (like Chrome).
+➡️ But with Node.js, you can use JavaScript to build backend servers, APIs, and tools.
+
+It’s built on Google Chrome’s V8 engine, which makes it very fast at executing JavaScript code.
+
+⚙️ How Node.js Works (Simple Explanation)
+
+Node.js uses a single-threaded, event-driven architecture — meaning it handles many requests at the same time without creating multiple threads.
+
+Here’s how it works step by step:
+
+📨 A client sends a request (for example, to fetch data or upload a file).
+
+🧠 Node.js puts this request in an event queue.
+
+⚡ If it’s a simple task (like reading data from memory), Node.js handles it directly.
+
+🧩 If it’s a long-running task (like reading a file or querying a database), Node.js sends it to the worker threads via the event loop, and keeps handling other requests in the meantime.
+
+✅ Once the task is done, the result is sent back to the main thread, and Node.js sends the response to the client.
+
+🔄 In Short:
+
+Node.js = JavaScript + V8 Engine + Event Loop (non-blocking I/O)
+
+It’s fast, lightweight, and great for real-time apps like chat apps, streaming services, or APIs.
+
+💬 Example to Remember Easily:
+
+Think of Node.js as a chef who takes multiple orders (requests) at once.
+Instead of cooking each meal alone (blocking others), the chef gives some tasks to helpers (workers) — and keeps taking more orders.
+When helpers finish, the chef serves the dishes (responses) quickly. 🍽️
+
+---
+
+2. How do you manage packages in your node.js project?
+
+📦 How I manage packages in a Node.js project
+
+In Node.js, packages are reusable pieces of code (like libraries or modules) that help add features easily — for example, Express for servers or Mongoose for MongoDB.
+
+We manage these packages using npm (Node Package Manager) or yarn.
+
+⚙️ How it works (step by step):
+
+🏗️ Initialize the project:
+
+npm init
+
+→ This creates a package.json file — it stores all project details and dependencies.
+
+📥 Install packages:
+
+npm install express
+
+→ This downloads the package into a node_modules folder and adds it to package.json.
+
+🧾 package.json:
+Keeps track of which packages (and versions) your project depends on.
+
+📦 package-lock.json:
+Records exact versions of all installed packages — ensures consistency across environments.
+
+🚀 Reinstall all packages:
+If someone else downloads your project, they can run:
+
+npm install
+
+→ It reads package.json and installs everything automatically.
+
+🧹 Remove a package:
+
+npm uninstall express
+
+🪄 In short:
+
+I use npm to install, update, or remove packages, and manage them through package.json — which keeps my project organized and consistent.
+
+---
+
+3. How is Node.js better than other frameworks most popularly used?
+
+Why Node.js is better than other frameworks
+
+✅ Single Language (JavaScript Everywhere):
+You can use JavaScript for both frontend and backend, which makes development faster and easier — no need to learn multiple languages.
+
+⚙️ Non-blocking & Event-driven:
+Node.js uses an event loop and non-blocking I/O, so it can handle many requests at once without slowing down — perfect for real-time apps like chats or live updates.
+
+🚀 Fast Performance:
+It’s built on Google’s V8 engine, which makes JavaScript run very fast on the server.
+
+📦 Huge Package Ecosystem (npm):
+Node.js has a massive library of ready-to-use packages through npm, which saves a lot of development time.
+
+🌐 Scalability:
+Node.js is lightweight and scalable, great for building microservices and large-scale applications.
+
+💬 Real-time Capabilities:
+With tools like WebSockets, Node.js is perfect for real-time communication apps like chat, gaming, or live dashboards.
+
+🪄 In short:
+
+Node.js is fast, scalable, and uses the same language (JavaScript) on both frontend and backend — making development quicker and smoother than many other backend frameworks.
+
+---
+
+4. Explain the steps how “Control Flow” controls the functions calls?
+
+⚙️ What is Control Flow?
+
+Control flow means the order in which code runs — how Node.js decides which function runs first, next, and last.
+
+In Node.js, because it is asynchronous and non-blocking, control flow doesn’t always go line-by-line like normal code.
+It depends on callbacks, promises, and the event loop.
+
+🧩 Simple Steps — How Control Flow Works:
+
+Let’s understand step by step 👇
+
+🟢 Start the program
+Node.js begins executing your file from top to bottom.
+
+⚡ Synchronous code runs first
+All normal (blocking) code runs line by line.
+
+console.log("Start"); // runs first
+
+🕒 Asynchronous functions are registered
+Functions like setTimeout, fs.readFile, or API calls are sent to background to be handled later.
+Node.js doesn’t wait for them — it moves on to the next line.
+
+setTimeout(() => console.log("Async Task"), 1000);
+
+➡️ Continue with next lines of code
+Node.js executes the rest of the code while the async task is still running in the background.
+
+console.log("End");
+
+🔁 Event Loop checks for completed tasks
+When the async task finishes, its callback (or promise) is sent back to the event loop, which puts it in the callback queue.
+
+🎯 Execute callbacks one by one
+When the main thread (call stack) is empty, the event loop picks the next callback and runs it.
+
+💬 Example:
+console.log("Start");
+
+setTimeout(() => {
+console.log("Async Task Done");
+}, 1000);
+
+console.log("End");
+
+🧠 Output:
+
+Start
+End
+Async Task Done
+
+Because the control flow first runs all synchronous code, then later handles asynchronous callbacks.
+
+🪄 In short:
+
+Node.js control flow means:
+1️⃣ Run synchronous code first →
+2️⃣ Send async tasks to background →
+3️⃣ When they finish, the event loop runs their callbacks.
+
+---
+
+5. What are some commonly used timing features of Node.js?
+
+1. setTimeout()
+
+What it does: Runs a function once after a given delay (in milliseconds).
+
+Example:
+
+setTimeout(() => {
+console.log("Runs after 2 seconds");
+}, 2000);
+
+🧠 Think of it as a timer alarm — it rings once after a set time.
+
+⚙️ 2. setInterval()
+
+What it does: Runs a function repeatedly after every given interval.
+
+Example:
+
+setInterval(() => {
+console.log("Runs every 3 seconds");
+}, 3000);
+
+🔁 Think of it as a repeating alarm — it rings again and again at set intervals.
+
+⚙️ 3. clearTimeout()
+
+What it does: Stops a timer started by setTimeout() before it runs.
+
+Example:
+
+const timer = setTimeout(() => console.log("Won’t run"), 3000);
+clearTimeout(timer);
+
+⚙️ 4. clearInterval()
+
+What it does: Stops a repeating timer started by setInterval().
+
+Example:
+
+const repeater = setInterval(() => console.log("Repeating"), 1000);
+clearInterval(repeater);
+
+⚙️ 5. setImmediate()
+
+What it does: Runs a function immediately after the current event loop phase (faster than setTimeout(fn, 0)).
+
+Example:
+
+setImmediate(() => console.log("Runs immediately after current code"));
+
+---
+
+6. What are the advantages of using promises instead of callbacks?
+
+💭 What are Promises?
+
+A Promise in Node.js is an object that represents the result of an asynchronous operation — it can be:
+
+✅ Resolved (success)
+❌ Rejected (error)
+⏳ Pending (still running)
+
+⚡ Why Promises are better than Callbacks
+
+✅ Avoid “Callback Hell”
+With callbacks, nested functions can look messy and confusing:
+
+getData(() => {
+processData(() => {
+saveData(() => {
+console.log("Done");
+});
+});
+});
+
+With Promises, it’s cleaner:
+
+getData()
+.then(processData)
+.then(saveData)
+.then(() => console.log("Done"))
+.catch(err => console.log(err));
+
+🧠 Easier to Read and Maintain
+Promise chains look like top-to-bottom code, which is easier to understand and debug.
+
+⚙️ Better Error Handling
+In callbacks, you must handle errors in every function separately.
+Promises have a single .catch() for all errors in the chain.
+
+🔄 Supports Async/Await
+Promises work perfectly with modern async/await syntax, making code look even simpler:
+
+async function run() {
+try {
+const data = await getData();
+const processed = await processData(data);
+await saveData(processed);
+console.log("Done");
+} catch (err) {
+console.log(err);
+}
+}
+
+🪄 In short:
+
+Promises make asynchronous code cleaner, easier to read, and easier to handle errors — unlike callbacks, which can become messy (“callback hell”).
+
+---
+
+7. What is fork() in Node.js?
+
+fork() in Node.js is a method used to create a new child process — basically a separate copy of your program that can run in parallel with the main process.
+
+It’s part of the child_process module and is often used to run CPU-heavy or background tasks without blocking the main thread.
+
+⚙️ How it works (in simple steps):
+
+Node.js runs your app on a single thread.
+So, if one task takes a long time (like image processing or data crunching), it can block others.
+
+Using fork(), you can create another Node.js process to handle that heavy work separately.
+
+The main process and child process can communicate with each other using messages.
+
+💻 Example:
+// main.js
+const { fork } = require('child_process');
+
+const child = fork('child.js'); // creates a new Node process
+
+child.send('Start work'); // send message to child
+
+child.on('message', (msg) => {
+console.log('Message from child:', msg);
+});
+
+// child.js
+process.on('message', (msg) => {
+console.log('Child got message:', msg);
+process.send('Work done!'); // send reply back
+});
+
+💡 In short:
+
+fork() creates a new Node.js process to run code in parallel, helping handle heavy tasks without blocking the main app.
+
+🧠 Real-life example:
+
+Think of fork() like hiring an assistant to do a time-consuming job —
+you keep serving customers while the assistant works in parallel and reports back when done. 👨‍🍳👩‍🍳
+
+---
+
+8. ⚙️ Why is Node.js Single-Threaded?
+
+Node.js is single-threaded by design because it was built to handle many connections efficiently — without creating a new thread for each request.
+
+It uses an event-driven, non-blocking I/O model, which means it can do multiple things asynchronously on a single thread.
+
+🧠 Simple Explanation:
+
+Imagine Node.js as a chef 🧑‍🍳 working alone in a kitchen:
+
+The chef takes many orders (client requests).
+
+Instead of cooking each meal fully before taking the next order, the chef starts a task, sets a timer (async operation), and then moves on to the next order.
+
+When the food is ready (task completes), the chef serves it immediately.
+
+So even with one chef (one thread), many customers are served efficiently.
+
+💡 Main Reason:
+
+Less overhead: No need to manage multiple threads.
+
+Fast and lightweight: One thread + event loop = handles thousands of requests.
+
+Efficient for I/O tasks: Like reading files, databases, or APIs.
+
+⚠️ But note:
+
+Node.js is single-threaded for JavaScript code,
+but internally it uses multiple threads (via libuv) for tasks like file operations or networking — so it’s still very efficient.
+
+🪄 In short:
+
+Node.js is single-threaded to keep it fast, lightweight, and efficient by using an event loop to handle many requests without blocking.
+
+---
+
+9. How do you create a simple server in Node.js that returns Hello World?
+
+Creating a Simple Server in Node.js
+
+In Node.js, you can create a basic web server using the built-in http module — no need for extra libraries.
+
+💻 Example:
+// 1. Import the http module
+const http = require('http');
+
+// 2. Create a server
+const server = http.createServer((req, res) => {
+res.writeHead(200, { 'Content-Type': 'text/plain' }); // status code 200 = OK
+res.end('Hello World'); // send response
+});
+
+// 3. Make the server listen on a port
+server.listen(3000, () => {
+console.log('Server running at http://localhost:3000');
+});
+
+---
+
+10. How many types of API functions are there in Node.js?
+
+⚙️ Types of API Functions in Node.js
+
+In Node.js, API functions are mainly divided into two types based on how they handle tasks:
+
+1️⃣ Synchronous APIs (Blocking)
+
+These functions block the execution of code until the task is finished.
+
+The next line of code will not run until the current one completes.
+
+🧩 Example:
+
+const fs = require('fs');
+const data = fs.readFileSync('file.txt', 'utf8'); // blocking
+console.log(data);
+console.log("This runs after file is read");
+
+🧠 Explanation:
+Here, Node.js waits until the file is completely read before moving to the next line.
+
+2️⃣ Asynchronous APIs (Non-blocking)
+
+These functions don’t block the program.
+
+They start the task and let the rest of the code run — when the task finishes, a callback, promise, or async/await handles the result.
+
+🧩 Example:
+
+const fs = require('fs');
+fs.readFile('file.txt', 'utf8', (err, data) => { // non-blocking
+console.log(data);
+});
+console.log("This runs first, even before file reading completes!");
+
+🧠 Explanation:
+Node.js reads the file in the background while continuing with other code.
+
+---
+
+11. List down the two arguments that async.queue takes as input?
+
+The async.queue() function in Node.js
+
+The async.queue() (from the async library) is used to manage tasks that run asynchronously — like a task queue that processes one or more jobs at a time.
+
+It takes two arguments as input 👇
+
+🧩 1️⃣ Worker Function
+
+This function defines what each task should do.
+
+It runs for every item added to the queue.
+
+It usually looks like:
+
+function(task, callback) {
+// process the task here
+callback(); // called when task is done
+}
+
+🧩 2️⃣ Concurrency Number
+
+This number defines how many tasks can run at the same time.
+
+Example:
+
+1 → tasks run one by one (sequentially).
+
+3 → up to three tasks can run in parallel.
+
+💻 Example:
+const async = require('async');
+
+// Create a queue with concurrency of 2
+const q = async.queue(function(task, done) {
+console.log('Processing task:', task.name);
+done(); // signal that the task is complete
+}, 2);
+
+// Add tasks
+q.push({ name: 'Task 1' });
+q.push({ name: 'Task 2' });
+q.push({ name: 'Task 3' });
+
+🪄 In short:
+
+async.queue() takes two arguments:
+1️⃣ A worker function (that processes each task)
+2️⃣ A concurrency number (that sets how many tasks run at once).
+
+---
+
+12. 📦 What is module.exports in Node.js?
+
+In Node.js, every file is treated as a separate module.
+The module.exports is used to share code (like functions, objects, or variables) from one file so it can be used in another file.
+
+⚙️ Simple Explanation:
+
+Think of module.exports like a delivery box 📦 —
+you pack what you want to send from one file, and another file can import (require) it and use it.
+
+💻 Example:
+
+📁 math.js
+
+function add(a, b) {
+return a + b;
+}
+
+module.exports = add; // exporting the function
+
+📁 app.js
+
+const add = require('./math'); // importing from math.js
+console.log(add(5, 3)); // Output: 8
+
+🧠 What’s Happening:
+
+In math.js, we exported the add function.
+
+In app.js, we imported it using require().
+
+Now we can use it just like a normal function.
+
+💡 In short:
+
+module.exports is used to export code (functions, objects, variables) from one file so that it can be reused in another file using require().
+
+---
+
+13. what is libuv?
+
+libuv is a C library that Node.js uses under the hood to handle asynchronous (non-blocking) operations like:
+
+File system tasks (reading/writing files)
+
+Network requests
+
+Timers
+
+Child processes
+
+💡 In simple words:
+
+libuv is the engine that makes Node.js’s event loop and async behavior work.
+
+Even though Node.js runs JavaScript on a single thread, libuv secretly uses a pool of background threads to perform tasks in parallel, so your code doesn’t get blocked.
+
+🧠 What libuv does:
+
+Manages the Event Loop → decides what runs next.
+
+Handles Async I/O → reads files, handles sockets, timers, etc.
+
+Manages Thread Pool → runs slow operations (like file access) in the background.
+
+Provides Cross-Platform Support → works on Windows, macOS, and Linux the same way.

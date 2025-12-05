@@ -1,0 +1,210 @@
+1. What Are Tagged Templates?
+
+A tagged template allows you to call a function on a template literal before it produces a final string.
+
+The function (called the tag) receives:
+
+The literal string parts
+The values inside ${ }
+
+It can then modify, filter, or transform the template however it wants.
+
+🔵 How It Works (Simple Example)
+function tag(strings, ...values) {
+  console.log(strings);
+  console.log(values);
+}
+
+let name = "Prem";
+let age = 25;
+
+tag`My name is ${name} and I am ${age} years old.`;
+
+Output:
+strings = ["My name is ", " and I am ", " years old."]
+values  = ["Prem", 25]
+
+
+✔️ JavaScript splits the template into
+
+Strings (fixed parts)
+Values (variables)
+
+-----------------------------------
+
+2. What are Symbol s used for in JavaScript?
+
+Symbols are a primitive data type in JavaScript that create unique and hidden identifiers.
+They are mainly used to avoid naming conflicts and to create private-like properties in objects.
+
+🟦 What are Symbols used for?
+1. To Create Unique Object Keys (No Name Collisions)
+
+Symbols ensure that two keys never overwrite each other.
+
+Example:
+let id = Symbol("id");
+
+let user = {
+  name: "Prem",
+  age: 25,
+  [id]: 123
+};
+
+console.log(user[id]); // 123
+
+Even if another developer uses "id" as a key, it won’t conflict with your Symbol key.
+
+2. To Add Hidden / Private-like Properties
+
+Example:
+
+let secret = Symbol("secret");
+
+let obj = {
+  name: "Prem",
+  [secret]: "hidden value"
+};
+
+console.log(Object.keys(obj));   // ["name"]
+console.log(obj[secret]);        // "hidden value"
+
+
+✔️ Symbol properties remain hidden from normal inspection.
+
+✔️ Why?
+
+Because:
+
+id (string "id") is a normal key
+
+id (Symbol("id")) is a unique key
+
+Even if the Symbol has the same description "id", it is not equal to the string "id".
+
+🔍 Let’s see what the object actually looks like:
+let id = Symbol("id");
+
+let user = {
+  name: "Prem",
+  age: 25,
+  [id]: 123
+};
+
+user.id = "public id";  // string key "id"
+
+console.log(user);
+
+Resulting object has two different keys:
+{
+  name: "Prem",
+  age: 25,
+  id: "public id",     // normal string key
+  [Symbol(id)]: 123    // unique Symbol key
+}
+
+
+Both exist separately!
+They do NOT overwrite each other.
+
+----------------------------------
+
+3. What are proxies in JavaScript used for?
+
+JavaScript Proxies are a powerful feature that allow you to intercept and customize the behavior of objects.
+
+Think of a Proxy as a middleman between your code and an object.
+
+✅ What is a Proxy?
+
+A Proxy wraps an object and lets you control operations like:
+
+getting a property (obj.property)
+
+setting a property (obj.property = value)
+
+deleting a property
+
+checking if a property exists
+
+calling a function
+
+And much more.
+
+🟦 Basic Syntax
+let proxy = new Proxy(targetObject, handler);
+
+
+targetObject → the original object you want to monitor
+
+handler → an object with functions called traps that intercept operations
+
+🟢 Example: Intercepting Property Access (get)
+let user = { name: "Prem", age: 25 };
+
+let proxy = new Proxy(user, {
+  get(target, property) {
+    console.log(`Reading property: ${property}`);
+    return target[property];
+  }
+});
+
+console.log(proxy.name);
+
+Output:
+Reading property: name
+Prem
+
+
+✔️ The Proxy intercepts the read operation.
+
+🟢 Example: Validating Data When Setting Properties (set)
+let user = {
+  age: 25
+};
+
+let proxy = new Proxy(user, {
+  set(target, prop, value) {
+    if (prop === "age" && value < 0) {
+      throw new Error("Age cannot be negative");
+    }
+    target[prop] = value;
+    return true;
+  }
+});
+
+proxy.age = 30;   // OK
+proxy.age = -5;   // ❌ Error: Age cannot be negative
+
+✔️ The Proxy controls how properties are modified.
+
+🟢 Example: Logging Every Operation
+let data = {};
+
+let proxy = new Proxy(data, {
+  get(target, prop) {
+    console.log(`Get: ${prop}`);
+    return target[prop];
+  },
+  set(target, prop, value) {
+    console.log(`Set: ${prop} = ${value}`);
+    target[prop] = value;
+    return true;
+  }
+});
+
+proxy.a = 10;  // Set intercepted
+console.log(proxy.a);  // Get intercepted
+
+------------------------------------------------
+
+4. What are rest parameters and how are they used?
+Rest parameters in JavaScript allow a function to accept an indefinite number of
+arguments as an array. They are denoted by three dots ( ... ) followed by the name of
+the array. This feature is useful for functions that need to handle multiple arguments
+without knowing the exact number in advance.
+
+function sum(...numbers) {
+return numbers.reduce((acc, curr) => acc + curr, 0);
+}
+console.log(sum(1, 2, 3, 4)); // Output: 10
