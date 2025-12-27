@@ -208,3 +208,137 @@ function sum(...numbers) {
 return numbers.reduce((acc, curr) => acc + curr, 0);
 }
 console.log(sum(1, 2, 3, 4)); // Output: 10
+
+-----------------------------------------
+
+5. What are Arrow Functions?
+
+Arrow functions were introduced in ES6 as a shorter and cleaner syntax for writing functions.
+They work great for callbacks and functional programming—but they have important limitations.
+
+Limitations of Arrow Functions (Interview Explanation)
+1️⃣ Cannot be accessed before initialization
+Arrow functions are not hoisted like normal function declarations.
+
+sayHello(); // ❌ ReferenceError
+const sayHello = () => {
+  console.log("Hello");
+};
+
+👉 Why?
+Arrow functions are stored in variables (let / const), and variables are not usable before initialization.
+
+2️⃣ No arguments object
+
+Arrow functions do not have their own arguments object.
+
+function normalFunc() {
+  console.log(arguments);
+}
+normalFunc(1, 2); // ✅ [1, 2]
+
+const arrowFunc = () => {
+  console.log(arguments);
+};
+arrowFunc(1, 2); // ❌ ReferenceError
+
+
+👉 Alternative: Use rest parameters
+
+const arrowFunc = (...args) => {
+  console.log(args);
+};
+
+3️⃣ No own this (Very important ⭐)
+
+Arrow functions do not have their own this.
+They inherit this from the surrounding (lexical) scope.
+
+const user = {
+  name: "Prem",
+  greet: () => {
+    console.log(this.name);
+  }
+};
+
+user.greet(); // ❌ undefined
+
+👉 Because this here refers to the outer scope, not user.
+
+✅ Correct way:
+
+const user = {
+  name: "Prem",
+  greet() {
+    console.log(this.name);
+  }
+};
+
+4️⃣ Cannot be used as constructors
+
+Arrow functions cannot be used with new.
+
+const Person = () => {
+  this.name = "Prem";
+};
+
+const p = new Person(); // ❌ TypeError
+
+👉 Reason:
+Arrow functions do not have:
+
+this
+prototype
+constructor
+
+5️⃣ Cannot be used as generator functions
+
+Arrow functions cannot use yield.
+
+const gen = () => {
+  yield 1; // ❌ SyntaxError
+};
+
+👉 Generator functions must be declared using function.
+
+🧪 Example 1: Normal function vs Arrow function
+const user = {
+  name: "Prem",
+
+  normalGreet: function () {
+    console.log(this.name);
+  },
+
+  arrowGreet: () => {
+    console.log(this.name);
+  }
+};
+
+user.normalGreet(); // Prem
+user.arrowGreet();  // undefined
+
+Why?
+normalGreet() → this refers to user
+arrowGreet() → this comes from outer scope (global), not user
+
+🧪 Example 2: Arrow function inside a normal method (VERY IMPORTANT)
+const user = {
+  name: "Prem",
+
+  greet: function () {
+    const arrow = () => {
+      console.log(this.name);
+    };
+    arrow();
+  }
+};
+
+user.greet(); // Prem
+
+What’s happening?
+greet() is a normal function
+this inside greet() = user
+Arrow function inherits this from greet()
+So this.name → "Prem"
+
+✅ This is the correct use case for arrow functions

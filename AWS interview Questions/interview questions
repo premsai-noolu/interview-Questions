@@ -1052,3 +1052,741 @@ Scale down at 10 PM
 🎯 Interview-Friendly Summary
 
 “An Auto Scaling Group automatically adds or removes EC2 instances based on demand, helping maintain performance and reduce costs. To configure an ASG, you need a Launch Template or Launch Configuration that defines the instance settings, an Auto Scaling Group that defines the min/max/desired capacity and subnet placement, and scaling policies—such as target tracking, step scaling, or scheduled scaling—to control how and when the ASG scales.”
+
+---
+
+16. ✅ What is Infrastructure as Code (IaC)?
+
+Infrastructure as Code (IaC) is a DevOps practice where you manage and provision infrastructure using code instead of manual steps.
+
+👉 Instead of:
+
+Logging into AWS console
+
+Clicking to create VPCs, subnets, EC2s, security groups
+
+You write code (YAML, JSON, Terraform, etc.) that describes the infrastructure.
+⭐ Why does IaC matter?
+
+IaC allows teams to:
+
+Automate infrastructure creation
+
+Avoid manual mistakes
+
+Maintain consistency across environments (dev/stage/prod)
+
+Version control infrastructure (store in Git like normal code)
+
+Reproduce environments anytime
+
+It makes infrastructure management faster, reliable, and scalable.
+
+✅ What is AWS CloudFormation?
+
+AWS CloudFormation is Amazon’s native IaC service.
+It lets you define AWS resources using templates (YAML or JSON) and deploy them as stacks.
+
+⭐ Role of CloudFormation
+
+CloudFormation helps you:
+
+1. Model and Provision Resources
+
+Create entire environments with a single template:
+
+VPC
+
+Subnets
+
+Route tables
+
+EC2
+
+RDS database
+
+IAM roles
+
+All generated automatically.
+
+2. Automation & Consistency
+
+Using CloudFormation:
+
+Same template = same environment
+
+No human errors
+
+Dev, Stage, Prod can be identical
+
+Full environment spins up in minutes
+
+3. Version Control
+
+CloudFormation templates are code, so you can:
+
+Store in Git
+
+Review changes
+
+Track diffs
+
+Rollback to previous versions
+
+4. Repeatability & Disaster Recovery
+
+You can recreate the same infrastructure in:
+
+Another AWS region
+
+Another AWS account
+
+A DR site
+
+Just by re-running the template.
+
+📌 Final, Simple Summary
+
+IaC:
+Using code to create/manage infrastructure instead of doing it manually.
+
+CloudFormation:
+AWS service that lets you write templates (YAML/JSON) to automatically create and manage AWS resources in a consistent, repeatable, and version-controlled way.
+
+---
+
+17. ✅ S3 Storage Classes (Explained Simply)
+
+Amazon S3 provides different storage classes depending on how often you access data and how much you want to pay.
+Each class balances cost, durability, and availability.
+
+🔹 1. S3 Standard
+
+Used for frequently accessed data
+
+High performance
+
+99.99% availability
+
+Ideal for: websites, mobile apps, backups, big data analytics
+
+✔ Most expensive among general-purpose classes, but fastest.
+
+🔹 2. S3 Intelligent-Tiering
+
+Automatically moves your data between:
+
+Frequent access
+
+Infrequent access
+
+Archive tiers
+
+Based on how often you access the object
+
+No operational overhead, no performance loss
+
+✔ Best when access patterns are unknown or unpredictable.
+
+🔹 3. S3 Standard-IA (Infrequent Access)
+
+For rarely accessed data
+
+Cheaper storage but higher retrieval cost
+
+Ideal for: backups, disaster recovery copies
+
+🔹 4. S3 One Zone-IA
+
+Same as Standard-IA, but stored in one Availability Zone instead of three
+
+Cheaper, but less resilient
+
+Good for non-critical data or secondary backups
+
+🔹 5. S3 Glacier Classes (Archival Storage)
+
+Used for long-term data archiving, extremely low cost.
+
+a) Glacier Instant Retrieval
+
+Milliseconds retrieval
+
+Cheaper than Standard-IA
+
+For archival data that may be accessed occasionally
+
+b) Glacier Flexible Retrieval
+
+Retrieval time: minutes to hours
+
+Suitable for backups or archive with occasional restores
+
+c) Glacier Deep Archive
+
+Cheapest S3 storage
+
+Retrieval time: 12 hours or more
+
+Used for regulatory data, long-term retention (7–10 years)
+
+✅ Purpose of S3 Lifecycle Policies
+
+S3 Lifecycle Policies help automate storage cost optimization.
+
+They define rules that move objects between storage classes or delete them after a defined time.
+
+⭐ What Lifecycle Policies Do:
+
+1. Transition Objects
+
+Automatically move objects to cheaper storage classes:
+
+Example:
+
+After 30 days → move to Standard-IA
+
+After 90 days → move to Glacier
+
+After 1 year → move to Glacier Deep Archive
+
+✔ Helps reduce cost automatically.
+
+2. Expire (Delete) Objects
+
+Delete objects after a set time:
+
+Example:
+
+Delete logs after 60 days
+
+Delete temporary files after 7 days
+
+✔ Helps meet compliance, reduces clutter, lowers cost.
+
+📌 Simple Summary
+S3 Storage Classes
+
+Different pricing tiers based on:
+
+How often you access data
+
+How fast you need it
+
+How long you want to store it
+
+How much durability you require
+
+S3 Lifecycle Policies
+
+Automate:
+
+Moving data to cheaper storage
+
+Deleting old objects
+
+---
+
+18. ✅ Difference Between Elastic IP and Public IP in AWS
+
+Both Public IP and Elastic IP (EIP) allow an EC2 instance to be reachable from the internet.
+However, they behave very differently in terms of lifecycle, ownership, and stability.
+
+🔹 1. Public IP Address
+
+A Public IP is:
+
+Automatically assigned when you launch an instance in a public subnet
+
+Temporary
+
+Changes whenever you stop/start the instance
+
+Released automatically when the instance is terminated
+
+Cannot be moved to another instance
+
+Not suitable for production endpoints where the IP must stay fixed
+
+👉 Use-case:
+
+Short-lived workloads, dev/testing systems that don’t require a fixed IP.
+
+🔹 2. Elastic IP Address (EIP)
+
+An Elastic IP is:
+
+A static IPv4 address you own in your AWS account
+
+Does not change even if the instance stops/starts
+
+Can be attached or detached from EC2 instances or ENIs
+
+Allows quick failover — move the same IP to another instance during failure
+
+Suitable for production systems, DNS, and stable endpoints
+
+AWS charges for unused Elastic IPs to avoid hoarding.
+
+👉 Use-case:
+
+Production servers, ALB alternatives, legacy apps requiring a fixed IP.
+
+---
+
+19. ✅ 20. What is the purpose of AWS Lambda? Compare it to EC2.
+    🔹 What is AWS Lambda?
+
+AWS Lambda is a serverless compute service where you run your code without managing servers.
+
+You just:
+
+Upload your code
+
+Lambda runs it only when needed
+
+You pay only for the compute time used (per millisecond)
+
+⭐ Key purposes of Lambda:
+
+Run event-driven applications (S3 uploads, DynamoDB changes, API Gateway requests, etc.)
+
+Automate backend tasks
+
+Build serverless APIs
+
+Run scheduled jobs (cron-like tasks)
+
+Process streams/logs in real-time (Kinesis, CloudWatch)
+
+You never manage:
+
+OS
+
+Servers
+
+Patching
+
+Scaling
+
+Everything is auto-handled by AWS.
+
+🔹 AWS Lambda vs EC2 — Simple Comparison
+Feature AWS Lambda Amazon EC2
+Server management No servers (fully managed) You manage servers, OS, patches
+Pricing Pay per request + execution time Pay per hour/second while instance runs
+Scaling Auto-scales instantly Manual or auto-scaling group needed
+Run duration Max 15 minutes per execution No time limit
+Use cases Short tasks, event-driven apps Long-running apps, full control
+Startup Cold start sometimes Always running
+Maintenance None You maintain infrastructure
+Control level Low-level control not allowed Full control (SSH access, root access)
+✅ When to Use Lambda
+
+Microservices
+
+APIs
+
+Event-based workflows
+
+File processing (images, video)
+
+Cron jobs
+
+Lightweight backend tasks
+
+✅ When to Use EC2
+
+Applications needing full control over OS
+
+Long-running processes (e.g., web servers, game servers)
+
+Applications requiring persistent connections
+
+Custom networking, security agents, software installations
+
+Heavy workloads not suitable for 15-minute Lambda limit
+
+⭐ Simple Summary
+
+Lambda: Run code without servers, automatically scales, pay only when used. Best for short, event-driven workloads.
+
+EC2: Virtual machine where you control everything. Best for long-running, stable workloads requiring full customization.
+
+---
+
+20. ✅ Goal: Design a Serverless API Backend on AWS
+
+“Serverless” means:
+
+You don’t manage servers or OS
+
+AWS manages scaling, availability, and infrastructure
+
+You focus mainly on business logic
+
+Your main building blocks:
+
+API Gateway → Entry point (HTTP/REST API)
+
+Auth (Cognito / Lambda Authorizer) → Who is calling?
+
+Lambda → Backend functions (business logic)
+
+DynamoDB → Database (NoSQL)
+
+CloudWatch + IaC (SAM/CloudFormation) → Monitoring + deployments
+
+🔹 1. API Gateway – Front Door of the API
+
+Exposes REST/HTTP endpoints like:
+
+POST /login
+GET /users
+POST /orders
+
+Handles:
+
+Routing → which Lambda to call
+
+Rate limiting / throttling
+
+Authorization integration (Cognito / Lambda Authorizers)
+
+Optional request/response validation (schemas)
+
+Think of it as the “API layer”.
+
+🔹 2. Authentication & Authorization
+🧩 Amazon Cognito
+
+Used for user sign-up, sign-in, and tokens (JWTs).
+Users log in → Cognito gives them a JWT access token.
+API Gateway verifies this token before calling Lambda.
+
+🧩 Lambda Authorizer (optional)
+
+A custom Lambda function used by API Gateway to:
+
+Validate custom tokens
+
+Validate API keys
+
+Integrate with third-party auth providers
+
+So:
+
+Cognito → built-in user pool and JWT auth.
+
+Lambda Authorizer → more complex or custom auth logic.
+
+🔹 3. AWS Lambda – Business Logic
+
+Each API endpoint (like GET /orders) calls a Lambda function.
+
+Lambda:
+
+Parses request from API Gateway
+
+Validates input
+
+Reads/writes data to DynamoDB
+
+Returns a response (JSON) back to API Gateway
+
+Features:
+
+Auto-scaling
+
+Pay-per-use (only when invoked)
+
+No server management
+
+🔹 4. DynamoDB – Database Layer
+
+Fully-managed NoSQL database.
+
+Great for:
+
+High performance, low-latency reads/writes
+
+Serverless apps (no server to manage)
+
+Lambda uses the AWS SDK to:
+
+PutItem → Insert data
+
+GetItem / Query → Read data
+
+UpdateItem → Update data
+
+You design tables and partition keys based on access patterns.
+
+🔹 5. Monitoring & Infrastructure as Code (IaC)
+📊 CloudWatch
+
+Lambda logs → print()/console.log go to CloudWatch Logs.
+
+You can see:
+
+Errors
+Latency
+Invocations
+Throttles
+
+📦 SAM / CloudFormation
+
+You define your whole architecture as code:
+
+API Gateway endpoints
+Lambda functions
+DynamoDB tables
+IAM roles
+
+Benefits:
+
+Version-controlled
+
+Easy to recreate environments (dev, test, prod)
+
+Automated deployments (CI/CD)
+
+🔁 End-to-End Flow (Simple Story)
+
+Client (web/mobile) calls GET /orders with a JWT token.
+API Gateway receives the request.
+
+API Gateway:
+
+Validates token using Cognito or Lambda Authorizer.
+Routes the request to the correct Lambda function.
+
+Lambda:
+
+Reads the request parameters
+Fetches data from DynamoDB
+Returns a JSON response.
+API Gateway sends the response back to the client.
+All logs & metrics go to CloudWatch.
+
+---
+
+21. ✅ What is ECS in AWS?
+
+Amazon ECS (Elastic Container Service) is a fully managed container orchestration service provided by AWS.
+It helps you run and manage Docker containers at scale without having to install or operate container orchestration software yourself.
+
+Think of ECS as the AWS tool that:
+
+Runs your containers
+Starts/stops them automatically
+Handles scaling
+Connects containers to networks, load balancers, and IAM roles
+
+🔹 Key Features of ECS
+
+1. Fully managed
+
+AWS handles:
+
+Infrastructure management
+
+Scheduling containers
+
+Scaling
+
+Health checks
+
+You just define how your app should run.
+
+2. Works with EC2 or Fargate
+
+You can choose:
+
+ECS on EC2
+
+You manage the EC2 servers that run containers.
+
+ECS on Fargate
+
+No servers at all; AWS runs containers for you.
+
+Serverless container compute.
+
+3. Deep AWS Integration
+
+ECS integrates tightly with:
+
+IAM
+
+VPC & subnets
+
+CloudWatch
+
+Application Load Balancer
+
+ECR (Elastic Container Registry)
+
+This makes deployments smooth and secure.
+
+4. No control plane to manage
+
+You don’t manage Kubernetes masters or cluster control planes (unlike EKS).
+AWS handles everything behind the scenes.
+
+🔹 Where ECS Is Used
+
+Running microservices
+
+Hosting backend APIs
+
+Batch processing jobs
+
+Containerizing old monolithic apps
+
+Running scalable web services
+
+🔹 Why Choose ECS?
+
+You choose ECS when you want:
+
+Simpler container orchestration
+
+Lower operational overhead
+
+AWS-native solution
+
+Fast setup
+
+Less complexity compared to Kubernetes (EKS)
+
+⭐ Simple Explanation (One Line)
+
+ECS is AWS’s fully managed service for running Docker containers without needing to manage your own orchestration platform.
+
+---
+
+22. How would you design a highly available and fault-tolerant architecture for a critical web application on AWS?
+
+✅ Goal: Highly Available & Fault-Tolerant Web App on AWS
+
+Idea:
+Don’t depend on any single server, single AZ, or single DB instance.
+If one thing fails, traffic should automatically move to healthy resources without downtime (or with very minimal impact).
+
+Your design has 3 main layers:
+
+Load Balancer (ALB)
+
+Web/App Tier (EC2 + Auto Scaling Group)
+
+Database Tier (RDS Multi-AZ)
+
+Let’s break them down.
+
+🔹 1. Load Balancer (ALB)
+
+What it does:
+
+Sits in front of your EC2 instances.
+
+Receives all incoming traffic (HTTP/HTTPS).
+
+Distributes requests across instances in multiple AZs.
+
+Key features:
+
+Multi-AZ: ALB has nodes in more than one AZ. If one AZ LB node fails, others still serve traffic.
+
+Health checks: Regularly checks if EC2 instances are healthy.
+
+If an instance fails → ALB stops sending traffic to it.
+
+Path-based & host-based routing:
+
+/api/\* → API service target group
+
+/images/\* → image service target group
+
+admin.example.com → admin backend
+
+👉 Result: No single instance or AZ is a bottleneck at the entry point.
+
+🔹 2. Web/App Tier – EC2 with Auto Scaling Group (ASG)
+
+What you’re doing:
+
+Run your web/app servers (EC2) in an Auto Scaling Group.
+
+Spread instances across at least 2 Availability Zones.
+
+Benefits:
+
+High Availability:
+
+If one AZ goes down, instances in the other AZ still serve traffic.
+
+Fault Tolerance:
+
+If an instance becomes unhealthy, ASG terminates and replaces it automatically.
+
+Auto Scaling:
+
+Scale out (add instances) on high load (CPU, requests).
+
+Scale in when traffic drops, saving cost.
+
+👉 Result: The app layer survives instance failures and even full AZ failures.
+
+🔹 3. Database Tier – RDS Multi-AZ
+
+What RDS Multi-AZ gives you:
+
+You have:
+
+Primary DB instance in one AZ
+
+Synchronous standby replica in another AZ
+
+Writes are synchronously replicated:
+
+Data is safely stored in both AZs.
+
+Failover behavior:
+
+If the primary DB fails (instance, AZ, hardware):
+
+RDS automatically promotes the standby to primary.
+
+Uses the same DB endpoint (hostname).
+
+App usually needs no configuration change – reconnects to the same endpoint.
+
+Benefits:
+
+High durability: data is stored across AZs.
+
+Minimal downtime during DB failures.
+
+👉 Result: Your database is resilient to instance and AZ failures.
+
+🔁 Putting It All Together – Request Flow
+
+User hits https://yourapp.com.
+
+Route 53 (optional but common) sends traffic to the ALB.
+
+ALB distributes requests to healthy EC2 instances in multiple AZs (via ASG).
+
+EC2 instances access RDS Multi-AZ for data.
+
+If:
+
+An instance dies → ALB stops sending traffic; ASG replaces it.
+An AZ dies → ALB routes traffic only to the healthy AZ.
+DB primary fails → RDS fails over to standby with same endpoint.
+Your app stays online (or suffers only minimal interruption).
+
+⭐ One-Line Interview Summary
+
+“I’ll design the web app using an ALB in multi-AZ, an Auto Scaling Group of EC2 instances across at least two AZs, and an RDS Multi-AZ database. This removes single points of failure at the load balancer, app, and database layers, giving high availability and fault tolerance.”
