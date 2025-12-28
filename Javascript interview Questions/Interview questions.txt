@@ -355,3 +355,123 @@ console.log(result); // undefined
 
 const result = nums.map(n => n * 2);
 console.log(result); // [2, 4, 6]
+----------------------------------------------------
+
+7. Difference between for...in and for...of in JavaScript (Interview-ready)
+
+Both for...in and for...of are looping constructs, but they are used for different purposes.
+
+🔹 for...in
+
+Iterates over keys / property names
+Mostly used for objects
+Returns indexes when used with arrays
+
+Example (Object)
+const user = { name: "Prem", age: 24 };
+
+for (let key in user) {
+  console.log(key, user[key]);
+}
+
+Output
+
+name Prem
+age 24
+
+Example (Array – not recommended)
+const arr = [10, 20, 30];
+
+for (let i in arr) {
+  console.log(i, arr[i]);
+}
+
+
+Output:
+
+0 10
+1 20
+2 30
+
+🔹 for...of
+
+Iterates over values
+Used for iterables (Array, String, Map, Set)
+Cleaner and safer for arrays
+Does not work directly on objects
+
+Example (Array)
+const arr = [10, 20, 30];
+
+for (let value of arr) {
+  console.log(value);
+}
+
+Output
+
+10
+20
+30
+
+Example (String)
+for (let char of "JS") {
+  console.log(char);
+}
+
+Output:
+
+J
+S
+-----------------------------------------------
+
+8. 19. Difference between Pure and Impure Functions
+🔹 Pure Functions
+
+A pure function is a function that:
+
+✅ Always returns the same output for the same input
+✅ Has no side effects
+✅ Does not modify or depend on external (non-local) state
+✅ Makes code predictable, testable, and reusable
+
+Example (Pure Function)
+function greeting(name) {
+  return `Hello ${name}`;
+}
+
+console.log(greeting("Saikrishna Nangunuri"));
+
+
+Why this is pure:
+
+Output depends only on name
+No external variable is used
+Same input → same output every time
+
+🔹 Impure Functions
+
+An impure function is a function that:
+❌ May return different output for the same input
+❌ Has side effects
+❌ Depends on or modifies external (non-local) state
+❌ Harder to test and debug
+
+Example (Impure Function)
+let message = "good morning";
+
+function greeting1(name) {
+  return `Hello ${name}, ${message}`;
+}
+
+console.log(greeting1("Saikrishna Nangunuri"));
+
+Why this is impure:
+
+Output depends on external variable message
+If message changes, output changes without changing input
+
+message = "good evening";
+console.log(greeting1("Saikrishna Nangunuri"));
+
+
+➡ Different output for the same input
