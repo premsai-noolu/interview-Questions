@@ -473,5 +473,9 @@ If message changes, output changes without changing input
 message = "good evening";
 console.log(greeting1("Saikrishna Nangunuri"));
 
-
 ➡ Different output for the same input
+
+-------------------------------------
+
+9. Check the below link for polyfills for forEach, map, filter and reduce functions 
+https://dev.to/umerjaved178/polyfills-for-foreach-map-filter-reduce-in-javascript-1h13
