@@ -479,3 +479,128 @@ console.log(greeting1("Saikrishna Nangunuri"));
 
 9. Check the below link for polyfills for forEach, map, filter and reduce functions 
 https://dev.to/umerjaved178/polyfills-for-foreach-map-filter-reduce-in-javascript-1h13
+
+---------------------------------------
+
+10. What is TypeScript vs JavaScript (short intro)
+
+JavaScript (JS) is a scripting language that runs directly in the browser or Node.js.
+TypeScript (TS) is a superset of JavaScript, meaning:
+Any valid JavaScript code is also valid TypeScript code.
+TypeScript adds types and extra features on top of JavaScript.
+
+1️⃣ TypeScript is a superset of JavaScript
+
+Meaning:
+
+TypeScript includes all JavaScript features
+Plus additional features like:
+
+Static typing
+Interfaces
+Enums
+Generics
+Access modifiers
+
+// JavaScript
+let age = 25;
+
+// TypeScript
+let age: number = 25;
+
+2️⃣ Object-Oriented Programming (OOP) support
+
+TypeScript:
+
+Strong OOP features:
+
+class
+interface
+abstract class
+private, protected, public
+
+JavaScript:
+
+Supports OOP but in a looser, prototype-based way
+No interfaces or access modifiers
+
+👉 TS makes OOP clearer and safer.
+
+3️⃣ Large-scale vs Small-scale applications
+
+TypeScript:
+
+Best for large applications
+Helps multiple developers work safely
+Easy refactoring and maintenance
+
+JavaScript:
+
+Better for small scripts or simple apps
+Less structure → harder to manage at scale
+
+4️⃣ Compile-time error checking vs Runtime errors
+
+TypeScript:
+
+Errors are caught during development (compile time)
+
+let count: number = "ten"; // ❌ Error before running
+
+JavaScript:
+
+Error happens at runtime
+
+let count = "ten";
+count * 2; // ❌ Runtime error
+
+
+👉 TS reduces production bugs.
+
+5️⃣ Interfaces support
+
+TypeScript:
+
+interface User {
+  name: string;
+  age: number;
+}
+
+let u: User = { name: "Prem", age: 24 };
+
+JavaScript:
+
+❌ No interfaces
+You rely on documentation or comments
+
+6️⃣ Optional parameters in functions
+
+TypeScript:
+
+function greet(name: string, msg?: string) {
+  console.log(name, msg);
+}
+
+JavaScript:
+
+Parameters are optional by nature
+But no compile-time checking
+
+function greet(name, msg) {
+  console.log(name, msg);
+}
+
+👉 TS makes optional parameters explicit and safer.
+
+7️⃣ Compilation time
+
+TypeScript:
+
+Needs to be compiled to JavaScript
+Takes extra time
+Needs build tools
+
+JavaScript:
+
+Runs directly
+No compilation step
