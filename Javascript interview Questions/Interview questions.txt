@@ -341,4 +341,17 @@ this inside greet() = user
 Arrow function inherits this from greet()
 So this.name → "Prem"
 
-✅ This is the correct use case for arrow functions
+✅ This is the correct use case for arrow functions.
+
+-----------------------------------
+
+6. forEach and map
+
+forEach() is used to execute a function on each element without returning anything, whereas map() is used to transform array elements and returns a new array.
+
+Key Interview Difference (🔥 important)
+const result = nums.forEach(n => n * 2);
+console.log(result); // undefined
+
+const result = nums.map(n => n * 2);
+console.log(result); // [2, 4, 6]
