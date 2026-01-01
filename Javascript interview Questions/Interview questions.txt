@@ -638,3 +638,54 @@ JavaScript:
 
 Runs directly
 No compilation step
+
+------------------------------------------------
+
+11. Shallow Copy vs Deep Copy in JavaScript
+🔹 Shallow Copy
+
+👉 A shallow copy copies only the top-level values.
+👉 If the object contains nested objects or arrays, their references are copied, not the actual data.
+📌 Changes in nested objects affect the original object.
+
+Example – Shallow Copy
+const original = {
+  name: "Prem",
+  skills: ["JS", "React"]
+};
+
+const shallowCopy = { ...original };
+
+shallowCopy.skills.push("Node");
+
+console.log(original.skills);
+
+
+Output:
+
+["JS", "React", "Node"]
+
+❗ Even though we copied the object, the nested array is shared.
+
+🔹 Deep Copy
+
+👉 A deep copy duplicates all levels of the object, including nested objects and arrays.
+👉 No shared references exist between original and copied object.
+
+📌 Changes do NOT affect the original object.
+
+Example – Deep Copy
+const original = {
+  name: "Prem",
+  skills: ["JS", "React"]
+};
+
+const deepCopy = JSON.parse(JSON.stringify(original));
+
+deepCopy.skills.push("Node");
+
+console.log(original.skills);
+
+Output:
+
+["JS", "React"]
