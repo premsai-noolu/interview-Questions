@@ -575,22 +575,56 @@ You rely on documentation or comments
 
 6️⃣ Optional parameters in functions
 
-TypeScript:
+JavaScript DOES allow calling functions without passing parameters.
+👉 TypeScript adds compile-time safety by explicitly defining optional parameters.
 
-function greet(name: string, msg?: string) {
-  console.log(name, msg);
+So yes, it is OK to not pass parameters in TypeScript only if they are marked optional.
+
+JavaScript behavior (no type checking)
+function greet(name) {
+  console.log("Hello", name);
 }
 
-JavaScript:
+greet(); // No error
 
-Parameters are optional by nature
-But no compile-time checking
+Output:
+Hello undefined
 
-function greet(name, msg) {
-  console.log(name, msg);
+✔ JavaScript allows this
+❌ But there is no warning or safety
+
+TypeScript without optional parameters ❌
+function greet(name: string) {
+  console.log("Hello", name);
 }
 
-👉 TS makes optional parameters explicit and safer.
+greet(); // ❌ Compile-time error
+
+Error:
+
+Expected 1 arguments, but got 0.
+
+👉 TypeScript forces you to pass required parameters.
+
+TypeScript with optional parameters ✅
+function greet(name?: string) {
+  console.log("Hello", name);
+}
+
+greet();       // ✅ OK
+greet("Prem"); // ✅ OK
+
+
+? means parameter is optional
+Type becomes: string | undefined
+
+Optional parameter with default value (BEST PRACTICE)
+function greet(name: string = "Guest") {
+  console.log("Hello", name);
+}
+
+greet();        // Hello Guest
+greet("Prem");  // Hello Prem
 
 7️⃣ Compilation time
 
@@ -598,7 +632,7 @@ TypeScript:
 
 Needs to be compiled to JavaScript
 Takes extra time
-Needs build tools
+
 
 JavaScript:
 
