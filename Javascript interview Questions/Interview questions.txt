@@ -708,3 +708,17 @@ If you have ever observed many companies like Flipkart and Paytm use localStorag
 And if you go and check the localStorage for Paytm you’ll also find that even they store a lot of data such as the recent searches for flights, recent cities you selected and even some session data into localStorage.
 
 One more important thing to note here is that due to security reasons it follows the same-origin policy. Same-Origin refers to the same Protocol, same host, and the same port.
+
+------------------------------------
+
+13. Event bubbling and Event Capturing 
+
+Capturing phase – the event goes down to the element.
+Target phase – the event reached the target element.
+Bubbling phase – the event bubbles up from the element.
+
+elem.addEventListener( event, callack,  capture)
+If it’s false (default), then the handler is set on the bubbling phase.
+If it’s true, then the handler is set on the capturing phase.
+
+event.stopPropagation() stops the bubbling
