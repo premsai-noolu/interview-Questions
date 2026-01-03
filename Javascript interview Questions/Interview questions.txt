@@ -722,3 +722,70 @@ If it’s false (default), then the handler is set on the bubbling phase.
 If it’s true, then the handler is set on the capturing phase.
 
 event.stopPropagation() stops the bubbling
+
+--------------------------------------------
+
+14. What is Prototype Inheritance?
+
+Prototype inheritance in JavaScript is a mechanism where one object can access properties and methods of another object through a hidden link called the prototype.
+
+👉 Instead of copying properties, JavaScript links objects together.
+
+Key Idea (Very Important for Interviews)
+
+Every JavaScript object has an internal property called [[Prototype]]
+If a property is not found on the object itself, JavaScript looks up the prototype chain
+This continues until the property is found or null is reached
+
+Your Example Explained Step-by-Step
+1️⃣ Parent Object (package)
+let package = {
+  version: "2.0",
+};
+
+This is the parent object
+
+It contains a property version
+
+2️⃣ Child Object (application)
+let application = Object.create(package, {
+  name: { value: "game" },
+});
+
+What happens here?
+
+Object.create(package)
+👉 Creates a new object whose prototype is package
+
+{ name: { value: "game" } }
+👉 Adds an own property called name to application
+
+So:
+application does NOT have version directly
+It inherits version from package
+
+3️⃣ Accessing the Child Object
+console.log(application);
+
+
+Output (conceptually):
+{ name: "game" }
+
+Even though you don’t see version, it’s available via prototype inheritance.
+
+4️⃣ Checking the Prototype
+console.log(Object.getPrototypeOf(application));
+
+Output:
+{ version: "2.0" }
+
+✔️ This confirms that:
+application.__proto__ === package
+
+5️⃣ Property Lookup in Action
+console.log(application.version);
+
+How JS finds version:
+Check application → ❌ not found
+Go to prototype (package) → ✅ found
+Return "2.0"
