@@ -789,3 +789,109 @@ How JS finds version:
 Check application → ❌ not found
 Go to prototype (package) → ✅ found
 Return "2.0"
+
+
+-----------------------------------
+1️⃣ Inheritance in JavaScript
+
+When an object tries to access variables or properties of another object
+
+Example
+const parent = {
+  company: "Google"
+};
+
+const child = {
+  name: "Prem"
+};
+
+// link child to parent
+child.__proto__ = parent;
+
+console.log(child.name);     // Prem (own property)
+console.log(child.company);  // Google (inherited)
+
+🔹 Explanation
+
+child does not have company
+JS looks in parent using prototype
+This is inheritance in JS
+
+2️⃣ Prototype is an object attached to functions / objects
+Example (Function prototype)
+function Employee(name) {
+  this.name = name;
+}
+
+Employee.prototype.company = "Microsoft";
+
+const emp1 = new Employee("Prem");
+
+console.log(emp1.name);      // Prem
+console.log(emp1.company);   // Microsoft
+
+🔹 Explanation
+company is not inside the function
+It is added to Employee.prototype
+All objects created using new Employee() can access it
+
+3️⃣ Hidden properties (Prototype)
+Whenever we create an object / array / function, JS attaches a hidden prototype.
+
+Example (Array)
+const arr = [1, 2, 3];
+console.log(arr.push(4));  // Works
+
+🔹 Why does push() work?
+push() is not written by us
+It comes from Array.prototype
+JS internally does:
+arr → Array.prototype → Object.prototype → null
+
+4️⃣ __proto__ points to prototype
+Example
+const obj = {};
+
+console.log(obj.__proto__ === Object.prototype); // true
+
+🔹 Explanation
+
+__proto__ is a reference
+It points to the object’s prototype
+Used to access prototype manually (not recommended in real apps)
+
+5️⃣ Prototype chaining
+Example
+const grandParent = {
+  country: "India"
+};
+
+const parent = {
+  state: "Telangana",
+  __proto__: grandParent
+};
+
+const child = {
+  city: "Hyderabad",
+  __proto__: parent
+};
+
+console.log(child.city);     // Hyderabad
+console.log(child.state);    // Telangana
+console.log(child.country);  // India
+
+🔹 How JS searches?
+child
+parent
+grandParent
+Object.prototype
+null ❌ stop
+👉 This search process is called Prototype Chaining
+
+6️⃣ End of prototype chain (null)
+console.log(Object.prototype.__proto__); // null
+
+🔹 Explanation
+Object.prototype is the top
+After that → null
+Prototype chain ends here
