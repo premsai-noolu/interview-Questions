@@ -1,0 +1,943 @@
+🔥 SQL Interview Questions (Must-Prepare)
+🟢 Basics (Very Important)
+
+1. What is SQL?
+
+SQL (Structured Query Language) is a standard language used to communicate with relational databases. It allows us to store, retrieve, update, delete, and manage data in a database.
+
+With SQL, you can:
+
+Create database structures (tables, indexes, views)
+Insert, update, and delete data
+Retrieve data using queries
+Control user access and permissions
+Manage transactions
+
+2. Difference between DDL, DML, DCL, TCL
+
+🔹 DDL – Data Definition Language
+Purpose: Defines and modifies the structure of database objects
+
+Commands:
+CREATE
+ALTER
+DROP
+TRUNCATE
+RENAME
+
+Example:
+
+CREATE TABLE Employee (
+  id INT PRIMARY KEY,
+  name VARCHAR(50)
+);
+
+👉 DDL affects schema, not the data itself.
+
+🔹 DML – Data Manipulation Language
+Purpose: Used to insert, update, delete, and retrieve data
+
+Commands:
+INSERT
+UPDATE
+DELETE
+SELECT
+
+Example:
+
+UPDATE Employee
+SET salary = 60000
+WHERE id = 101;
+
+👉 DML works on data inside tables.
+
+🔹 DCL – Data Control Language
+Purpose: Controls access and permissions to database objects
+
+Commands:
+GRANT
+REVOKE
+
+Example:
+
+GRANT SELECT ON Employee TO user1;
+
+👉 It gives permission to user1 to read data from the Employee table.user1 can run SELECT queries on the Employee table, but cannot insert, update, or delete data.
+
+👉 DCL ensures security.
+
+🔹 TCL – Transaction Control Language
+
+Purpose: Manages transactions and maintains data consistency
+
+Commands:
+
+COMMIT
+ROLLBACK
+SAVEPOINT
+
+Example:
+
+SAVEPOINT sp1;
+ROLLBACK TO sp1;
+COMMIT;
+
+Explanation of Each Statement
+🔹 SAVEPOINT sp1;
+
+Creates a checkpoint inside a transaction
+Lets you partially roll back without losing everything
+
+Think of it as:
+“Remember this position so I can come back here if needed.”
+
+🔹 ROLLBACK TO sp1;
+
+Undoes all changes made after sp1
+Keeps all changes before sp1
+
+👉 Only partial rollback, not full rollback.
+
+🔹 COMMIT;
+
+Permanently saves the current state of the transaction
+
+After COMMIT, changes cannot be undone
+
+Real Example (Very Important)
+BEGIN;
+
+INSERT INTO Employee VALUES (1, 'Tony', 50000);
+
+SAVEPOINT sp1;
+
+INSERT INTO Employee VALUES (2, 'Steve', 60000);
+
+ROLLBACK TO sp1;
+
+COMMIT;
+
+Final Result in Table:
+
+✅ Tony is inserted
+❌ Steve is NOT inserted
+
+Because:
+
+ROLLBACK TO sp1 removed Steve
+COMMIT saved Tony permanently
+
+👉 TCL ensures ACID properties.
+
+3. Difference between DELETE, TRUNCATE, DROP
+
+🔹 DELETE
+Purpose: Removes specific rows or all rows from a table
+
+Key Points
+
+Can use WHERE clause
+Row-by-row operation
+Can be rolled back (if not committed)
+Table structure remains
+
+Example
+DELETE FROM Employee WHERE dept = 'HR';
+
+🔹 TRUNCATE
+Purpose: Removes all rows from a table at once
+
+Key Points
+
+WHERE clause ❌ not allowed
+Faster than DELETE
+Cannot be rolled back (in most DBs)
+Resets auto-increment
+Table structure remains
+
+Example
+TRUNCATE TABLE Employee;
+
+🔹 DROP
+Purpose: Deletes the entire table structure
+
+Key Points
+
+Removes data + structure
+Cannot be rolled back
+Frees storage space
+Table no longer exists
+
+Example
+DROP TABLE Employee;
+
+4. What is a primary key?
+
+A primary key is a column (or combination of columns) in a table that uniquely identifies each row in that table.
+
+Key Characteristics (Very Important for Interviews)
+
+✅ Unique – no two rows can have the same value
+❌ Cannot be NULL – every row must have a value
+📌 Only one primary key per table
+⚡ Automatically creates an index (in most databases)
+
+Simple Example
+CREATE TABLE Employee (
+  emp_id INT PRIMARY KEY,
+  name VARCHAR(50),
+  salary INT
+);
+
+
+Here:
+
+emp_id uniquely identifies each employee
+No duplicate or NULL values allowed in emp_id
+
+Composite Primary Key:
+A primary key can consist of multiple columns.
+PRIMARY KEY (order_id, product_id)
+
+Used when a single column is not enough to ensure uniqueness.
+
+A primary key uniquely identifies each record in a table and does not allow duplicate or NULL values.
+
+5. Difference between primary key and unique key
+
+🔑 Primary Key
+Purpose: Uniquely identifies each row in a table
+
+Key Points
+Only one primary key per table
+Does NOT allow NULL values
+Automatically creates an index
+Ensures entity integrity
+
+Example
+CREATE TABLE Employee (
+  emp_id INT PRIMARY KEY,
+  email VARCHAR(100) UNIQUE
+);
+
+🔑 Unique Key
+Purpose: Ensures uniqueness of a column
+
+Key Points
+Multiple unique keys allowed per table
+Allows one NULL value (DB-dependent)
+Automatically creates an index
+Ensures data uniqueness
+
+A primary key uniquely identifies a record and does not allow NULLs, whereas a unique key only enforces uniqueness and can allow NULL values.
+
+6. What is a foreign key?
+
+A foreign key is a column (or set of columns) in one table that refers to the primary key (or unique key) of another table.
+It is used to maintain a relationship between tables and ensure referential integrity.
+
+Simple Example
+CREATE TABLE Department (
+  dept_id INT PRIMARY KEY,
+  dept_name VARCHAR(50)
+);
+
+CREATE TABLE Employee (
+  emp_id INT PRIMARY KEY,
+  name VARCHAR(50),
+  dept_id INT,
+  FOREIGN KEY (dept_id) REFERENCES Department(dept_id)
+);
+
+Department.dept_id → Primary Key
+Employee.dept_id → Foreign Key
+
+👉 Every dept_id in Employee must exist in Department.
+
+Key Characteristics (Interview Important)
+Can have duplicate values
+Can allow NULL values
+Enforces referential integrity
+Prevents invalid data insertion
+
+What Foreign Key Prevents
+❌ Inserting an employee with a non-existing department
+
+Example (Very Clear)
+Parent Table
+Department
+-----------
+dept_id
+---------
+10
+20
+30
+
+Child Table
+Employee
+-----------
+emp_id | dept_id
+
+Here:
+
+Employee.dept_id is a foreign key
+It references Department.dept_id
+
+❌ Invalid Data Insertion (Blocked)
+INSERT INTO Employee (emp_id, dept_id)
+VALUES (1, 99);
+
+❌ Error occurs because:
+dept_id = 99 does NOT exist in Department
+👉 This is invalid data, and the foreign key prevents it.
+
+7. What is NULL? How is it different from 0 or empty string?
+
+NULL represents the absence of a value or unknown value in a database.
+
+👉 It means:
+Value is not provided
+Value is unknown
+Value is not applicable
+
+⚠️ NULL is not a value.
+
+🔹 Examples:
+
+while querying
+salary IS NULL -- correct
+
+0
+salary = 0
+
+Means salary is zero.
+
+Empty String
+name = ''
+
+Means name exists but is empty.
+
+🔹 Behavior in Queries
+COUNT difference
+COUNT(*)        -- counts all rows
+COUNT(salary)  -- ignores NULL values
+
+
+8. What is constraint? Name different constraints
+
+A constraint is a rule applied to a table or column to restrict the type of data that can be stored in it.
+Constraints help maintain data accuracy, consistency, and integrity in a database.
+
+🔑 Different Types of Constraints (Very Important)
+1️⃣ NOT NULL
+
+Ensures a column cannot have NULL values
+name VARCHAR(50) NOT NULL
+
+2️⃣ UNIQUE
+
+Ensures all values are unique
+email VARCHAR(100) UNIQUE
+
+3️⃣ PRIMARY KEY
+
+Uniquely identifies each row
+(No duplicates, no NULLs)
+id INT PRIMARY KEY
+
+4️⃣ FOREIGN KEY
+
+Creates a relationship between tables
+Prevents invalid data insertion
+FOREIGN KEY (dept_id) REFERENCES Department(dept_id)
+
+5️⃣ CHECK
+
+Restricts values based on a condition
+age INT CHECK (age >= 18)
+
+6️⃣ DEFAULT
+
+Assigns a default value if none is provided
+status VARCHAR(20) DEFAULT 'Active'
+
+
+9. What is index? Why do we use it?
+
+An index is a database object that improves the speed of data retrieval (SELECT queries) on a table by allowing the database to find rows quickly without scanning the entire table.
+
+🔍 Why do we use Indexes?
+1️⃣ Faster SELECT Queries
+
+Without index:
+
+Database performs full table scan
+Slower for large tables
+
+With index:
+
+Database uses index lookup
+Much faster search
+
+3️⃣ Enforces Uniqueness (Sometimes)
+
+PRIMARY KEY and UNIQUE constraints create indexes automatically.
+
+Example:
+
+Without Index (Slow Query)
+Table: Employee
+emp_id	name	salary
+1	A	30000
+2	B	40000
+3	C	50000
+...	...	...
+100000	Z	80000
+Query
+SELECT *
+FROM Employee
+WHERE salary = 50000;
+
+What happens?
+
+Database checks each row one by one
+This is called a full table scan
+
+❌ Slow when table is large
+
+Create Index
+CREATE INDEX idx_salary ON Employee(salary);
+
+With Index (Fast Query)
+Now run the same query:
+
+Database looks into index structure
+Directly jumps to rows with salary = 50000
+🚀 Much faster
+
+10.-------------------------------------------------------------
+🟡 Joins (Extremely Important)
+
+Types of joins in SQL
+
+Difference between INNER JOIN and LEFT JOIN
+
+Difference between LEFT JOIN and RIGHT JOIN
+
+What is SELF JOIN?
+
+What is CROSS JOIN?
+
+🔗 Types of JOINs in SQL
+Main Types of Joins
+
+INNER JOIN
+LEFT JOIN (LEFT OUTER JOIN)
+RIGHT JOIN (RIGHT OUTER JOIN)
+FULL JOIN (FULL OUTER JOIN) (some DBs)
+SELF JOIN
+CROSS JOIN
+
+1️⃣ INNER JOIN
+What is INNER JOIN?
+
+Returns only the matching rows from both tables.
+
+Example Tables
+
+Employee
+
+emp_id	name	dept_id
+1	Tony	10
+2	Steve	20
+3	Bruce	30
+
+Department
+
+dept_id	dept_name
+10	IT
+20	HR
+Query
+SELECT e.name, d.dept_name
+FROM Employee e
+INNER JOIN Department d
+ON e.dept_id = d.dept_id;
+
+Output
+name	dept_name
+Tony	IT
+Steve	HR
+
+👉 Bruce is excluded because dept_id 30 has no match
+
+Interview One-Liner ⭐
+INNER JOIN returns only records that have matching values in both tables.
+
+2️⃣ LEFT JOIN (LEFT OUTER JOIN)
+What is LEFT JOIN?
+
+Returns:
+
+All rows from left table
+Matching rows from right table
+NULL if no match
+
+Query
+SELECT e.name, d.dept_name
+FROM Employee e
+LEFT JOIN Department d
+ON e.dept_id = d.dept_id;
+
+Output
+name	dept_name
+Tony	IT
+Steve	HR
+Bruce	NULL
+
+👉 Bruce is included because LEFT JOIN keeps all left table records
+
+Interview One-Liner ⭐
+LEFT JOIN returns all rows from the left table and matching rows from the right table.
+
+🔍 Difference: INNER JOIN vs LEFT JOIN
+Matching rows	   Only matching	    All left rows
+Non-matching rows	Excluded	       Included with NULL
+Use case	     Strict matching	     Find missing records
+
+3️⃣ RIGHT JOIN (RIGHT OUTER JOIN)
+What is RIGHT JOIN?
+
+Returns:
+All rows from right table
+Matching rows from left table
+NULL if no match
+
+Query
+SELECT e.name, d.dept_name
+FROM Employee e
+RIGHT JOIN Department d
+ON e.dept_id = d.dept_id;
+
+Output
+name	dept_name
+Tony	IT
+Steve	HR
+
+(If Department had extra rows, they would appear with NULL employee)
+
+📌 Interview Tip:
+RIGHT JOIN can always be rewritten using LEFT JOIN.
+
+🔗 FULL JOIN (FULL OUTER JOIN)
+
+A FULL JOIN returns:
+
+All matching rows
+All non-matching rows from the LEFT table
+All non-matching rows from the RIGHT table
+
+👉 If there is no match on either side, the missing columns are filled with NULL.
+
+4️⃣ SELF JOIN
+What is SELF JOIN?
+
+A table joined with itself.
+Used when rows in a table are related to other rows in the same table.
+
+Example Table: Employee
+emp_id	name	manager_id
+1	Tony	NULL
+2	Steve	1
+3	Bruce	1
+Query
+SELECT e.name AS Employee, m.name AS Manager
+FROM Employee e
+LEFT JOIN Employee m
+ON e.manager_id = m.emp_id;
+
+Output
+Employee	Manager
+Tony	NULL
+Steve	Tony
+Bruce	Tony
+Interview One-Liner ⭐
+SELF JOIN is used to join a table with itself using aliases.
+
+5️⃣ CROSS JOIN
+What is CROSS JOIN?
+
+Returns Cartesian product:
+Every row from table A
+Combined with every row from table B
+
+Example
+
+Table A → 2 rows
+Table B → 3 rows
+
+👉 Result = 2 × 3 = 6 rows
+
+Query:
+SELECT *
+FROM A
+CROSS JOIN B;
+
+Use Case
+
+Creating combinations
+Generating test data
+
+Interview One-Liner ⭐
+CROSS JOIN returns all possible combinations of rows from both tables.
+
+11. Write a query to fetch records present in table A but not in table B
+
+👉 Fetch records present in Table A but NOT in Table B
+
+Example Tables
+TableA (Employees)
+id	name
+1	Tony
+2	Steve
+3	Bruce
+4	Peter
+TableB (Employees on Project)
+id
+1
+3
+Expected Output
+
+Employees present in TableA but not in TableB
+
+id	name
+2	Steve
+4	Peter
+✅ Best Query (Interview Preferred)
+SELECT A.*
+FROM TableA A
+LEFT JOIN TableB B
+  ON A.id = B.id
+WHERE B.id IS NULL;
+
+How This Query Works (Explain Like This in Interview)
+Step 1: LEFT JOIN
+FROM TableA A
+LEFT JOIN TableB B
+ON A.id = B.id;
+
+Result after join:
+
+A.id	A.name	B.id
+1	Tony	1
+2	Steve	NULL
+3	Bruce	3
+4	Peter	NULL
+
+All rows from TableA are kept
+
+Matching rows from TableB are joined
+
+Non-matching rows get NULL in B.id
+
+Step 2: Filter NULLs
+WHERE B.id IS NULL;
+
+This filters rows where:
+
+There is no matching record in TableB
+
+Final Output:
+
+id	name
+2	Steve
+4	Peter
+
+⭐ Interview One-Liner Answer
+
+By using a LEFT JOIN and filtering rows where the right table’s key is NULL, we can fetch records present in Table A but not in Table B.
+
+----------------------------------------------------------------------------------------------------------------------------------------------
+🟡 Functions & Clauses
+
+12. Difference between WHERE and HAVING
+
+Let’s explain WHERE vs HAVING with a very clear example, step by step, exactly how you can say it in an interview.
+
+Example Table: Employee
+emp_id	name	dept	salary
+1	Tony	IT	60000
+2	Steve	IT	55000
+3	Bruce	HR	40000
+4	Natasha	HR	45000
+5	Peter	HR	70000
+🔹 WHERE Example (Row-level filtering)
+Question:
+
+👉 Get employees whose salary is greater than 50,000
+
+SELECT *
+FROM Employee
+WHERE salary > 50000;
+
+How it works:
+
+SQL checks each row
+Filters rows before grouping
+
+Output:
+emp_id	name	dept	salary
+1	Tony	IT	60000
+2	Steve	IT	55000
+5	Peter	HR	70000
+
+🔹 HAVING Example (Group-level filtering)
+Question:
+
+👉 Get departments whose average salary is greater than 55,000
+
+SELECT dept, AVG(salary)
+FROM Employee
+GROUP BY dept
+HAVING AVG(salary) > 55000;
+
+How it works:
+
+Rows are grouped by dept
+AVG(salary) is calculated per group
+HAVING filters the groups
+
+Output:
+dept	avg_salary
+IT	    57500
+❌ Why WHERE Cannot Replace HAVING
+WHERE AVG(salary) > 55000; -- ❌ INVALID
+
+Because:
+
+WHERE runs before GROUP BY
+Aggregate functions are not available yet
+
+🔁 Using WHERE and HAVING Together
+Question:
+👉 Departments with more than 1 employee earning above 45,000
+
+SELECT dept, COUNT(*)
+FROM Employee
+WHERE salary > 45000
+GROUP BY dept
+HAVING COUNT(*) > 1;
+
+Explanation:
+
+WHERE → filters employees first
+GROUP BY → groups remaining rows
+HAVING → filters groups
+
+⭐ Interview One-Liner
+WHERE filters individual rows before grouping, while HAVING filters aggregated groups after GROUP BY.
+
+🧠 Easy Way to Remember
+
+WHERE = row filter
+HAVING = group filter
+
+13. Difference between GROUP BY and ORDER BY
+
+GROUP BY:
+
+Used to group rows that have the same values
+Commonly used with aggregate functions (COUNT, SUM, AVG, MAX, MIN)
+Reduces multiple rows into one row per group
+
+Example
+
+👉 Find total salary per department
+
+SELECT dept, SUM(salary) AS total_salary
+FROM Employee
+GROUP BY dept;
+
+How it works:
+
+Rows are grouped by dept
+SUM(salary) is calculated per group
+
+Sample Output
+dept	total_salary
+IT	115000
+HR	155000
+
+🔹 ORDER BY
+What is ORDER BY?
+
+Used to sort the result set
+Does not change number of rows
+Can sort in ASC (default) or DESC
+
+Example
+
+👉 List employees sorted by salary
+
+SELECT *
+FROM Employee
+ORDER BY salary DESC;
+
+Sample Output
+name	salary
+Peter	70000
+Tony	60000
+Steve	55000
+Natasha	45000
+Bruce	40000
+
+🔁 Using GROUP BY and ORDER BY Together
+SELECT dept, AVG(salary) AS avg_salary
+FROM Employee
+GROUP BY dept
+ORDER BY avg_salary DESC;
+
+👉 Groups first, then sorts the grouped results.
+
+⭐ Interview One-Liner
+GROUP BY groups rows to apply aggregate functions, while ORDER BY sorts the final result set.
+
+🧠 Easy Way to Remember
+GROUP BY → combine rows
+ORDER BY → arrange rows
+
+14. What are aggregate functions?
+
+Aggregate functions are built-in SQL functions that perform calculations on multiple rows and return a single summarized value.
+
+They are commonly used with the GROUP BY clause.
+
+🔑 Common Aggregate Functions (Very Important)
+1️⃣ COUNT()
+
+Returns the number of rows
+SELECT COUNT(*) FROM Employee;
+
+COUNT(*) → counts all rows
+COUNT(column) → ignores NULL values
+
+2️⃣ SUM()
+
+Returns the total of numeric values
+SELECT SUM(salary) FROM Employee;
+
+3️⃣ AVG()
+
+Returns the average value
+SELECT AVG(salary) FROM Employee;
+
+4️⃣ MAX()
+
+Returns the highest value
+SELECT MAX(salary) FROM Employee;
+
+5️⃣ MIN()
+
+Returns the lowest value
+SELECT MIN(salary) FROM Employee;
+
+🧠 Example Table: Employee
+emp_id	dept	salary
+1	IT	60000
+2	IT	55000
+3	HR	40000
+4	HR	45000
+Aggregate + GROUP BY Example
+
+👉 Average salary per department
+
+SELECT dept, AVG(salary) AS avg_salary
+FROM Employee
+GROUP BY dept;
+
+Output
+dept	avg_salary
+IT	57500
+HR	42500
+Important Rules (Interview Favorites)
+
+Aggregate functions ignore NULL values (except COUNT(*))
+Cannot use aggregate functions in WHERE
+Must use HAVING for conditions on aggregates
+
+❌ Wrong:
+
+WHERE AVG(salary) > 50000
+
+✅ Correct:
+
+HAVING AVG(salary) > 50000
+
+15. What is COUNT(*) vs COUNT(column)
+
+What does COUNT(*) do:
+
+Counts all rows in a table or group
+
+Includes NULL values
+Counts rows regardless of column values
+
+Example
+SELECT COUNT(*) FROM Employee;
+
+👉 Returns the total number of rows
+
+🔢 COUNT(column)
+What does COUNT(column) do?
+
+Counts only non-NULL values in a specific column
+Ignores NULL values
+
+Example
+SELECT COUNT(salary) FROM Employee;
+
+👉 Counts only rows where salary is NOT NULL
+
+🧠 Example Table: Employee
+emp_id	name	salary
+1	Tony	60000
+2	Steve	NULL
+3	Bruce	40000
+4	Natasha	NULL
+Result Comparison
+SELECT COUNT(*) FROM Employee;      -- 4
+SELECT COUNT(salary) FROM Employee; -- 2
+
+16. What is COALESCE()?
+
+COALESCE() is a SQL function used to replace NULL values.
+It returns the first non-NULL value from the list of arguments.
+
+COALESCE(value1, value2, ..., valueN)
+
+👉 SQL checks values from left to right and returns the first one that is NOT NULL.
+
+Simple Example
+SELECT COALESCE(NULL, NULL, 5000);
+
+Output
+5000
+
+Real Example (Very Important)
+Employee Table
+emp_id	name	salary	bonus
+1	Tony	60000	NULL
+2	Steve	NULL	5000
+Query
+SELECT name,
+       COALESCE(salary, bonus, 0) AS final_amount
+FROM Employee;
+
+Output
+name	final_amount
+Tony	60000
+Steve	5000
+Why do we use COALESCE?
+
+Handle NULL values
+Avoid calculation errors
+Display meaningful default values
