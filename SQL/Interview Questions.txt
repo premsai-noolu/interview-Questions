@@ -941,3 +941,359 @@ Why do we use COALESCE?
 Handle NULL values
 Avoid calculation errors
 Display meaningful default values
+
+16. What is a subquery?
+
+A subquery is a query written inside another SQL query.
+It is used to provide intermediate results that the main (outer) query uses to complete its task.
+
+👉 In simple words:
+
+A subquery is a query within a query.
+Where Can Subqueries Be Used?
+
+Subqueries can be used in:
+
+WHERE clause
+SELECT clause
+FROM clause
+HAVING clause
+
+Simple Example
+Find employees earning more than the average salary
+SELECT *
+FROM Employee
+WHERE salary > (
+    SELECT AVG(salary)
+    FROM Employee
+);
+
+How it works:
+
+Inner query calculates average salary
+Outer query fetches employees with salary greater than that average
+
+Example Table: Employee
+emp_id	name	salary
+1	Tony	60000
+2	Steve	50000
+3	Bruce	40000
+Average salary = 50,000
+
+👉 Output:
+
+emp_id	name	salary
+1	Tony	60000
+Types of Subqueries (Interview Important)
+
+1️⃣ Single-row subquery
+Returns one value
+
+WHERE salary = (SELECT MAX(salary) FROM Employee)
+
+2️⃣ Multi-row subquery
+Returns multiple values
+
+WHERE dept_id IN (SELECT dept_id FROM Department)
+
+17. Difference between correlated and non-correlated subquery
+
+🔹 Non-Correlated Subquery
+A non-correlated subquery is a subquery that runs independently of the outer query.
+Executes once
+Result is passed to the outer query
+Easier to understand and faster
+
+Example
+
+👉 Employees earning more than average salary
+
+SELECT *
+FROM Employee
+WHERE salary > (
+    SELECT AVG(salary)
+    FROM Employee
+);
+
+How it works:
+
+Inner query calculates average salary
+Outer query compares each employee’s salary to that value
+
+🔹 Correlated Subquery
+A correlated subquery depends on the outer query.
+
+Executes once for each row of the outer query
+Uses values from the outer query
+Slower but more powerful
+
+Example
+
+👉 Employees earning more than the average salary of their department
+
+SELECT *
+FROM Employee e
+WHERE salary > (
+    SELECT AVG(salary)
+    FROM Employee
+    WHERE dept_id = e.dept_id
+);
+
+How it works:
+
+For each employee, the subquery calculates department-wise average
+Then compares employee salary with it
+
+🧠 Example Table
+emp_id	name	dept	salary
+1	Tony	IT	60000
+2	Steve	IT	50000
+3	Bruce	HR	40000
+4	Natasha	HR	45000
+Output of Correlated Query
+name	dept	salary
+Tony	IT	60000
+Natasha	HR	45000
+
+⭐ Interview One-Liner
+A non-correlated subquery runs independently, while a correlated subquery depends on the outer query and executes once per row.
+
+18. Find 2nd / 3rd / 5th highest salary
+
+3️⃣ 3rd Highest Salary
+SELECT salary
+FROM (
+    SELECT salary,
+           DENSE_RANK() OVER (ORDER BY salary DESC) AS rnk
+    FROM Employee
+) t
+WHERE rnk = 3;
+
+👉 It finds the 3rd highest DISTINCT salary from the Employee table.
+
+Step-by-Step Explanation
+🔹 Step 1: Inner Query (Window Function)
+SELECT salary,
+       DENSE_RANK() OVER (ORDER BY salary DESC) AS rnk
+FROM Employee;
+
+What happens here?
+
+ORDER BY salary DESC → sorts salaries from highest to lowest
+
+DENSE_RANK():
+
+Assigns a rank to each distinct salary
+Same salaries get the same rank
+No gaps in ranking
+
+🔹 Example Data
+emp_id	salary
+1	100000
+2	90000
+3	90000
+4	80000
+5	70000
+🔹 Result of Inner Query
+salary	rnk
+100000	1
+90000	2
+90000	2
+80000	3
+70000	4
+🔹 Step 2: Outer Query (Filtering)
+WHERE rnk = 3;
+
+Filters rows where rank is 3
+Returns the 3rd highest distinct salary
+
+Final Output
+80000
+
+✅ METHOD 2: Using LIMIT & OFFSET (MySQL / PostgreSQL)
+SELECT DISTINCT salary
+FROM Employee
+ORDER BY salary DESC
+LIMIT 1 OFFSET 1;   -- 2nd highest
+
+LIMIT 1 OFFSET 2;   -- 3rd highest
+LIMIT 1 OFFSET 4;   -- 5th highest
+
+19. Find duplicate records in a table
+
+Example Data
+emp_id	name	email	salary
+1	Tony	tony@gmail.com
+	60000
+2	Steve	steve@gmail.com
+	55000
+3	Tony	tony@gmail.com
+	60000
+4	Bruce	bruce@gmail.com
+	40000
+5	Tony	tony@gmail.com
+	60000
+
+Here, Tony’s record is duplicated.
+
+✅ Method 1: Using GROUP BY + HAVING (Most Common)
+Find duplicate rows based on a column (e.g., email)
+SELECT email, COUNT(*) AS cnt
+FROM Employee
+GROUP BY email
+HAVING COUNT(*) > 1;
+
+Output
+email	cnt
+tony@gmail.com
+	3
+
+👉 Shows which values are duplicated
+
+✅ Method 2: Fetch the FULL duplicate records
+SELECT *
+FROM Employee
+WHERE email IN (
+    SELECT email
+    FROM Employee
+    GROUP BY email
+    HAVING COUNT(*) > 1
+);
+
+Output
+
+All rows where email = 'tony@gmail.com'
+
+✅ Method 3: Find duplicates using multiple columns
+SELECT name, email, salary, COUNT(*)
+FROM Employee
+GROUP BY name, email, salary
+HAVING COUNT(*) > 1;
+
+👉 Finds exact duplicate rows
+
+🧠 How to Explain in Interview (Simple)
+We can find duplicate records using GROUP BY on the required column(s) and filter groups having COUNT(*) > 1 using HAVING.
+
+20. Delete duplicate records (keep one)
+The Query
+DELETE FROM Employee
+WHERE emp_id NOT IN (
+    SELECT MIN(emp_id)
+    FROM Employee
+    GROUP BY email
+);
+
+What does this query do?
+
+👉 It deletes duplicate records from the Employee table
+👉 Keeps only one record per email
+👉 Specifically, it keeps the row with the smallest emp_id for each email
+
+Example Table (Before)
+emp_id	name	email
+1	Tony	tony@gmail.com
+
+2	Steve	steve@gmail.com
+
+3	Tony	tony@gmail.com
+
+4	Bruce	bruce@gmail.com
+
+5	Tony	tony@gmail.com
+
+Here:
+
+tony@gmail.com appears 3 times
+
+Step-by-Step Execution
+🔹 Step 1: Inner Query
+SELECT MIN(emp_id)
+FROM Employee
+GROUP BY email;
+
+Result of inner query:
+email	MIN(emp_id)
+tony@gmail.com
+	1
+steve@gmail.com
+	2
+bruce@gmail.com
+	4
+
+👉 These are the records we want to KEEP
+
+🔹 Step 2: Outer DELETE
+DELETE FROM Employee
+WHERE emp_id NOT IN (1, 2, 4);
+
+👉 This deletes:
+
+emp_id = 3
+emp_id = 5
+
+21. Find employees with salary greater than average salary
+
+SELECT *
+FROM Employee
+WHERE salary > (
+    SELECT AVG(salary)
+    FROM Employee
+);
+
+🔵 Window Functions (Very High Chance)
+
+What is a window function?
+
+22. Difference between ROW_NUMBER(), RANK(), DENSE_RANK()
+
+These are window (ranking) functions used to assign a rank to rows based on an order.
+
+Example Table: Employee
+emp_id	name	salary
+1	Tony	100000
+2	Steve	90000
+3	Bruce	90000
+4	Natasha	80000
+5	Peter	70000
+Query Used
+SELECT name, salary,
+       ROW_NUMBER() OVER (ORDER BY salary DESC) AS row_num,
+       RANK() OVER (ORDER BY salary DESC) AS rnk,
+       DENSE_RANK() OVER (ORDER BY salary DESC) AS dense_rnk
+FROM Employee;
+
+Output
+name	salary	ROW_NUMBER	RANK	DENSE_RANK
+Tony	100000	1	1	1
+Steve	90000	2	2	2
+Bruce	90000	3	2	2
+Natasha	80000	4	4	3
+Peter	70000	5	5	4
+Key Differences Explained
+🔹 ROW_NUMBER()
+
+Assigns unique number to each row
+Does not care about duplicates
+Always increments by 1
+👉 Use when you need unique row IDs
+
+🔹 RANK()
+
+Same values get same rank
+Skips ranks after duplicates
+👉 Use when ranking positions matter (like competition ranking)
+
+🔹 DENSE_RANK()
+
+Same values get same rank
+Does NOT skip ranks
+👉 Best for Nth highest salary
+
+23. Use of PARTITION BY
+
+24. SQL Order of Execution (Sequence of Operations)
+
+SQL executes queries in a logical order starting from FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT, not in the written order.
+
+This is a very important interview question 👍
