@@ -1297,3 +1297,114 @@ Does NOT skip ranks
 SQL executes queries in a logical order starting from FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT, not in the written order.
 
 This is a very important interview question 👍
+
+25. Find top 3 salaries in each department
+
+Query
+SELECT emp_id, name, department, salary
+FROM (
+    SELECT
+        emp_id,
+        name,
+        department,
+        salary,
+        DENSE_RANK() OVER (
+            PARTITION BY department
+            ORDER BY salary DESC
+        ) AS rnk
+    FROM Employee
+) t
+WHERE rnk <= 3;
+
+🔹 Step-by-Step SQL Execution
+1️⃣ INNER QUERY – FROM Employee
+FROM Employee
+
+SQL first reads all rows from the Employee table
+
+No filtering yet
+
+📌 At this point:
+
+All employees are loaded
+
+2️⃣ WINDOW FUNCTION EXECUTION
+DENSE_RANK() OVER (
+    PARTITION BY department
+    ORDER BY salary DESC
+)
+
+This happens after FROM and before WHERE of the outer query.
+
+What SQL does internally:
+
+Partitions data by department
+Sorts each department by salary DESC
+Assigns rank starting from 1 in each department
+Same salary → same rank
+No gaps in ranking (because DENSE_RANK)
+
+📌 Example (IT department):
+
+Salary: 90000 → rnk = 1
+Salary: 85000 → rnk = 2
+Salary: 85000 → rnk = 2
+Salary: 70000 → rnk = 3
+
+3️⃣ INNER SELECT List Execution
+SELECT emp_id, name, department, salary, rnk
+
+SQL now creates a temporary result set
+This result includes the calculated rnk
+
+Temporary Table (t)
+emp_id	name	department	salary	rnk
+1	A	IT	90000	1
+2	B	IT	85000	2
+3	C	IT	85000	2
+4	D	IT	70000	3
+5	E	HR	80000	1
+6	F	HR	75000	2
+7	G	HR	72000	3
+
+📌 This result is aliased as t
+
+4️⃣ OUTER QUERY – FROM t
+FROM ( ... ) t
+
+SQL treats the inner query as a derived table
+Now all filtering happens on this result
+
+5️⃣ OUTER WHERE CLAUSE
+WHERE rnk <= 3
+
+SQL filters rows after ranking is completed
+Keeps only top 3 salaries per department
+
+📌 Important:
+
+WHERE cannot directly filter window functions,
+so we use a subquery.
+
+6️⃣ FINAL SELECT
+SELECT emp_id, name, department, salary
+
+Only required columns are returned
+
+rnk is not shown
+
+✅ Final Output
+emp_id	name	department	salary
+1	A	IT	90000
+2	B	IT	85000
+3	C	IT	85000
+4	D	IT	70000
+5	E	HR	80000
+6	F	HR	75000
+7	G	HR	72000
+
+
+🔹 Why DENSE_RANK()?
+
+Handles duplicate salaries
+Ensures exactly top 3 salary levels
