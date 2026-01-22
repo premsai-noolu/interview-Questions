@@ -1408,3 +1408,566 @@ emp_id	name	department	salary
 
 Handles duplicate salaries
 Ensures exactly top 3 salary levels
+
+26. What is index?
+
+An index is a data structure that helps the database find rows faster, just like an index in a book helps you quickly find a topic without reading every page.
+
+Simple Definition (Interview-ready)
+An index is a database object that improves query performance by allowing faster data retrieval at the cost of additional storage and slower write operations.
+
+Without Index (Full Table Scan)
+SELECT * FROM Employee WHERE emp_id = 101;
+
+Database scans every row in the table
+Slow for large tables ❌
+
+With Index
+CREATE INDEX idx_emp_id ON Employee(emp_id);
+
+Database directly jumps to the row
+Very fast lookup ✅
+
+Types of Indexes (Important for Interviews)
+1️⃣ Clustered Index
+
+Defines physical order of table data
+Only one per table
+
+Example: Primary Key
+PRIMARY KEY (emp_id)
+
+2️⃣ Non-Clustered Index
+Separate structure from table data
+
+Multiple allowed per table
+CREATE INDEX idx_salary ON Employee(salary);
+
+3️⃣ Unique Index
+
+Prevents duplicate values
+CREATE UNIQUE INDEX idx_email ON Employee(email);
+
+4️⃣ Composite Index
+
+Index on multiple columns
+CREATE INDEX idx_dept_salary ON Employee(department, salary);
+
+
+📌 Column order matters!
+
+5️⃣ Covering Index
+
+Index contains all columns needed by query
+
+No table lookup required
+
+CREATE INDEX idx_cover ON Employee(department, salary, name);
+
+27. When NOT to use index?
+
+Indexes are powerful, but using them everywhere is a mistake. Here are the clear situations where you should NOT use an index 👇
+1️⃣ Small Tables
+If a table has very few rows, a full table scan is faster than index lookup.
+
+2️⃣ Columns with Low Cardinality
+
+Low cardinality = few unique values
+Examples:
+gender (M/F)
+status (Active/Inactive)
+is_deleted (0/1)
+
+📌 Indexing these columns usually does not help.
+WHERE gender = 'M'
+
+3️⃣ Frequently Updated Columns
+
+Indexes slow down:
+INSERT
+UPDATE
+DELETE
+
+❌ Avoid indexing columns that change often.
+Example:
+last_login_time
+status
+updated_at
+
+7️⃣ Over-Indexing (Too Many Indexes)
+More indexes = more problems:
+Slower writes
+More storage
+Complex optimizer choices
+📌 Only index what is needed.
+
+28. What is query optimization?
+
+Query optimization is the process of improving SQL query performance so that the database retrieves results as fast and efficiently as possible, using minimum resources (CPU, memory, I/O).
+
+Simple Interview Definition
+Query optimization is the technique of writing or executing SQL queries in a way that reduces execution time and resource usage by choosing the most efficient execution plan.
+
+Common Query Optimization Techniques
+1️⃣ Proper Indexing
+CREATE INDEX idx_dept_salary ON Employee(department, salary);
+
+2️⃣ Avoid SELECT *
+
+❌ Bad:
+SELECT * FROM Employee;
+
+✔ Good:
+SELECT emp_id, name FROM Employee;
+
+3️⃣ Use WHERE Before GROUP BY
+Filter rows early to reduce data volume
+
+6️⃣ Use JOIN Instead of Subqueries (When Possible)
+SELECT e.name, d.name
+FROM Employee e
+JOIN Department d ON e.dept_id = d.id;
+
+7️⃣ Limit Result Set
+LIMIT 10;
+
+🟣 Transactions
+
+29. What is transaction?
+
+A transaction is a group of SQL operations executed as a single logical unit that ensures data integrity through ACID properties
+Real-Life Example (Bank Transfer 💳)
+
+Transfer ₹1000 from Account A → Account B
+
+1. Deduct ₹1000 from Account A
+2. Add ₹1000 to Account B
+
+
+✔ Both must succeed
+❌ If one fails → rollback
+
+Transaction Commands
+BEGIN TRANSACTION;   -- Start
+COMMIT;              -- Save changes
+ROLLBACK;            -- Undo changes
+SAVEPOINT sp1;       -- Partial rollback
+
+Example Transaction:
+
+BEGIN TRANSACTION;
+UPDATE Accounts
+SET balance = balance - 1000
+WHERE account_id = 1;
+
+UPDATE Accounts
+SET balance = balance + 1000
+WHERE account_id = 2;
+
+COMMIT;
+
+❌ If error occurs:
+ROLLBACK;
+
+Why Transactions Are Important
+
+Prevent partial updates
+Maintain data consistency
+Handle failures safely
+Support concurrent users
+
+ACID Properties (VERY IMPORTANT)
+1️⃣ Atomicity
+
+All operations succeed or none
+No partial execution
+
+📌 Example: Bank transfer
+
+2️⃣ Consistency
+
+Database moves from one valid state to another
+Constraints are preserved
+
+3️⃣ Isolation
+
+Transactions do not interfere with each other
+Controlled by isolation levels
+
+4️⃣ Durability
+
+Once committed, data is permanent
+Survives crashes
+
+30. Difference between COMMIT and ROLLBACK and savepoint.
+
+Imagine This Scenario 🏦
+You are doing a bank transaction:
+Deduct money from Account A
+Add money to Account B
+Log the transaction
+
+1️⃣ COMMIT – “Make changes permanent”
+Meaning
+COMMIT saves all changes permanently to the database.
+
+Example
+BEGIN TRANSACTION;
+
+UPDATE Accounts
+SET balance = balance - 500
+WHERE account_id = 1;
+
+UPDATE Accounts
+SET balance = balance + 500
+WHERE account_id = 2;
+
+COMMIT;
+
+✔ Money transferred
+✔ Changes saved
+✔ Cannot undo after commit
+
+2️⃣ ROLLBACK – “Undo changes”
+Meaning
+ROLLBACK undoes all changes made in the current transaction.
+
+Example
+BEGIN TRANSACTION;
+
+UPDATE Accounts
+SET balance = balance - 500
+WHERE account_id = 1;
+
+-- Something went wrong
+ROLLBACK;
+
+❌ Deduction undone
+❌ Database returns to original state
+
+3️⃣ SAVEPOINT – “Checkpoint inside a transaction”
+Meaning
+A SAVEPOINT allows you to rollback to a specific point, not the entire transaction.
+
+🔁 SAVEPOINT + ROLLBACK Example
+BEGIN TRANSACTION;
+
+-- Step 1
+UPDATE Accounts
+SET balance = balance - 500
+WHERE account_id = 1;
+
+SAVEPOINT sp1;
+
+-- Step 2
+UPDATE Accounts
+SET balance = balance + 500
+WHERE account_id = 2;
+
+SAVEPOINT sp2;
+
+-- Step 3 (fails)
+INSERT INTO TransactionLog VALUES (...);
+
+-- Rollback only step 3
+ROLLBACK TO sp2;
+
+COMMIT;
+
+What Happens?
+Step	Result
+Deduct from A	✅ Kept
+Add to B	✅ Kept
+Log transaction	❌ Undone
+Final commit	✅ Saved
+
+Difference Summary Table
+Command	What it does
+BEGIN	Starts transaction
+COMMIT	Saves all changes
+ROLLBACK	Undo entire transaction
+SAVEPOINT	Mark a point to rollback to
+ROLLBACK TO SAVEPOINT	Undo part of transaction
+Important Interview Points ⚠️
+
+COMMIT ends transaction
+ROLLBACK ends transaction
+SAVEPOINT does not end transaction
+You can have multiple savepoints
+After COMMIT, rollback is impossible
+
+One-Line Interview Answer 🎯
+SAVEPOINT creates a checkpoint inside a transaction, ROLLBACK undoes changes, and COMMIT permanently saves all changes to the database.
+
+🔴 Scenario-Based (Interview Favorite)
+
+31. How to fetch even rows from a table?
+
+✅ Recommended Method (Using ROW_NUMBER())
+SELECT *
+FROM (
+    SELECT *,
+           ROW_NUMBER() OVER (ORDER BY emp_id) AS rn
+    FROM Employee
+) t
+WHERE rn % 2 = 0;
+
+🔍 How It Works (Execution Explanation)
+
+ROW_NUMBER() assigns a unique sequence number to each row
+ORDER BY emp_id ensures consistent row numbering
+rn % 2 = 0 filters even-numbered rows
+
+32. Find employees who didn’t receive salary this month
+
+This is a very common real-world + interview question.
+Let’s assume a Salary table that records salary payments.
+
+Assumed Tables
+Employee
+emp_id	name
+1	A
+2	B
+3	C
+4	D
+
+Salary
+emp_id	salary_month	paid_date
+1	2026-01	2026-01-05
+2	2026-01	2026-01-06
+
+👉 Employees C and D did NOT receive salary this month.
+
+✅ Best & Recommended Solution – LEFT JOIN
+SELECT e.emp_id, e.name
+FROM Employee e
+LEFT JOIN Salary s
+    ON e.emp_id = s.emp_id
+    AND s.salary_month = '2026-01'
+WHERE s.emp_id IS NULL;
+
+🔍 Execution Explanation
+LEFT JOIN keeps all employees
+Salary rows are matched only for current month
+Employees with no matching salary record get NULL
+WHERE s.emp_id IS NULL filters unpaid employees
+
+
+33. How to handle NULL values in queries?
+
+NULL values are handled using IS NULL, COALESCE, and careful query design, since NULL represents unknown data and cannot be compared using standard operators.
+
+🔴 Tricky / Conceptual
+
+34. What happens if we use GROUP BY without aggregate function?
+Short answer: It is valid SQL, but its behavior depends on what you select.
+
+Let’s break it down clearly 👇
+
+Case 1️⃣ GROUP BY with the same columns in SELECT (Valid & Meaningful)
+SELECT department
+FROM Employee
+GROUP BY department;
+
+What happens?
+Rows are grouped by department
+One row per department is returned
+Acts like DISTINCT
+
+Output
+department
+IT
+HR
+Finance
+
+📌 Equivalent to:
+
+SELECT DISTINCT department FROM Employee;
+
+Case 2️⃣ GROUP BY with multiple columns, no aggregates (Valid)
+SELECT department, job_role
+FROM Employee
+GROUP BY department, job_role;
+
+What happens?
+Returns unique combinations
+No calculations, just grouping
+
+Case 3️⃣ GROUP BY but selecting a column not in GROUP BY ❌
+SELECT department, name
+FROM Employee
+GROUP BY department;
+
+Using GROUP BY without aggregate functions is valid only when all selected columns are included in the GROUP BY, in which case it behaves like DISTINCT; otherwise it results in an error or unpredictable output.
+
+35. Can we use WHERE with aggregate function? Why not?
+
+Short answer: ❌ No, we cannot use aggregate functions in the WHERE clause.
+
+Why NOT? (Core Reason)
+
+👉 Because of SQL execution order.
+
+Logical Execution Order (simplified)
+FROM
+WHERE        ← runs BEFORE aggregation
+GROUP BY
+HAVING       ← runs AFTER aggregation
+SELECT
+
+📌 Since WHERE runs before GROUP BY,
+aggregates don’t exist yet when WHERE is evaluated.
+
+Example to Understand Clearly
+❌ Invalid Query
+SELECT department, COUNT(*) 
+FROM Employee
+WHERE COUNT(*) > 2
+GROUP BY department;
+
+❌ Error:
+Invalid use of group function
+
+Why?
+COUNT(*) is calculated after GROUP BY
+WHERE tries to filter before counting
+
+✅ Correct Way: Use HAVING
+SELECT department, COUNT(*) 
+FROM Employee
+GROUP BY department
+HAVING COUNT(*) > 2;
+
+Meaning
+👉 “Show only departments having more than 2 employees”
+
+Can WHERE and HAVING Be Used Together?
+✔ Yes
+
+SELECT department, COUNT(*) 
+FROM Employee
+WHERE salary > 40000       -- row-level filter
+GROUP BY department
+HAVING COUNT(*) > 2;       -- group-level filter
+
+Interview One-Liner 🎯
+Aggregate functions cannot be used in WHERE because WHERE is evaluated before GROUP BY; HAVING is used instead to filter aggregated results.
+
+36. Difference between UNION and UNION ALL
+
+Let’s explain it clearly with examples, behavior, and performance differences.
+
+Basic Definition
+Keyword	What it does
+UNION	Combines results and removes duplicates
+UNION ALL	Combines results and keeps duplicates
+
+Example Tables
+Table: Employee_2024
+emp_id	name
+1	A
+2	B
+3	C
+
+Table: Employee_2025
+emp_id	name
+3	C
+4	D
+5	E
+1️⃣ UNION (Removes Duplicates)
+SELECT emp_id, name FROM Employee_2024
+UNION
+SELECT emp_id, name FROM Employee_2025;
+
+Output
+emp_id	name
+1	A
+2	B
+3	C
+4	D
+5	E
+
+📌 Duplicate (3, C) appears only once.
+
+2️⃣ UNION ALL (Keeps Duplicates)
+SELECT emp_id, name FROM Employee_2024
+UNION ALL
+SELECT emp_id, name FROM Employee_2025;
+
+Output
+emp_id	name
+1	A
+2	B
+3	C
+3	C
+4	D
+5	E
+
+37. What is VIEW?
+
+A VIEW is a virtual table that represents the result of a stored SELECT query and provides abstraction, security, and simplicity without storing data.
+
+Basic Syntax
+CREATE VIEW emp_view AS
+SELECT emp_id, name, department, salary
+FROM Employee;
+
+How VIEW Works (Internally)
+View stores only the SQL query
+
+When you query the view:
+SELECT * FROM emp_view;
+
+Example
+Base Table: Employee
+emp_id	name	department	salary
+1	A	IT	50000
+2	B	HR	40000
+View Creation
+CREATE VIEW it_employees AS
+SELECT emp_id, name, salary
+FROM Employee
+WHERE department = 'IT';
+
+Query the View
+SELECT * FROM it_employees;
+
+Output
+emp_id	name	salary
+1	A	50000
+
+38. Difference between VIEW and TABLE
+
+Basic Definition
+TABLE	                          VIEW
+Stores data physically	    Does not store data (virtual table)
+Data exists permanently	    Data is fetched dynamically
+Created using CREATE TABLE	Created using CREATE VIEW
+
+Example
+TABLE
+CREATE TABLE Employee (
+    emp_id INT,
+    name VARCHAR(50),
+    department VARCHAR(20),
+    salary INT
+);
+
+VIEW
+CREATE VIEW emp_view AS
+SELECT emp_id, name, department
+FROM Employee;
+
+⭐ Most Asked Coding Questions (Practice These)
+
+2nd / Nth highest salary
+
+Employees with same salary
+
+Department-wise highest salary
+
+Duplicate rows
+
+JOIN with condition
+
+WHERE vs HAVING query
