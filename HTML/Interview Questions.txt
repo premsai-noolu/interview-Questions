@@ -1,0 +1,495 @@
+🔹 Basic HTML (Must-Know)
+
+1. What is HTML? Is it a programming language?
+HTML (HyperText Markup Language) is the standard markup language used to create and structure web pages. It defines the structure and content of a webpage using elements like headings, paragraphs, images, links, forms, etc.
+
+Example:
+<h1>Welcome</h1>
+<p>This is a paragraph</p>
+
+❓ Is HTML a programming language?
+No, HTML is NOT a programming language.
+
+🔹 Why?
+A programming language can:
+Perform logic (if/else)
+Use loops
+Manipulate data
+
+HTML cannot do any of these.
+
+🔹 HTML:
+Describes what content is (structure)
+Does not describe how to process data
+Has no conditions, loops, or functions
+That’s why it’s called a markup language, not a programming language.
+
+2. What are HTML elements and attributes
+
+🔹 HTML Elements
+An HTML element is a building block of a web page.
+It usually consists of:
+
+Opening tag
+Content
+Closing tag
+
+Example:
+<p>Hello World</p>
+
+Here:
+<p> → opening tag
+Hello World → content
+</p> → closing tag
+
+📌 Some elements are self-closing (void elements) and don’t have closing tags:
+<img src="image.jpg" alt="sample image" />
+<br />
+<input />
+
+🔹 HTML Attributes
+Attributes provide additional information about an element.
+They are written inside the opening tag as name="value" pairs.
+
+Example:
+<img src="logo.png" alt="Company Logo" width="200" />
+
+Here:
+
+src, alt, width → attributes
+They modify or describe the behavior or appearance of the element
+
+🔹 Key Points (Interview Important)
+Attributes always appear in the opening tag
+Attributes usually come in name–value pairs
+Some attributes are global attributes (can be used on any element)
+
+Common Global Attributes:
+
+id
+class
+style
+title
+
+3. Difference between HTML and HTML5.
+
+HTML and HTML5 are used to create web pages, but HTML5 is the latest and more advanced version with many new features for modern web applications.
+🔹 Doctype Declaration
+
+HTML (Older):
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+
+HTML5:
+<!DOCTYPE html>
+
+👉 HTML5 doctype is simpler and easier to remember.
+
+🔹 Semantic Elements
+
+HTML (older):
+<div id="header"></div>
+<div id="footer"></div>
+
+HTML5:
+
+<header></header>
+<footer></footer>
+
+👉 Improves readability, SEO, and accessibility.
+
+🔹 Multimedia Support
+
+HTML:
+Requires plugins like Flash
+
+HTML5:
+<video controls>
+  <source src="video.mp4">
+</video>
+
+<audio controls>
+  <source src="audio.mp3">
+</audio>
+
+👉 No third-party plugins required.
+
+🔹 New Form Input Types (HTML5)
+<input type="email">
+<input type="date">
+<input type="number">
+<input type="range">
+
+👉 Provides built-in validation and better user experience.
+
+🔹 Storage
+Storage Type	Usage
+Cookies	Small data, sent with every request
+localStorage	Persistent data
+sessionStorage	Per session data
+🧠 Interview-Ready Answer (Best)
+
+HTML5 is the latest version of HTML that introduces semantic elements, native multimedia support, advanced form controls, client-side storage, and better support for modern and mobile web applications. Compared to older HTML versions, HTML5 improves performance, accessibility, and developer productivity.
+
+3.What are void (self-closing) elements?
+
+Void elements are HTML elements that do not have closing tags and cannot contain any content. They are used to insert standalone elements such as images, line breaks, and form inputs. Examples include img, br, input, and hr.
+
+4. Difference between <div> and <span>.
+
+Both <div> and <span> are non-semantic HTML elements, but they differ mainly in display behavior and usage.
+
+🔹 Key Differences (Interview-Friendly Table)
+Feature	                <div>	                  <span>
+Type	          Block-level element	    Inline element
+New line	    Starts on a new line	    Does not start on a new line
+Width	Takes full available width	        Takes only content width
+Usage	Used for layout / grouping blocks	Used for styling inline text
+Can contain	Block + inline elements	        Inline elements only
+Common use	Sections, containers, layout	Highlighting text, icons
+
+🔹 Example
+<div style="border:1px solid black">
+  This is a div
+</div>
+
+<span style="border:1px solid red">
+  This is a span
+</span>
+
+Browser Output:
+
+div appears on a new line and spans full width
+span stays inline with text
+
+🔹 Display Property (Important)
+By default:
+
+div {
+  display: block;
+}
+span {
+  display: inline;
+}
+
+👉 You can change behavior using CSS:
+
+span {
+  display: block;
+}
+
+🔹 Interview-Ready Answer (Best)
+<div> is a block-level element used to group and structure sections of a webpage, while <span> is an inline element used to style or group small portions of text within a line. A div starts on a new line and takes full width, whereas a span does not.
+
+🔍 Common Follow-up Questions
+Can span contain div?
+❌ No, because span is inline and cannot contain block elements.
+
+Can div contain span?
+✅ Yes.
+
+5. Difference between <strong> and <b>.
+
+Both <strong> and <b> make text bold, but they differ in meaning (semantics) and purpose.
+
+🔹 Key Difference (Short Answer)
+
+<strong> → Semantic, indicates importance
+<b> → Non-semantic, used only for styling
+
+6. Difference between <em> and <i>.
+
+Both <em> and <i> usually render text in italic, but they differ in semantic meaning and purpose.
+🔹 Key Difference (Short Answer)
+
+<em> → Semantic, indicates emphasis
+<i> → Non-semantic, used only for styling
+🧠 Interview-Ready Answer (Best)
+<em> is a semantic HTML element used to emphasize text and convey meaning, which is helpful for accessibility and SEO. <i> is a non-semantic element used mainly for visual styling or for special text like foreign words or icons.
+
+7. What is DOCTYPE and why is it required?
+
+DOCTYPE (Document Type Declaration) tells the browser which version of HTML the page is written in and how the browser should render the page.
+
+It must be written at the very top of the HTML document, before the <html> tag.
+
+Example (HTML5):
+<!DOCTYPE html>
+
+🔹 Why is DOCTYPE Required?
+1️⃣ Tells the Browser How to Render the Page
+With DOCTYPE → Standards Mode
+Without DOCTYPE → Quirks Mode
+
+👉 Standards Mode follows modern web standards
+👉 Quirks Mode behaves like old browsers (can break layouts)
+
+2️⃣ Prevents Layout & CSS Issues
+
+Without DOCTYPE:
+CSS behaves inconsistently
+Box model issues
+Unexpected spacing & alignment problems
+
+With DOCTYPE:
+Consistent rendering across browsers
+
+8. What are block-level and inline elements?
+
+Block-level elements start on a new line and take up the full width of their container, making them suitable for layout and structure. Inline elements do not start on a new line and take only the space required by their content, making them suitable for text-level styling.
+
+Examples (Block-level):
+<div></div>
+<p></p>
+<h1></h1>
+<section></section>
+<article></article>
+<header></header>
+<footer></footer>
+<ul></ul>
+<li></li>
+
+Examples (inline):
+<span></span>
+<a></a>
+<strong></strong>
+<em></em>
+<img>
+<label>
+
+9. What is the difference between id and class?
+
+An id uniquely identifies a single HTML element and must be used only once on a page, while a class can be applied to multiple elements to group them for styling or behavior. IDs have higher CSS specificity than classes.
+🔹 Example
+<h1 id="mainTitle">Welcome</h1>
+<p class="text">Paragraph 1</p>
+<p class="text">Paragraph 2</p>
+
+#mainTitle {
+  color: blue;
+}
+
+.text {
+  color: green;
+}
+
+🔹 Important Interview Points
+❌ IDs should not be repeated
+✅ One element can have multiple classes
+<div class="card active highlight"></div>
+
+❌ One element should not have multiple IDs
+
+🔹 JavaScript Usage Example
+document.getElementById("mainTitle");
+document.querySelectorAll(".text");
+
+10. What is the use of the title attribute?
+
+The title attribute is a global HTML attribute used to provide additional information about an element.
+When a user hovers the mouse over an element, the value of the title attribute is usually shown as a tooltip.
+
+🔹 Basic Example
+<button title="Click to submit the form">
+  Submit
+</button>
+
+👉 When the user hovers over the button, a tooltip appears.
+
+11. Difference between href and src.
+
+href is used to reference and link external resources, while src is used to embed external resources directly into the webpage.
+🔹 href (Hypertext Reference)
+
+Used to link one resource to another
+The resource is not embedded, only referenced
+
+Commonly used in <a> and <link>
+
+<a href="https://example.com">Visit</a>
+<link rel="stylesheet" href="style.css">
+
+👉 Clicking or loading the link navigates to or applies the resource.
+
+🔹 src (Source)
+
+Used to embed a resource into the page
+The resource becomes part of the page content
+Used in <img>, <script>, <iframe>, <audio>, <video>
+
+<img src="logo.png">
+<script src="app.js"></script>
+
+👉 Browser fetches and displays/executes the resource.
+
+12. What is the use of alt attribute in <img>?
+
+🔹 Example
+<img src="laptop.png" alt="Dell Inspiron Laptop">
+
+🧠 Interview-Ready Answer
+The alt attribute provides alternative text for an image, which is used by screen readers, displayed when the image fails to load, and helps improve SEO.
+
+13. How do you comment in HTML?
+
+<!-- Header section starts -->
+<h1>Welcome</h1>
+<!-- Header section ends -->
+
+🔹 HTML5 Important Questions (Very Common)
+
+14. What are the new features in HTML5?
+HTML5 introduced many features to support modern, interactive, and mobile-friendly web applications without relying on third-party plugins.
+
+🔹 Key New Features of HTML5
+✅ 1. Semantic Elements
+Provide meaningful structure to the page.
+<header> <nav> <main> <section> <article> <footer>
+
+✅ 2. Native Audio & Video Support
+No need for Flash or plugins.
+
+<video controls src="video.mp4"></video>
+<audio controls src="audio.mp3"></audio>
+
+✅ 3. New Form Input Types & Attributes
+Better user experience and built-in validation.
+<input type="email">
+<input type="date">
+<input type="number">
+<input type="range">
+
+✅ 4. Client-Side Storage
+
+Store data in the browser.
+
+Storage	        Description
+localStorage	Persistent storage
+sessionStorage	Session-based storage
+
+15. What are semantic elements?
+
+Semantic elements are HTML tags that clearly define their meaning and content, such as header, article, section, and footer. They improve accessibility, SEO, and code readability.
+
+16. Why are semantic tags important?
+Semantic tags clearly describe the meaning and purpose of the content they contain.
+
+🔹 Importance of Semantic Tags
+
+📈 Better SEO – search engines understand page structure
+♿ Better accessibility – screen readers interpret content correctly
+🧹 Readable & maintainable code
+🧠 Clear content structure
+🚀 Better user experience
+
+17. Difference between <article> and <section>.
+🔹 Example
+<article>
+  <h2>Blog Post</h2>
+  <p>Content...</p>
+</article>
+
+<section>
+  <h2>About Us</h2>
+  <p>Company info...</p>
+</section>
+
+🧠 Interview-Ready Answer
+<article> represents self-contained content that can be reused independently, while <section> is used to group related content within a page.
+
+18. Difference between <header> and <head>.
+
+✅ What is <head>?
+
+Used to store metadata and resources
+Not visible on the webpage
+Helps browser, SEO, and performance
+
+📌 What goes inside <head>?
+
+Page title
+Meta tags
+CSS files
+JS files
+SEO info
+
+✅ Example of <head>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Website</title>
+  <meta charset="UTF-8">
+  <meta name="description" content="Learning HTML">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <p>Page content</p>
+</body>
+</html>
+
+👉 User will NOT see anything from <head> directly.
+🧠 Interview Answer (Short)
+The <head> tag contains metadata like title, meta tags, and links to CSS or JS files. It is not displayed on the webpage.
+
+🔹 <header> Tag — Visible Page Section
+✅ What is <header>?
+
+Used for introductory content
+Visible on the webpage
+Can appear multiple times
+
+📌 What goes inside <header>?
+
+Logo
+Site title
+Navigation menu
+Search bar
+Section headings
+
+✅ Example of <header>
+<header>
+  <h1>My Website</h1>
+  <nav>
+    <a href="#">Home</a>
+    <a href="#">About</a>
+    <a href="#">Contact</a>
+  </nav>
+</header>
+
+👉 This appears at the top of the page.
+
+🧠 Interview Answer (Short)
+The <header> tag contains visible introductory content such as headings, logos, or navigation and is part of the page body.
+
+19. What is the use of <main> tag?
+The <main> tag represents the primary (main) content of a webpage — the content that is unique to that page.
+
+20. What is the use of <figure> and <figcaption>?
+The <figure> tag is used to group media content such as images or charts, and <figcaption> provides a caption describing that content, improving semantic meaning and accessibility.
+🔹 Example
+<figure>
+  <img src="sales.png" alt="Sales chart">
+  <figcaption>Monthly Sales Report - 2026</figcaption>
+</figure>
+
+21. What is <details> and <summary>?
+<details> and <summary> are HTML5 semantic elements used to create a collapsible (expand/collapse) section without JavaScript.
+
+<summary> → visible heading / label
+<details> → contains hidden content
+
+🔹 Example
+<details>
+  <summary>What is HTML?</summary>
+  <p>HTML stands for HyperText Markup Language.</p>
+</details>
+
+👉 Initially only the summary is visible.
+👉 Clicking it expands the content.
+
+🔹 Open by Default
+<details open>
+  <summary>Terms & Conditions</summary>
+  <p>All users must agree...</p>
+</details>
