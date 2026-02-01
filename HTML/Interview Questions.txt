@@ -493,3 +493,878 @@ The <figure> tag is used to group media content such as images or charts, and <f
   <summary>Terms & Conditions</summary>
   <p>All users must agree...</p>
 </details>
+
+22. What is placeholder vs value?
+
+placeholder provides a hint to the user about what to enter and is not submitted with the form, whereas value contains the actual input data and is submitted to the server.
+placeholder
+Shows hint text inside the input
+Disappears when the user starts typing
+Used to guide the user
+Not submitted with the form
+
+<input type="text" placeholder="Enter your name">
+
+👉 Appears as light/grey text
+👉 Goes away when user types
+
+🔹 value
+
+Sets the actual value of the input
+Sent to the server on form submission
+Remains unless changed by user or JS
+
+<input type="text" value="Prem">
+
+👉 Text is already filled
+👉 Gets submitted
+
+23. What is required, readonly, and disabled?
+
+required makes a form field mandatory, readonly prevents editing but allows submission, and disabled completely disables the field and excludes it from form submission.
+
+24. Difference between localStorage, sessionStorage, and cookies.
+localStorage stores data permanently until cleared, sessionStorage stores data for a single session or tab, and cookies store small amounts of data that are sent to the server with every request and can have an expiry time.
+
+🔹 localStorage
+✔ Features
+
+Data persists even after browser restart
+Shared across all tabs of the same domain
+
+Example
+localStorage.setItem("theme", "dark");
+localStorage.getItem("theme");
+
+👉 Use for:
+Theme settings
+Language preferences
+Non-sensitive data
+
+🔹 sessionStorage
+✔ Features
+
+Data exists only for the current tab/session
+Cleared when tab is closed
+
+Example
+sessionStorage.setItem("step", "2");
+sessionStorage.getItem("step");
+
+👉 Use for:
+Multi-step forms
+Temporary state
+
+🔹 Cookies
+✔ Features
+
+Sent with every HTTP request
+Small storage size
+Can be secured (HttpOnly, Secure)
+
+Example
+document.cookie = "user=Prem; expires=Fri, 31 Jan 2026 12:00:00 UTC;";
+
+👉 Use for:
+Authentication
+Session management
+Tracking
+
+26. What is the <audio> and <video> tag?
+
+The <audio> tag is used to embed sound/audio content in a web page without plugins.
+
+Example:
+<audio controls>
+  <source src="song.mp3" type="audio/mpeg">
+</audio>
+
+Important Attributes:
+controls → play, pause, volume
+autoplay → starts automatically
+loop → repeats audio
+muted → starts muted
+
+3️⃣ What is the <video> tag in HTML?
+
+The <video> tag is used to embed video content in a web page.
+
+Example:
+<video width="400" controls>
+  <source src="movie.mp4" type="video/mp4">
+</video>
+
+Important Attributes:
+controls
+autoplay
+loop
+muted
+poster → thumbnail image before play
+
+🔹 Forms & Input (Very Important)
+
+27. What is the difference between GET and POST methods?
+28. What happens when you submit a form?
+
+🔹 GET Method
+
+Used to request / fetch data from the server
+Data is sent in the URL (query string)
+Not secure (data visible in URL)
+Can be cached and bookmarked
+Limited data length
+
+Example:
+GET /search?product=mobile&page=1 HTTP/1.1
+
+<form method="GET" action="/search">
+  <input type="text" name="product">
+  <button type="submit">Search</button>
+</form>
+
+📌 URL after submit:
+/search?product=mobile
+
+🔹 POST Method
+
+Used to send data to the server
+Data is sent in the request body
+More secure than GET (not visible in URL)
+Cannot be bookmarked
+No data size limitation (practical)
+
+Example:
+<form method="POST" action="/login">
+  <input type="email" name="email">
+  <input type="password" name="password">
+  <button type="submit">Login</button>
+</form>
+
+📌 Data sent in body:
+email=user@gmail.com
+password=123456
+
+🔍 GET vs POST (Quick Comparison Table)
+Feature	         GET	     POST
+Purpose	     Fetch data	     Send data
+Data location	URL	         Request body
+Security	Less secure	     More secure
+Cacheable	Yes	             No
+Bookmark	Yes	             No
+Data size	Limited	         Large
+Use case	Search, filters	 Login, signup
+
+⭐ Interview One-Liners
+GET: Used to retrieve data from the server.
+POST: Used to send data securely to the server.
+
+2️⃣ What happens when you submit a form?
+
+When a form is submitted, the following steps occur:
+🔹 Step-by-Step Flow
+
+1️⃣ User clicks Submit button
+2️⃣ Browser collects form data (name/value pairs)
+3️⃣ Browser checks HTML validations (required, pattern, etc.)
+4️⃣ Browser creates an HTTP request
+5️⃣ Request is sent to the server using GET or POST
+6️⃣ Server processes the request
+7️⃣ Server sends back a response
+8️⃣ Browser renders the response
+
+🔹 Example Flow (POST Login Form)
+<form method="POST" action="/login">
+  <input name="email">
+  <input name="password">
+  <button type="submit">Login</button>
+</form>
+
+
+📌 Browser sends:
+
+POST /login HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+
+email=test@gmail.com&password=1234
+
+
+📌 Server responds:
+Success → Redirect to dashboard
+Failure → Show error message
+
+🔥 Interview Follow-Up Questions (Very Common)
+Q: What is the default method of a form?
+👉 GET
+Q: Where is form data sent in GET?
+👉 URL
+Q: Where is form data sent in POST?
+👉 Request body
+Q: Can POST be cached?
+👉 No
+
+🎯 Final Interview Summary (Perfect Answer)
+
+GET is used to retrieve data and sends data via URL, while POST is used to send data securely in the request body.
+When a form is submitted, the browser validates inputs, creates an HTTP request, sends it to the server, and displays the server’s response.
+
+29. What is name attribute in form elements?
+The name attribute is used to identify form data when it is submitted to the server.
+👉 It acts as the key in a key–value pair sent in the request.
+
+✅ Why name is important
+Without name, input value is NOT sent to the server
+Server uses name to read the submitted data
+Essential for backend processing (Node.js, Java, Python, etc.)
+
+🔹 Example with name
+<form method="POST" action="/login">
+  <input type="email" name="email">
+  <input type="password" name="password">
+  <button type="submit">Login</button>
+</form>
+
+📌 Data sent to server:
+email=user@gmail.com
+password=123456
+
+🔹 Example without name
+<input type="text" value="Prem">
+
+📌 Result:
+Value is NOT sent to server
+Backend cannot access it
+
+⭐ Interview One-Liner
+The name attribute defines the key used to send form data to the server.
+
+30. Why is label important in forms?
+
+The <label> element is used to describe form inputs and improve usability and accessibility.
+
+🔹 Example (Correct Way)
+<label for="email">Email</label>
+<input type="email" id="email" name="email">
+
+🔹 What label does
+✅ Clicking the label focuses the input
+✅ Helps screen readers (accessibility)
+✅ Improves user experience
+✅ Makes forms more professional & readable
+
+🔹 Alternative (Wrapping Input)
+<label>
+  Password
+  <input type="password" name="password">
+</label>
+
+❌ Without label (Bad Practice)
+<input type="email" placeholder="Enter email">
+
+📌 Problems:
+Poor accessibility
+Screen readers can’t identify the field clearly
+
+⭐ Interview One-Liner
+Labels improve accessibility and usability by associating text with form inputs.
+
+31. What is for attribute in <label>?
+
+The for attribute in a <label> is used to link the label to a specific form input.
+👉 The value of for must match the id of the input element.
+
+✅ Why it is important
+Clicking the label focuses / selects the input
+Improves accessibility (screen readers)
+Makes forms user-friendly
+
+🔹 Example
+<label for="email">Email</label>
+<input type="email" id="email" name="email">
+
+📌 Behavior:
+Clicking “Email” places the cursor inside the input box.
+
+32. Difference between radio and checkbox.
+
+🔹 Radio Button
+
+Allows only ONE option to be selected
+Grouped using the same name attribute
+Common for single-choice questions
+
+Example:
+<input type="radio" name="gender" value="male"> Male
+<input type="radio" name="gender" value="female"> Female
+
+📌 Only one option can be selected at a time
+
+🔹 Checkbox
+Allows MULTIPLE options to be selected
+Each checkbox works independently
+Used when multiple choices are allowed
+
+Example:
+<input type="checkbox" name="skills" value="js"> JavaScript
+<input type="checkbox" name="skills" value="react"> React
+
+📌 Multiple options can be selected.
+
+33. How do you make a field mandatory?
+
+You make a field mandatory by using the required attribute in form elements.
+🔹 Example
+<form>
+  <label for="email">Email</label>
+  <input type="email" id="email" name="email" required>
+
+  <button type="submit">Submit</button>
+</form>
+
+📌 Behavior:
+
+Form will not submit if the field is empty
+Browser shows a validation message
+No JavaScript needed
+
+🔹 Required with Checkbox
+<input type="checkbox" id="terms" required>
+<label for="terms">Accept Terms & Conditions</label>
+
+📌 User must check the box to submit
+
+🔹 Required with Radio Buttons
+<input type="radio" name="gender" required> Male
+<input type="radio" name="gender"> Female
+
+📌 At least one option must be selected
+A field is made mandatory using the required attribute.
+
+34. What is autocomplete?
+
+autocomplete is an HTML attribute that allows the browser to automatically fill input fields using previously saved user data.
+🔹 Example
+<input type="email" name="email" autocomplete="on">
+
+📌 Browser suggests saved email addresses
+
+🔹 Disable Autocomplete
+<input type="password" autocomplete="off">
+
+📌 Browser will not suggest saved values
+
+🔹 Common Autocomplete Values
+<input name="name" autocomplete="name">
+<input name="email" autocomplete="email">
+<input name="username" autocomplete="username">
+<input name="current-password" autocomplete="current-password">
+
+⭐ Interview One-Liner
+Autocomplete allows the browser to automatically fill form fields based on stored user information.
+
+35. What is form validation?
+
+Form validation is the process of checking user input to ensure it is correct, complete, and in the expected format before processing or storing it.
+
+👉 It helps to:
+Prevent invalid or empty data
+Improve user experience
+Protect the application from bad input
+
+🔹 Examples of validation
+
+Email must be valid
+Password length ≥ 8
+Required fields not empty
+Phone number format
+
+🔹 Simple Example
+<input type="email" required>
+📌 Browser prevents submission if email format is invalid.
+
+⭐ Interview One-Liner
+Form validation ensures that user input is accurate and acceptable before submission.
+
+36. Client-side validation vs server-side validation.
+
+Client-side validation happens in the browser, before data is sent to the server.
+
+🔹 How it’s done
+HTML5 attributes (required, pattern, min, max)
+JavaScript (custom validation)
+
+🔹 Example
+<input type="password" minlength="8" required>
+
+📌 Error shown instantly in the browser.
+
+✅ Advantages
+
+Fast feedback
+Better user experience
+Reduces server load
+
+3️⃣ Server-Side Validation
+
+Server-side validation happens on the server after the form is submitted.
+
+🔹 Example (Node.js / Express)
+app.post("/register", (req, res) => {
+  if (!req.body.email) {
+    return res.status(400).send("Email is required");
+  }
+});
+
+✅ Advantages
+
+Secure and reliable
+Cannot be bypassed
+Protects database and backend
+
+Client-side validation:
+Validation done in the browser before sending data to the server.
+
+Server-side validation:
+Validation done on the server after receiving data.
+
+🎯 Final Interview Answer (Perfect)
+Form validation ensures that user inputs are correct and complete. Client-side validation improves user experience by giving instant feedback, while server-side validation is essential for security and data integrity. Both should be used together.
+
+37. How do you prevent form submission?
+
+Form submission can be prevented by stopping the default browser behavior.
+🔹 Common Ways
+✅ 1. Using JavaScript event.preventDefault()
+
+This is the most common and correct way.
+
+Example:
+<form id="myForm">
+  <input type="text" required>
+  <button type="submit">Submit</button>
+</form>
+
+<script>
+  document.getElementById("myForm").addEventListener("submit", function (event) {
+    event.preventDefault(); // stops form submission
+    alert("Form submission prevented");
+  });
+</script>
+
+📌 Prevents page reload and form submission.
+
+✅ 2. Return false in onsubmit
+Example:
+<form onsubmit="return false;">
+  <input type="text">
+  <button type="submit">Submit</button>
+</form>
+
+📌 If false is returned, the form is not submitted.
+
+⚠️ Not recommended for modern applications (inline JS).
+
+✅ 3. Button type = button (Not submit)
+<button type="button">Click Me</button>
+
+📌 Form won’t submit because only type="submit" triggers submission.
+
+✅ 4. Using HTML5 Validation (required, pattern)
+<input type="email" required>
+
+📌 Browser prevents submission if validation fails.
+⚠️ This is validation-based prevention, not programmatic control.
+
+------------------------
+🔹 Performance, SEO & Accessibility (2+ Years Level)
+
+38. What is SEO-friendly HTML?
+39. How do semantic tags help SEO?
+
+SEO-friendly HTML means writing clean, well-structured HTML so that search engines (Google, Bing, etc.) can easily understand, index, and rank your content.
+👉 The goal is to help search engines:
+Understand what the page is about
+Identify important content
+Improve search ranking
+
+🔹 Key features of SEO-friendly HTML
+
+Proper use of semantic tags
+Correct heading hierarchy (h1 → h6)
+Descriptive title and meta tags
+Meaningful alt text for images
+Clean URLs and readable content
+
+🔹 Example (SEO-friendly HTML)
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Best React Developer in Hyderabad</title>
+  <meta name="description" content="Experienced React developer with MERN stack skills in Hyderabad.">
+</head>
+<body>
+
+<header>
+  <h1>React Developer in Hyderabad</h1>
+</header>
+
+<main>
+  <article>
+    <h2>My Skills</h2>
+    <p>React, Node.js, MongoDB, Express</p>
+  </article>
+</main>
+
+</body>
+</html>
+
+⭐ Interview One-Liner
+SEO-friendly HTML helps search engines understand and rank web pages by using clean structure and meaningful tags.
+
+2️⃣ How do semantic tags help SEO?
+Semantic tags clearly describe the meaning and role of content to both browsers and search engines.
+
+🔹 Common Semantic Tags
+  Tag	        Meaning
+<header>	Page or section header
+<nav>	    Navigation links
+<main>	    Main content
+<article>	Independent content
+<section>	Thematic grouping
+<footer>	Footer information
+🔹 Non-semantic vs Semantic
+❌ Non-semantic
+
+<div>Blog Title</div>
+<div>Blog content...</div>
+
+✅ Semantic
+
+<article>
+  <h1>Blog Title</h1>
+  <p>Blog content...</p>
+</article>
+
+📌 Search engines can clearly understand this is a blog post.
+
+🔹 SEO Benefits of Semantic Tags
+Improve content understanding for search engines
+Better page indexing
+Help create rich snippets
+Improve accessibility, which indirectly boosts SEO
+Clear content hierarchy
+
+⭐ Interview One-Liner
+Semantic tags help SEO by giving meaningful structure to content, making it easier for search engines to understand the page.
+
+40. What is meta tag?
+
+A <meta> tag provides metadata (information about the webpage) to the browser and search engines.
+👉 Meta tags:
+Are placed inside the <head> section
+Are not visible on the webpage
+Help with SEO, responsiveness, encoding, and browser behavior
+
+🔹 Common Meta Tags
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="React and MERN stack developer in Hyderabad">
+  <meta name="keywords" content="React, MERN, JavaScript">
+  <meta name="author" content="Prem Sai">
+</head>
+
+⭐ Interview One-Liner
+Meta tags provide information about a webpage to browsers and search engines.
+
+41. Difference between meta charset and meta viewport.
+
+🔹 meta charset
+<meta charset="UTF-8">
+
+Purpose:
+
+Defines the character encoding of the webpage
+Ensures text displays correctly (English, Telugu, Hindi, emojis 😊)
+
+📌 Without it:
+Special characters may appear as garbage symbols
+
+🔹 meta viewport
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+Purpose:
+Controls how the webpage scales on mobile devices
+Makes the site responsive
+
+📌 Without it:
+Website appears zoomed-out or broken on mobile
+
+42. What is viewport?
+
+The viewport is the visible area of a web page on a device screen.
+👉 It changes based on the device:
+Desktop → large viewport
+Mobile → small viewport
+
+🔹 Why viewport is important
+Controls how content scales
+Helps make websites responsive
+Essential for mobile-friendly design
+
+🔹 Meta Viewport Example
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+📌 Meaning:
+width=device-width → page width = device screen width
+initial-scale=1.0 → no zoom on load
+
+⭐ Interview One-Liner
+The viewport is the visible area of a webpage, and it controls how content is displayed on different screen sizes.
+
+43. What is ARIA?
+44. What is aria-label?
+
+ARIA stands for
+👉 Accessible Rich Internet Applications
+ARIA is a set of HTML attributes that improve accessibility for users who rely on screen readers and assistive technologies.
+
+📌 ARIA helps when:
+Native HTML semantics are not enough
+Using custom components (dropdowns, modals, tabs)
+
+🔹 Example
+<div role="button" tabindex="0">Submit</div>
+
+📌 Screen reader understands this as a button
+
+⭐ Interview One-Liner
+ARIA is used to make web applications accessible to users with disabilities.
+
+3️⃣ What is aria-label?
+aria-label provides a text description for elements without visible labels, especially for screen readers.
+
+🔹 Example (Icon Button)
+<button aria-label="Close">
+  ❌
+</button>
+
+📌 Screen reader reads:
+“Close button”
+
+✔ Without aria-label, screen reader may say:
+“Button”
+
+🔹 Input Example
+<input type="search" aria-label="Search products">
+
+📌 Screen reader:
+“Search products, search field”
+
+⭐ Interview One-Liner
+aria-label provides an accessible name for elements that don’t have visible labels.
+
+45. Why is accessibility important?
+
+Accessibility means designing websites so that everyone can use them, including people with disabilities (visual, hearing, motor, cognitive).
+
+🔹 Why it matters
+✅ Helps visually impaired users (screen readers)
+✅ Helps keyboard-only users
+✅ Improves user experience for all users
+✅ Required by legal standards (WCAG, ADA)
+✅ Improves SEO (better structure & semantics)
+
+46. What is screen reader friendly HTML?
+
+Screen reader friendly HTML is HTML written in a way that screen readers can clearly understand and announce content.
+
+🔹 Key practices
+
+✔ Use semantic HTML (header, nav, main, button)
+✔ Use proper labels for inputs
+✔ Use ARIA attributes when needed
+✔ Maintain correct heading order
+✔ Provide alt text for images
+
+🔹 Example
+❌ Not screen reader friendly:
+<div onclick="login()">Login</div>
+
+📌 Screen reader: “Generic container”
+
+✅ Screen reader friendly:
+<button>Login</button>
+
+📌 Screen reader: “Login, button”
+
+⭐ Interview One-Liner
+Screen reader friendly HTML uses semantic elements and proper labels so assistive technologies can understand the page.
+
+47. Difference between display: none and visibility: hidden (HTML + CSS concept).
+
+🔹 display: none
+div {
+  display: none;
+}
+
+
+Element is completely removed
+No space in layout
+Not visible
+Not read by screen readers
+
+🔹 visibility: hidden
+div {
+  visibility: hidden;
+}
+
+Element is invisible
+Space is still reserved
+Not visible
+Screen readers may still detect it (depends on context)
+
+🔹 Images, Media & Iframes
+
+48. Difference between <img> and background-image in CSS.
+
+Used to display content images (important images).
+<img src="profile.jpg" alt="User profile photo">
+
+Characteristics:
+Part of HTML content
+Supports alt text (accessibility & SEO)
+Indexed by search engines
+Suitable for logos, photos, diagrams
+
+🔹 background-image (CSS)
+
+Used for decorative images.
+.card {
+  background-image: url("bg.jpg");
+}
+
+Characteristics:
+Used for styling
+No alt text
+Not indexed by search engines
+Not announced by screen readers
+
+49. What is an iframe?
+
+An <iframe> (inline frame) is used to embed another HTML page or external content inside a webpage.
+Example:
+<iframe src="https://example.com" width="600" height="400"></iframe>
+🔹 Common Uses
+Embedding YouTube videos
+Google Maps
+Third-party widgets
+Payment gateways
+
+50. How do you make an iframe secure?
+
+Since iframes load external content, they can be a security risk. Security is improved using these methods:
+
+🔹 1. sandbox attribute (MOST IMPORTANT)
+<iframe src="https://example.com" sandbox></iframe>
+
+📌 Restricts:
+Scripts
+Forms
+Popups
+Navigation
+
+🔹 Allow specific features only
+<iframe
+  src="https://example.com"
+  sandbox="allow-scripts allow-same-origin">
+</iframe>
+
+🔹 2. allow attribute (Permissions policy)
+<iframe
+  src="https://example.com"
+  allow="fullscreen; autoplay">
+</iframe>
+
+🔹 3. Use HTTPS
+<iframe src="https://secure-site.com"></iframe>
+
+🔹 4. Restrict referrer info
+<iframe src="https://example.com" referrerpolicy="no-referrer"></iframe>
+
+🔹 5. Content Security Policy (CSP)
+Restrict which domains can be embedded.
+
+51. What is sandbox attribute in iframe?
+
+The sandbox attribute is used to restrict what an iframe is allowed to do, making it more secure.
+👉 By default, sandbox applies strict security restrictions to the embedded page.
+
+🔹 What does sandbox restrict?
+When sandbox is used without values, it blocks:
+
+JavaScript execution
+Form submission
+Pop-ups
+Access to parent page
+Top-level navigation
+
+🔹 Basic Example
+<iframe src="https://example.com" sandbox></iframe>
+
+📌 Embedded content runs in a restricted environment.
+
+🔹 Allow specific permissions
+<iframe
+  src="https://example.com"
+  sandbox="allow-scripts allow-forms">
+</iframe>
+
+📌 Only scripts and forms are allowed.
+
+⭐ Interview One-Liner
+The sandbox attribute secures an iframe by restricting its capabilities unless explicitly allowed.
+
+
+52. What is responsive image?
+
+A responsive image automatically adapts to different screen sizes and resolutions, so the browser loads the most appropriate image for the user’s device.
+
+👉 Goal:
+
+Faster loading
+Better performance
+Optimized for mobile, tablet, desktop
+
+🔹 Why responsive images are needed
+Mobile screens don’t need large desktop images
+Large images slow down websites
+Saves bandwidth and improves Core Web Vitals
+
+🔹 Example (Responsive Image)
+<img 
+  src="small.jpg"
+  srcset="small.jpg 480w, medium.jpg 768w, large.jpg 1200w"
+  sizes="(max-width: 600px) 480px, 1200px"
+  alt="Product image">
+
+📌 Browser chooses the best image based on screen size.
+
+⭐ Interview One-Liner
+Responsive images adapt to different screen sizes to improve performance and user experience.
+
+53. What is srcset?
+
+srcset is an HTML attribute that provides multiple image sources so the browser can choose the best one based on:
+
+Screen width
+Device pixel ratio (DPR)
+
+🔹 Example
+<img 
+  src="image.jpg"
+  srcset="image-1x.jpg 1x, image-2x.jpg 2x"
+  alt="Profile picture">
+
+📌 On high-resolution screens (Retina), browser loads 2x image.
+
+⭐ Interview One-Liner
+srcset allows the browser to select the most suitable image from multiple options.
