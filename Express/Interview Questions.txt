@@ -1,0 +1,453 @@
+🔹 Express.js Interview Questions (For MERN Stack Developer)
+🔸 Basics
+
+1. What is Express.js?
+
+Express.js is a fast, minimal, and flexible web application framework built on top of Node.js.
+It is mainly used to build RESTful APIs and server-side web applications.
+
+In simple terms:
+Node.js provides the runtime, and Express.js provides the structure and tools to build web applications easily.
+
+🔹 Key Features of Express.js
+
+🚀 Fast & lightweight
+🛣️ Easy routing
+🧩 Middleware support
+🔐 Security integrations
+🔄 Request–response handling
+📦 Works well with MongoDB (MERN stack)
+
+🔹 Example (Simple Express Server)
+const express = require("express");
+const app = express();
+
+app.get("/", (req, res) => {
+  res.send("Hello from Express");
+});
+
+app.listen(3000, () => {
+  console.log("Server running on port 3000");
+});
+
+Express acts as the bridge between frontend (React) and database (MongoDB).
+
+🔹 One-line Interview Answer (Very Important ⭐)
+Express.js is a minimal Node.js framework used to build fast, scalable backend applications and REST APIs by simplifying routing, middleware, and request–response handling.
+
+2. Why do we use Express.js instead of Node.js alone?
+
+Node.js alone provides a low-level way to handle HTTP requests, but building real-world applications with it becomes complex and repetitive.
+Express.js is used to simplify and speed up backend development.
+
+🔹 Using Node.js without Express (Pain Points)
+
+Manual routing
+Repetitive code
+No middleware system
+Harder error handling
+Poor scalability for large apps
+
+Example (pure Node.js):
+
+const http = require("http");
+http.createServer((req, res) => {
+  if (req.url === "/users" && req.method === "GET") {
+    res.end("Users list");
+  }
+}).listen(3000);
+
+🔹 Using Express.js (Clean & Scalable)
+const express = require("express");
+const app = express();
+
+app.get("/users", (req, res) => {
+  res.send("Users list");
+});
+
+app.listen(3000);
+
+We use Express.js because it provides a simple, structured, and scalable way to build web servers and REST APIs on top of Node.js by handling routing, middleware, and errors efficiently.
+
+3. What is middleware in Express?
+
+Middleware in Express is a function that runs between the request and the response.
+It has access to request (req), response (res), and the next (next) function.
+
+👉 Middleware is used to modify requests, execute logic, or control the flow before the final response is sent.
+
+🔹 Middleware Function Signature
+(req, res, next) => { }
+
+req → incoming request
+
+res → outgoing response
+
+next() → passes control to the next middleware
+
+🔹 Request–Response Flow (Very Important)
+Client → Middleware → Middleware → Route Handler → Response
+
+🔹 Simple Example
+app.use((req, res, next) => {
+  console.log("Request received");
+  next();
+});
+
+✔ If next() is not called, the request will hang.
+
+🔹 Why Middleware is Used
+
+Authentication & authorization
+Logging
+Validation
+Error handling
+Parsing request body
+Security
+
+🔹 Real-World Example (Auth Middleware)
+const authMiddleware = (req, res, next) => {
+  if (!req.headers.authorization) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  next();
+};
+
+app.get("/profile", authMiddleware, (req, res) => {
+  res.send("User Profile");
+});
+
+🔹 Built-in Middleware Example
+app.use(express.json());
+
+🔹 One-line Interview Answer ⭐
+Middleware in Express is a function that executes during the request–response cycle to process, modify, or validate requests before sending a response.
+
+4. What are the different types of middleware in Express?
+
+There are 5 main types of middleware, and this question is very common in interviews.
+
+🔹 1️⃣ Application-Level Middleware
+
+Applied to the entire application using app.use() or app.METHOD().
+
+Example
+app.use((req, res, next) => {
+  console.log("Application-level middleware");
+  next();
+});
+
+✔ Runs for every request.
+
+🔹 2️⃣ Router-Level Middleware
+
+Applied only to specific routes using express.Router().
+
+Example
+const router = express.Router();
+
+router.use((req, res, next) => {
+  console.log("Router-level middleware");
+  next();
+});
+
+router.get("/users", (req, res) => {
+  res.send("Users");
+});
+
+✔ Helps in modular route design.
+
+🔹 3️⃣ Built-in Middleware
+
+Provided directly by Express.
+
+Common Examples
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static("public"));
+
+✔ Used for parsing data and serving static files.
+
+🔹 4️⃣ Third-Party Middleware
+
+External packages installed via npm.
+
+Examples
+
+cors
+helmet
+morgan
+multer
+express-rate-limit
+
+const cors = require("cors");
+app.use(cors());
+
+✔ Used for security, logging, uploads, performance.
+
+🔹 5️⃣ Error-Handling Middleware ⭐ (Very Important)
+
+Used to handle errors centrally.
+
+Signature (4 parameters)
+(err, req, res, next) => { }
+
+Example
+app.use((err, req, res, next) => {
+  res.status(500).json({ error: err.message });
+});
+
+✔ Must be defined after routes.
+
+5. What is app.use()?
+
+app.use() is used to register middleware in an Express application.
+It tells Express to execute a function for every incoming request (or for a specific path).
+
+🔹 Basic Syntax
+app.use([path], middlewareFunction);
+
+path → optional (default is /)
+
+middlewareFunction → function with req, res, next
+
+🔹 Example 1: Global Middleware
+app.use((req, res, next) => {
+  console.log("Request received");
+  next();
+});
+
+✔ Runs for all routes and HTTP methods.
+
+🔹 Example 2: Built-in Middleware
+app.use(express.json());
+
+✔ Parses JSON request bodies.
+
+🔹 Example 3: Path-Specific Middleware
+app.use("/admin", (req, res, next) => {
+  console.log("Admin route accessed");
+  next();
+});
+
+✔ Runs only for /admin routes.
+
+🔹 Example 4: Using Router with app.use()
+const userRoutes = require("./routes/userRoutes");
+app.use("/users", userRoutes);
+
+✔ Helps keep code clean and modular.
+
+🔹 Important Behavior (Interview Point ⭐)
+Works for all HTTP methods (GET, POST, PUT, etc.)
+Executes middleware in the order it is defined
+Can end the request–response cycle or pass control using next()
+
+6. What is the difference between app.use() and app.get()?
+
+🔹 app.use()
+
+Used to register middleware
+Executes for all HTTP methods
+Path is optional
+Commonly used for middlewares, routers, and global logic
+
+Example
+app.use("/users", (req, res, next) => {
+  console.log("Middleware for users");
+  next();
+});
+
+✔ Runs for:
+
+GET /users
+POST /users
+PUT /users/1
+DELETE /users/1
+
+🔹 app.get()
+
+Used to handle GET requests only
+Path is mandatory
+Mainly used for route handling
+Does not act like middleware by default
+
+Example
+app.get("/users", (req, res) => {
+  res.send("Users list");
+});
+
+✔ Runs only for:
+GET /users
+
+🔹 Important Interview Trick ⭐
+app.use() matches all paths that start with the given path.
+
+app.use("/api", middleware);
+
+✔ Runs for:
+
+/api/users
+/api/products
+
+🔸 Routing & Request Handling
+
+7. What is routing in Express?
+
+Routing in Express is the mechanism that determines how an application responds to a client request based on:
+
+URL (path)
+HTTP method (GET, POST, PUT, DELETE, etc.)
+
+In simple words:
+
+Routing maps incoming requests → specific code (handlers).
+
+🔹 Basic Routing Syntax
+app.METHOD(PATH, HANDLER)
+
+Example
+app.get("/users", (req, res) => {
+  res.send("Users list");
+});
+
+✔ When a client sends GET /users, this handler executes.
+
+🔹 Routing with Multiple HTTP Methods
+app.post("/users", (req, res) => {
+  res.send("User created");
+});
+
+app.put("/users/:id", (req, res) => {
+  res.send("User updated");
+});
+
+🔹 Route Parameters
+app.get("/users/:id", (req, res) => {
+  res.send(`User ID: ${req.params.id}`);
+});
+
+✔ Dynamic values handled using :.
+
+🔹 Why Routing is Important
+
+Organizes application logic
+Supports REST API design
+Separates concerns
+Makes application scalable
+
+🔹 Using express.Router() (Real-World)
+const router = express.Router();
+
+router.get("/", getUsers);
+router.post("/", createUser);
+
+app.use("/users", router);
+
+✔ Helps build modular and maintainable apps.
+
+8. What is express.Router() and why is it used?
+
+express.Router() is a mini Express application that is used to create modular, reusable route handlers.
+It helps in splitting routes into separate files, making large applications clean, scalable, and maintainable.
+
+🔹 Why do we need express.Router()?
+
+Without Router:
+All routes go into app.js
+File becomes large and hard to maintain
+Poor scalability
+
+With Router:
+Routes are grouped by feature (users, auth, products)
+Better project structure
+Easier testing and debugging
+
+🔹 Basic Example
+file(routes/userRoutes.js)
+const express = require("express");
+const router = express.Router();
+
+router.get("/", (req, res) => {
+  res.send("All users");
+});
+
+router.post("/", (req, res) => {
+  res.send("Create user");
+});
+
+module.exports = router;
+
+app.js
+const userRoutes = require("./routes/userRoutes");
+app.use("/users", userRoutes);
+
+✔ Final routes:
+
+GET /users
+
+POST /users
+
+🔹 Router-Level Middleware Example
+router.use((req, res, next) => {
+  console.log("User route middleware");
+  next();
+});
+
+✔ Executes only for routes inside this router.
+
+🔹 One-Line Interview Answer ⭐
+express.Router() is used to create modular route handlers that help organize and scale Express applications by grouping related routes together.
+
+9. How do you access request data in Express?
+
+In Express, request data is available through the req (request) object.
+Depending on where the data comes from, we access it in different ways.
+
+🔹 Main Ways to Access Request Data
+1️⃣ req.params – Route Parameters
+
+Used for dynamic values in the URL path.
+
+app.get("/users/:id", (req, res) => {
+  console.log(req.params.id);
+});
+
+✔ URL: /users/5
+✔ Output: 5
+
+2️⃣ req.query – Query String Parameters
+
+Used for optional data in the URL.
+
+app.get("/users", (req, res) => {
+  console.log(req.query.page);
+});
+
+✔ URL: /users?page=2
+✔ Output: 2
+
+3️⃣ req.body – Request Body (POST / PUT)
+
+Used for data sent from client in the request body.
+
+app.use(express.json());
+
+app.post("/users", (req, res) => {
+  console.log(req.body);
+});
+
+✔ Used with POST, PUT, PATCH
+
+4️⃣ req.headers – Request Headers
+
+Used for auth tokens, content type, cookies.
+console.log(req.headers.authorization);
+
+5️⃣ req.cookies (with middleware)
+
+Used to read cookies (requires cookie-parser).
+console.log(req.cookies.token);
+
+🔹 One-Line Interview Answer ⭐
+In Express, request data is accessed using req.params for route params, req.query for query strings, req.body for request payloads, and req.headers for headers.
