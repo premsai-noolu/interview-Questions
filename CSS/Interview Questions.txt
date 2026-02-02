@@ -1,0 +1,845 @@
+🔹 1. CSS Basics (Very Common)
+
+1. What is CSS and why is it used?
+
+CSS (Cascading Style Sheets) is a stylesheet language used to control the presentation and layout of web pages written in HTML.
+
+🔹 Why CSS is used:
+To separate content from design
+To apply colors, fonts, spacing, and layouts
+To make websites responsive for different screen sizes
+To improve maintainability and reusability of styles
+To ensure a consistent look and feel across pages
+
+👉 Example:
+HTML defines what content is shown, CSS defines how it looks.
+
+2. What are the different ways to apply CSS?
+
+There are three main ways to apply CSS:
+
+1️⃣ Inline CSS
+CSS is written directly inside the HTML element using the style attribute.
+
+🔹 Example:
+<p style="color: red; font-size: 16px;">Hello World</p>
+
+📌 Interview Tip:
+Inline CSS has highest specificity.
+
+2️⃣ Internal CSS (Embedded CSS)
+CSS is written inside a <style> tag within the <head> section of an HTML document.
+
+🔹 Example:
+<head>
+  <style>
+    p {
+      color: blue;
+      font-size: 16px;
+    }
+  </style>
+</head>
+
+3️⃣ External CSS (MOST RECOMMENDED)
+
+CSS is written in a separate .css file and linked to HTML.
+
+🔹 Example:
+<link rel="stylesheet" href="styles.css">
+
+styles.css
+
+p {
+  color: green;
+  font-size: 16px;
+}
+
+Type	        Specificity Priority
+External CSS	    Lowest
+Internal CSS	    edium
+Inline   CSS	    Highest
+
+3. Difference between class and id selectors?
+
+Both class and id selectors are used to select and style HTML elements, but they are used for different purposes.
+
+🔹 1. Class Selector (.)
+A class selector is used to apply the same style to multiple elements.
+
+🔹 Syntax
+.box {
+  background-color: lightblue;
+}
+
+<div class="box">Div 1</div>
+<p class="box">Paragraph</p>
+
+🔹 Key Points
+Can be used multiple times
+One element can have multiple classes
+Lower specificity than id
+Best for reusable styles
+
+🔹 2. ID Selector (#)
+An ID selector is used to style one unique element on the page.
+
+🔹 Syntax
+#header {
+  background-color: gray;
+}
+
+<div id="header">Header</div>
+
+🔹 Key Points
+Must be unique on the page
+Higher specificity than class
+Used for unique components
+Often used with JavaScript (getElementById)
+
+🔹 Example: Class vs ID Together
+#title {
+  color: red;
+}
+
+.text {
+  color: blue;
+}
+
+<h1 id="title" class="text">Hello</h1>
+
+✅ Final Color:
+➡️ Red (ID has higher specificity)
+
+3. What is CSS specificity?
+
+CSS specificity is the rule the browser uses to decide which CSS style is applied when multiple rules target the same HTML element.
+👉 The rule with higher specificity wins.
+
+🔢 How CSS Specificity Is Calculated
+Specificity is calculated based on the type of selectors used, not where the CSS is written.
+Priority order (lowest → highest):
+
+Element selector (div, p) → 1
+Class / attribute / pseudo-class (.box, [type="text"], :hover) → 10
+ID selector (#header) → 100
+Inline styles (style="") → 1000
+!important → overrides everything (avoid using)
+
+🔹 Example
+p {
+  color: blue;
+}
+
+.text {
+  color: green;
+}
+
+#msg {
+  color: red;
+}
+
+<p id="msg" class="text">Hello</p>
+
+✅ Final color:
+➡️ Red (ID selector has higher specificity)
+
+🔹 Specificity Calculation Example
+#container .item p {
+  color: blue;
+}
+
+Selector	Value
+#container	100
+.item	    10
+p	        1
+Total	    111
+⚠️ If Specificity Is Same
+
+When two rules have equal specificity, the last defined rule wins.
+
+p { color: blue; }
+p { color: red; }
+
+➡️ Final color: red
+
+⭐ One-Line Interview Answer
+CSS specificity determines which style rule is applied when multiple rules target the same element. It is based on selector priority—inline styles, IDs, classes, and elements—and the higher specificity rule wins.
+
+4. How does the CSS cascade work?
+
+The CSS cascade is the process the browser uses to decide which CSS rule is finally applied to an element when multiple rules affect it.
+
+👉 The word cascade means “flow” — rules flow from different sources and the browser chooses one.
+
+5. Difference between display: none and visibility: hidden?
+
+Both hide elements, but they behave very differently.
+
+🔹 display: none
+
+Element is completely removed from the page
+Does not occupy any space
+Layout is recalculated
+Cannot be clicked or focused
+
+Example
+.box {
+  display: none;
+}
+
+📌 Element behaves as if it does not exist
+
+🔹 visibility: hidden
+
+Element is hidden but still exists
+Occupies space in the layout
+Layout remains unchanged
+Cannot be clicked
+
+Example
+.box {
+  visibility: hidden;
+}
+
+📌 Invisible but space is reserved
+
+⭐ One-Line Interview Answer
+display: none removes the element from the layout completely, whereas visibility: hidden hides the element but still occupies space.
+
+6. Difference between inline, inline-block, and block?
+
+🔹 display: inline
+
+Takes only content width
+Cannot set width & height
+No vertical margin/padding effect
+Flows with text
+
+Example
+span {
+  display: inline;
+}
+
+🔹 display: block
+
+Takes full width available
+Starts on a new line
+Width & height can be set
+Margin & padding work fully
+
+Example
+div {
+  display: block;
+}
+
+🔹 display: inline-block
+
+Flows like inline
+Allows width & height
+Margin & padding work
+Best of both inline and block
+
+Example
+.button {
+  display: inline-block;
+  width: 120px;
+}
+
+⭐ One-Line Interview Answer
+Inline elements flow with text and don’t support width and height, block elements take full width and start on a new line, while inline-block combines inline flow with block-level sizing.
+
+7. What are pseudo-classes and pseudo-elements?
+
+Both are used to style elements without adding extra HTML, but they serve different purposes.
+
+🔹 Pseudo-classes (:)
+📌 What is a pseudo-class?
+
+A pseudo-class is used to style an element based on its state or condition.
+
+👉 It answers: “When?”
+
+🔹 Common Pseudo-classes
+Pseudo-class	       Meaning
+:hover	          When mouse is over element
+:focus	          When input is focused
+:active	          When element is clicked
+:visited	      Visited link
+:first-child	  First child element
+:nth-child(n)	  nth child
+
+🔹 Example
+button:hover {
+  background-color: blue;
+}
+
+input:focus {
+  border-color: green;
+}
+
+📌 Styles apply only in that state
+
+🔹 Pseudo-elements (::)
+📌 What is a pseudo-element?
+
+A pseudo-element is used to style a specific part of an element.
+
+👉 It answers: “Which part?”
+
+🔹 Common Pseudo-elements
+Pseudo-element	    Meaning
+::before	      Before element content
+::after	          After element content
+::first-letter	  First letter
+::first-line	  First line
+::selection	      Selected text
+
+🔹 Example
+p::first-letter {
+  font-size: 32px;
+}
+
+.box::before {
+  content: "🔥 ";
+}
+
+📌 Requires content property for ::before and ::after
+
+⭐ One-Line Interview Answer
+Pseudo-classes are used to style elements based on their state, like hover or focus, while pseudo-elements are used to style specific parts of an element, like the first letter or content before and after it.
+
+8. Difference between margin and padding?
+
+Both are used for spacing, but they apply to different areas of the box model.
+
+🔹 Margin
+
+Space outside the element’s border
+Creates space between elements
+Does not increase element size
+Can have negative values
+Adjacent vertical margins can collapse
+
+Example
+.card {
+  margin: 20px;
+}
+
+📌 Used to control spacing between components
+
+🔹 Padding
+
+Space inside the element’s border
+Creates space between content and border
+Increases element size (unless box-sizing: border-box)
+Cannot be negative
+Does not collapse
+
+Example
+.card {
+  padding: 20px;
+}
+
+📌 Used to create inner breathing space
+
+⭐ One-Line Interview Answer
+Margin controls spacing outside an element, while padding controls spacing inside the element between content and border.
+
+9. What is !important? When should you avoid it?
+
+!important is a CSS keyword that forces a rule to override all other rules, regardless of specificity or source order.
+
+Example
+p {
+  color: red !important;
+}
+
+p {
+  color: blue;
+}
+
+➡️ Final color: red
+
+🔹 Why !important is powerful?
+
+Overrides:
+Inline styles
+ID selectors
+Class selectors
+Breaks normal CSS cascade
+
+❌ Why You Should Avoid !important
+
+Makes CSS hard to debug
+Breaks scalability
+Causes specificity wars
+Difficult to override later
+Bad for team projects
+
+⭐ One-Line Interview Answer
+!important forces a CSS rule to override all others, but it should be avoided because it breaks the normal cascade and makes styles difficult to maintain.
+
+🔹 2. Box Model (MUST KNOW)
+
+10. What is the CSS box model?
+
+The CSS box model describes how every HTML element is structured and how space and size are calculated in a web page.
+
+Every element is made up of four layers:
+
+Content – actual text/image
+Padding – space around the content
+Border – surrounds padding
+Margin – space outside the border
+
+🔹 Example
+.box {
+  width: 200px;
+  padding: 20px;
+  border: 5px solid black;
+  margin: 10px;
+}
+
+Actual space taken (default box model):
+
+Content width = 200px
+Padding = 20 + 20 = 40px
+Border = 5 + 5 = 10px
+➡️ Total width = 250px (margin extra)
+
+✅ Difference Between content-box and border-box
+
+These values belong to the box-sizing property.
+
+🔹 box-sizing: content-box (DEFAULT)
+.box {
+  box-sizing: content-box;
+}
+
+Meaning:
+width applies only to content
+Padding and border are added outside
+Element becomes larger than defined width
+
+Example:
+width: 200px;
+padding: 20px;
+border: 5px;
+
+➡️ Total width = 200 + 40 + 10 = 250px
+
+🔹 box-sizing: border-box (RECOMMENDED)
+.box {
+  box-sizing: border-box;
+}
+
+Meaning:
+
+width includes content + padding + border
+Padding and border are inside the width
+Layout becomes predictable
+
+Example:
+width: 200px;
+padding: 20px;
+border: 5px;
+
+➡️ Total width = 200px
+(Content shrinks to fit)
+
+The CSS box model defines how elements are sized using content, padding, border, and margin. In content-box, width applies only to content, while in border-box, width includes padding and border.
+
+📌 Best Practice (VERY IMPORTANT)
+Most developers use:
+
+* {
+  box-sizing: border-box;
+}
+
+Why?
+
+Prevents layout breaking
+Easier responsive design
+Consistent sizing
+
+11. How to center a div horizontally and vertically?
+
+There are multiple correct ways. Interviewers usually expect Flexbox first.
+
+🔥 Best & Most Used: Flexbox
+.parent {
+  display: flex;
+  justify-content: center; /* horizontal */
+  align-items: center;     /* vertical */
+  height: 100vh;
+}
+
+<div class="parent">
+  <div class="child">Centered</div>
+</div>
+
+✅ Most recommended method
+
+🔹 Using CSS Grid
+.parent {
+  display: grid;
+  place-items: center;
+  height: 100vh;
+}
+
+✅ Clean & modern
+
+🔹 Using Position + Transform (Classic)
+.child {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+📌 Useful when Flex/Grid cannot be used
+
+🔹 Horizontal Only (Common)
+.child {
+  width: 200px;
+  margin: 0 auto;
+}
+
+12. What is margin collapse?
+
+Margin collapse is a CSS behavior where vertical margins (top & bottom) of block elements combine into a single margin instead of adding up.
+
+👉 The larger margin wins, not the sum.
+
+⚠️ Only vertical margins collapse (top & bottom), never horizontal.
+
+🔹 Simple Example
+.div1 {
+  margin-bottom: 30px;
+}
+
+.div2 {
+  margin-top: 20px;
+}
+
+<div class="div1">Div 1</div>
+<div class="div2">Div 2</div>
+
+What you expect:
+30 + 20 = 50px gap ❌
+
+What actually happens:
+Max(30, 20) = 30px gap ✅
+
+➡️ This is margin collapse.
+
+🔹 When Does Margin Collapse Happen?
+1️⃣ Between adjacent block elements
+<div style="margin-bottom: 40px"></div>
+<div style="margin-top: 20px"></div>
+
+➡️ Final margin = 40px
+
+2️⃣ Between parent and first/last child
+.parent {
+  margin-top: 50px;
+}
+
+.child {
+  margin-top: 30px;
+}
+
+<div class="parent">
+  <div class="child">Child</div>
+</div>
+
+➡️ Margin becomes 50px, not 80px
+
+🔹 3. Positioning (Extremely Important)
+
+13. What are the different position values?
+
+The position property defines how an element is positioned in the document and how top, right, bottom, and left work.
+
+1️⃣ position: static (DEFAULT)
+📌 What it is:
+
+Default position for all elements
+Follows normal document flow
+top, left, right, bottom, z-index ❌ do not work
+
+Example
+div {
+  position: static;
+}
+
+⭐ Interview line:
+Static is the default position where elements follow the normal document flow.
+
+2️⃣ position: relative
+📌 What it is:
+
+Positioned relative to itself
+Original space is still reserved
+Can use top, left, etc.
+
+Example
+.box {
+  position: relative;
+  top: 10px;
+  left: 20px;
+}
+
+📌 Moves from its original position
+
+⭐ Interview line:
+Relative positioning moves an element relative to its original position without affecting the layout.
+
+3️⃣ position: absolute
+📌 What it is:
+
+Removed from normal document flow
+Positioned relative to the nearest positioned ancestor
+If no parent is positioned → relative to viewport
+
+Example
+.parent {
+  position: relative;
+}
+
+.child {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+📌 Does not reserve space
+
+⭐ Interview line:
+Absolute positioning places an element relative to its nearest positioned ancestor and removes it from the normal flow.
+
+4️⃣ position: fixed
+📌 What it is:
+
+Positioned relative to the viewport
+Stays in the same place even when scrolling
+Removed from normal flow
+
+Example
+.navbar {
+  position: fixed;
+  top: 0;
+}
+
+📌 Common use: Sticky headers, chat icons
+
+⭐ Interview line:
+Fixed positioning attaches an element to the viewport and keeps it visible during scrolling.
+
+5️⃣ position: sticky
+📌 What it is:
+
+Hybrid of relative + fixed
+Behaves as relative initially
+Becomes fixed when scroll threshold is reached
+
+Requires top, left, etc.
+
+Example
+.header {
+  position: sticky;
+  top: 0;
+}
+
+📌 Stops sticking when parent ends
+
+🧠 Quick Memory Trick
+
+Static → Normal
+Relative → Move myself
+Absolute → Out of flow, find parent
+Fixed → Stick to screen
+Sticky → Stick after scroll
+
+
+14. What is z-index and when does it work?
+
+z-index controls the vertical stacking order of overlapping elements on a web page.
+
+👉 Elements with a higher z-index value appear on top of elements with a lower value.
+
+🔹 Basic Example
+.box1 {
+  position: relative;
+  z-index: 1;
+}
+
+.box2 {
+  position: relative;
+  z-index: 2;
+}
+
+➡️ .box2 appears above .box1.
+
+✅ When Does z-index Work?
+🚨 This is the MOST IMPORTANT rule:
+
+z-index works only on positioned elements
+
+The element must have:
+position: relative
+position: absolute
+position: fixed
+position: sticky
+
+❌ Does NOT work with:
+
+position: static;
+
+🔹 Example (Won’t Work)
+.box {
+  z-index: 10;
+}
+
+❌ No effect (default position is static)
+
+🔹 Correct Example
+.box {
+  position: relative;
+  z-index: 10;
+}
+
+15. what is stacking context.
+
+🔍 Stacking Context Example (KEY INTERVIEW SCENARIO)
+HTML
+<div class="parent">
+  <div class="child">Child</div>
+</div>
+
+<div class="outside">Outside</div>
+
+CSS
+.parent {
+  position: relative;
+  z-index: 1;
+}
+
+.child {
+  position: absolute;
+  z-index: 999;
+}
+
+.outside {
+  position: relative;
+  z-index: 2;
+}
+
+❓ Which appears on top?
+
+➡️ .outside appears on top
+
+❌ Why child doesn’t win even with z-index: 999?
+
+Because:
+
+.parent creates a stacking context
+
+.child is trapped inside it
+
+.outside has a higher stacking level than .parent
+
+📌 Child cannot escape parent’s stacking context.
+
+1️⃣ First, understand the HTML structure
+<div class="parent">
+  <div class="child">Child</div>
+</div>
+
+<div class="outside">Outside</div>
+
+
+So we have:
+
+.parent contains .child
+
+.outside is a separate sibling, not inside .parent
+
+2️⃣ Now understand the CSS (line by line)
+🔹 .parent
+.parent {
+  position: relative;
+  z-index: 1;
+}
+
+
+position: relative + z-index
+
+✅ Creates a new stacking context
+
+.parent is placed at stack level 1
+
+📌 This is the MOST IMPORTANT LINE.
+
+🔹 .child
+.child {
+  position: absolute;
+  z-index: 999;
+}
+
+
+Positioned absolutely
+
+High z-index, BUT…
+
+❌ Child is trapped inside parent’s stacking context
+
+📌 Its z-index: 999 is only compared with siblings inside .parent
+
+🔹 .outside
+.outside {
+  position: relative;
+  z-index: 2;
+}
+
+
+Positioned element
+
+Creates its own stacking context
+
+Stack level = 2
+
+3️⃣ Now the KEY QUESTION
+
+❓ Which element appears on top?
+
+Answer:
+
+➡️ .outside appears on top
+
+4️⃣ WHY .outside wins (IMPORTANT)
+
+Let’s compare top-level stacking contexts, not children.
+
+Top-level stacking order:
+Element	z-index
+.parent	1
+.outside	2
+
+➡️ Since 2 > 1, .outside is above .parent
+
+📌 .child is inside .parent, so it cannot escape.
+
+5️⃣ Why z-index: 999 on .child does NOT help
+
+Because:
+
+z-index only works within the same stacking context
+
+.child competes only with siblings inside .parent
+
+It never competes with .outside
+
+Think like this:
+
+.child is a VIP inside a small room, but the whole room is below another room.
