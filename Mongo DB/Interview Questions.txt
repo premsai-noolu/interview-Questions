@@ -1,0 +1,268 @@
+🔹 MongoDB Basics (Very Frequently Asked)
+
+1. What is MongoDB? Why use it over RDBMS?
+
+MongoDB is a NoSQL, document-oriented database that stores data in JSON-like documents (BSON) instead of tables and rows.
+Each record is a document, and documents are stored inside collections.
+
+🔹 Key Advantages of MongoDB
+
+Flexible Schema
+Easy to add/remove fields without migrations
+
+High Performance
+Optimized for read & write-heavy apps
+
+Horizontal Scalability
+Supports sharding across servers
+
+Natural JSON Mapping
+Perfect match with JavaScript & Node.js
+
+Handles Big Data Easily
+Suitable for real-time and high-traffic apps
+
+🔹 When MongoDB is Better Choice?
+
+Rapid development
+Microservices architecture
+Real-time applications (chat, analytics)
+Applications with evolving data structure
+MERN Stack applications
+
+🔹 When RDBMS is Better?
+
+Complex joins & transactions
+Strong relational integrity
+Financial / banking systems
+Highly structured data
+
+Horizontal scalability means scaling by adding more servers instead of upgrading a single server.
+MongoDB achieves this using sharding, where data is distributed across multiple machines, improving performance and availability.
+
+2. What is a document and a collection?
+
+A document is a single record in MongoDB, stored in BSON (Binary JSON) format.
+Similar to a row in an RDBMS
+Stores data as key–value pairs
+Can contain nested objects and arrays
+
+📌 Example Document
+{
+  "_id": ObjectId("65f123abc456"),
+  "name": "Prem",
+  "age": 24,
+  "skills": ["React", "Node", "MongoDB"],
+  "address": {
+    "city": "Hyderabad",
+    "pincode": 500081
+  }
+}
+
+🔑 Key Points about Documents
+
+Each document has a unique _id
+Schema is flexible
+Supports nested structures
+Field values can differ between documents
+
+🔹 What is a Collection?
+
+A collection is a group of documents.
+Similar to a table in RDBMS
+Does not enforce a fixed schema
+Documents inside a collection can have different fields
+
+🔹 Real MERN Example
+User Collection
+users
+{
+  _id: ObjectId("1"),
+  name: "Prem",
+  email: "prem@gmail.com",
+  role: "admin"
+}
+
+{
+  _id: ObjectId("2"),
+  name: "Sai",
+  phone: "9876543210"
+}
+
+✔ Both documents are valid
+✔ No schema change needed
+
+A document is a single record in MongoDB stored in BSON format, consisting of key–value pairs.
+A collection is a group of related documents.
+Unlike tables in RDBMS, collections do not enforce a fixed schema, which provides flexibility and scalability.
+
+3. Difference between MongoDB and MySQL
+
+MongoDB is a NoSQL document-based database with flexible schema,
+while MySQL is a relational database with fixed schema and table-based structure.
+
+MySQL (Structured)
+CREATE TABLE users (
+  id INT PRIMARY KEY,
+  name VARCHAR(50),
+  email VARCHAR(50)
+);
+
+✔ Every row must follow the structure
+
+MongoDB (Flexible)
+{
+  name: "Prem",
+  email: "prem@gmail.com"
+}
+
+{
+  name: "Sai",
+  phone: "9876543210"
+}
+
+✔ Different fields allowed in same collection
+
+🔹 When to Use MongoDB?
+
+MERN stack applications
+Rapid development
+Applications with changing requirements
+High-volume data
+JSON-based APIs
+
+🔹 When to Use MySQL?
+
+Complex joins & relationships
+Financial systems
+Strong ACID compliance
+Reporting-heavy applications
+
+4. What is BSON?
+
+BSON stands for:
+Binary JSON
+MongoDB stores data internally in BSON format, which is a binary-encoded version of JSON.
+
+🔹 Why MongoDB uses BSON instead of JSON?
+Although MongoDB looks like it stores JSON, internally it uses BSON because it is:
+
+Faster to parse
+More efficient for storage
+Supports more data types than JSON
+
+5. Is MongoDB schema-less? What does that mean?
+
+MongoDB is schema-flexible, not completely schema-less.
+
+🔹 What does that mean?
+❌ Not truly schema-less
+
+MongoDB does have structure
+Every document follows BSON format
+Fields have data types
+
+✅ Schema-flexible
+
+Documents in the same collection can have different fields
+Schema can evolve over time
+No mandatory table alteration
+
+🔹 Example
+Same collection, different schemas
+// User 1
+{
+  name: "Prem",
+  age: 24
+}
+
+// User 2
+{
+  name: "Sai",
+  email: "sai@gmail.com",
+  isPremium: true
+}
+
+✔ Both are valid
+✔ No migration needed
+
+🔹 Can we enforce schema in MongoDB?
+
+✅ YES
+
+1️⃣ Application Level (Mongoose)
+const userSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  age: Number
+});
+
+6. What is _id field? Can we change it?
+
+_id is a unique identifier for every document in a MongoDB collection.
+
+Acts as the primary key
+Automatically created if not provided
+Must be unique within a collection
+
+7. What are embedded documents?
+
+Embedded documents are documents nested inside another document.
+Instead of storing related data in separate collections and joining them, MongoDB allows you to embed related data directly.
+
+🔹 Example of Embedded Document
+{
+  _id: ObjectId("101"),
+  name: "Prem",
+  email: "prem@gmail.com",
+  address: {
+    city: "Hyderabad",
+    pincode: 500081
+  },
+  orders: [
+    { orderId: 1, amount: 1500 },
+    { orderId: 2, amount: 2200 }
+  ]
+}
+
+Here:
+address → embedded object
+orders → array of embedded documents
+
+8. What is a cursor in MongoDB?
+
+A cursor is a pointer to the result set returned by a MongoDB query.
+When you run a query like find(), MongoDB does not return all documents at once.
+Instead, it returns a cursor that fetches documents in batches.
+
+🔹 Simple Example
+const cursor = db.users.find({ age: { $gt: 22 } });
+This does not immediately return all users
+It returns a cursor
+Documents are fetched as you iterate
+
+🔹 Important Interview Point ⚠️
+find() returns a cursor,
+findOne() returns a single document.
+
+🎯 Interview-Ready Answer
+A cursor in MongoDB is an object that points to the result set of a query. It retrieves documents in batches rather than all at once, which improves performance and memory efficiency when working with large datasets.
+
+9. What is the difference between find() and findOne()?
+
+find() returns a cursor that can contain multiple documents and supports chaining, while findOne() returns a single matching document. findOne() is preferred when exactly one result is expected.
+
+🔹 Example
+find()
+db.users.find({ age: { $gt: 22 } })
+
+Returns a cursor
+Can fetch multiple documents
+Supports chaining
+db.users.find().sort({ age: -1 }).limit(5)
+
+findOne()
+db.users.findOne({ age: { $gt: 22 } })
+
+Returns only one document
+Returns the first matched document
+No chaining
