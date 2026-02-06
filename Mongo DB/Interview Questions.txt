@@ -266,3 +266,1414 @@ db.users.findOne({ age: { $gt: 22 } })
 Returns only one document
 Returns the first matched document
 No chaining
+
+🔹 CRUD Operations (Must-Know)
+
+10. How do you insert data in MongoDB?
+
+insertOne()
+db.users.insertOne({
+  name: "Prem",
+  age: 24
+});
+
+✔ Inserts one document
+✔ MongoDB auto-generates _id
+
+insertMany()
+db.users.insertMany([
+  { name: "Sai", age: 25 },
+  { name: "Kiran", age: 26 }
+]);
+
+✔ Inserts multiple documents at once
+✔ Faster than multiple insertOne() calls
+
+🔹 Ordered vs Unordered Inserts (Interview Bonus)
+db.users.insertMany(docs, { ordered: false });
+
+ordered: true (default): stops on first error
+ordered: false: continues even if one insert fails
+
+insertOne() is used to insert a single document, while insertMany() inserts multiple documents in a single operation. insertMany() is more efficient for bulk inserts and supports ordered or unordered insertion.
+
+🎯 Interview-Ready One-Line Answer
+
+In insertMany(), ordered: true stops inserting documents when an error occurs, while ordered: false continues inserting remaining documents even if one insert fails.
+
+11. Difference between updateOne() and updateMany()
+
+db.collection.updateOne(filter, update, options)
+db.collection.updateMany(filter, update, options)
+
+🔹 Example Collection (users)
+[
+  { name: "Prem", role: "user", active: false },
+  { name: "Sai", role: "user", active: false },
+  { name: "Admin", role: "admin", active: false }
+]
+🔹 updateOne() Example
+db.users.updateOne(
+  { role: "user" },
+  { $set: { active: true } }
+);
+Result
+Prem → active: true   ✅
+Sai  → active: false
+Admin → active: false
+✔ Only first matching document updated
+
+🔹 updateMany() Example
+db.users.updateMany(
+  { role: "user" },
+  { $set: { active: true } }
+);
+Result
+Prem → active: true   ✅
+Sai  → active: true   ✅
+Admin → active: false
+✔ All matching documents updated
+
+🔹 Using upsert (Interview Bonus)
+db.users.updateOne(
+  { name: "Rahul" },
+  { $set: { active: true } },
+  { upsert: true }
+);
+If document exists → update
+If not → insert new document
+
+12. What is the difference between replaceOne() and updateOne()?
+
+updateOne() modifies specific fields,
+while replaceOne() replaces the entire document (except _id).
+
+🔹 Syntax Difference
+db.collection.updateOne(filter, update, options)
+db.collection.replaceOne(filter, replacement, options)
+
+🔹 Example Collection
+{
+  _id: 1,
+  name: "Prem",
+  age: 24,
+  role: "user"
+}
+
+🔹 updateOne() Example
+db.users.updateOne(
+  { _id: 1 },
+  { $set: { age: 25 } }
+);
+
+Result
+{
+  _id: 1,
+  name: "Prem",
+  age: 25,
+  role: "user"
+}
+
+✔ Only age is updated
+✔ Other fields remain unchanged
+
+🔹 replaceOne() Example
+db.users.replaceOne(
+  { _id: 1 },
+  { name: "Prem", age: 25 }
+);
+
+Result
+{
+  _id: 1,
+  name: "Prem",
+  age: 25
+}
+
+❌ role field is removed
+✔ Entire document replaced
+
+13. How do you delete documents?
+
+deleteOne() removes only the first matching document,
+while deleteMany() removes all matching documents.
+
+🔹 Syntax
+db.collection.deleteOne(filter)
+db.collection.deleteMany(filter)
+
+🔹 Example Collection (users)
+[
+  { name: "Prem", role: "user", active: false },
+  { name: "Sai", role: "user", active: false },
+  { name: "Admin", role: "admin", active: false }
+]
+
+🔹 deleteOne() Example
+db.users.deleteOne({ role: "user" });
+
+Result
+Sai → deleted ❌ (first match only)
+Prem → remains
+Admin → remains
+
+✔ Deletes only one document
+
+🔹 deleteMany() Example
+db.users.deleteMany({ active: false });
+
+Result
+Prem → deleted ❌
+Sai → deleted ❌
+Admin → deleted ❌
+
+✔ Deletes all matching documents
+
+14. What happens if no document matches the update condition?
+
+If no document matches the filter, MongoDB does NOTHING.
+
+No update happens
+No error is thrown
+Collection remains unchanged
+
+🔹 Example
+Existing Collection
+[
+  { _id: 1, name: "Prem", active: true }
+]
+
+Update Query
+db.users.updateOne(
+  { name: "Sai" },            // ❌ No matching document
+  { $set: { active: false } }
+);
+
+Result
+{
+  acknowledged: true,
+  matchedCount: 0,
+  modifiedCount: 0
+}
+
+✔ No document updated
+✔ No error
+
+🔹 What if you WANT to insert if not found?
+
+👉 Use upsert: true
+
+🔹 With upsert: true
+db.users.updateOne(
+  { name: "Sai" },
+  { $set: { active: true } },
+  { upsert: true }
+);
+
+What happens?
+
+MongoDB does not find the document
+It creates a new document
+
+Difference between save() and insert()
+
+🔹 Querying & Filtering (Very Important)
+
+15. How do you filter documents in MongoDB?
+
+You filter documents in MongoDB using the find() method by passing a query object that specifies the conditions.
+
+🔹 Basic Syntax
+db.collection.find({ condition })
+
+🔹 Example 1: Filter by exact match
+db.users.find({ age: 24 })
+
+✔ Returns users whose age is exactly 24
+
+🔹 Example 2: Using comparison operators
+db.users.find({ age: { $gt: 22 } })
+
+✔ Returns users whose age is greater than 22
+
+🔹 Example 3: Multiple conditions (implicit AND)
+db.users.find({ age: { $gt: 22 }, role: "user" })
+
+✔ Both conditions must be true
+
+16. Difference between $and, $or, $nor
+
+These are logical operators used to combine multiple query conditions.
+
+🔹 $and
+Returns documents where ALL conditions are true
+
+Example
+db.users.find({
+  $and: [
+    { age: { $gt: 22 } },
+    { role: "user" }
+  ]
+})
+
+✔ age > 22 AND role = user
+🔹 Interview Tip: $and is usually implicit
+
+db.users.find({ age: { $gt: 22 }, role: "user" })
+
+🔹 $or
+Returns documents where ANY condition is true
+
+Example
+db.users.find({
+  $or: [
+    { role: "admin" },
+    { age: { $lt: 25 } }
+  ]
+})
+
+✔ role is admin OR age < 25
+
+🔹 $nor
+Returns documents where NONE of the conditions are true
+
+Example
+db.users.find({
+  $nor: [
+    { role: "admin" },
+    { age: { $lt: 25 } }
+  ]
+})
+
+✔ role is NOT admin
+✔ age is NOT < 25
+
+17. What is $in and $nin?
+
+These operators are used to match values within or outside a list.
+
+🔹 $in
+Matches documents where a field’s value is any one of the values in the given array.
+
+Example
+db.users.find({
+  role: { $in: ["admin", "manager"] }
+})
+
+✔ role is either admin OR manager
+
+🔹 $nin
+Matches documents where a field’s value is NOT in the given array.
+
+Example
+db.users.find({
+  age: { $nin: [20, 21] }
+})
+
+✔ age is not 20 and not 21
+
+🔹 Works with Arrays Too (Interview Bonus)
+db.users.find({
+  skills: { $in: ["React"] }
+})
+
+✔ Matches if skills array contains "React"
+
+🔹 $in vs $or (Interview Tip)
+// Preferred
+db.users.find({ role: { $in: ["admin", "manager"] } })
+
+// Equivalent but longer
+db.users.find({
+  $or: [{ role: "admin" }, { role: "manager" }]
+})
+
+🎯 Interview-Ready Answer
+$in matches documents where a field’s value exists in a specified list, while $nin matches documents where the field’s value does not exist in that list.
+
+18. How to query nested documents?
+
+You query nested (embedded) documents using dot notation.
+
+🔹 Example Document
+{
+  name: "Prem",
+  address: {
+    city: "Hyderabad",
+    pincode: 500081
+  }
+}
+
+🔹 Query Using Dot Notation
+db.users.find({ "address.city": "Hyderabad" })
+
+✔ Matches documents where city inside address is Hyderabad
+
+🔹 Query Multiple Nested Fields
+db.users.find({
+  "address.city": "Hyderabad",
+  "address.pincode": 500081
+})
+
+✔ Both conditions must be true
+
+🔹 Nested Array of Objects (Bonus)
+{
+  name: "Prem",
+  orders: [
+    { orderId: 1, amount: 1500 },
+    { orderId: 2, amount: 2200 }
+  ]
+}
+
+db.users.find({ "orders.amount": { $gt: 2000 } })
+
+✔ Matches if any order has amount > 2000
+
+19. How to query arrays in MongoDB?
+
+MongoDB provides multiple ways to query arrays depending on the requirement.
+
+🔹 Example Document
+{
+  name: "Prem",
+  skills: ["React", "Node", "MongoDB"],
+  scores: [65, 78, 90]
+}
+
+🔹 1️⃣ Match any value in an array
+db.users.find({ skills: "React" })
+
+✔ Matches if "React" exists in the array
+
+🔹 2️⃣ Match multiple values in an array ($all)
+db.users.find({ skills: { $all: ["React", "Node"] } })
+
+✔ Array must contain both values
+
+🔹 3️⃣ Match array size
+db.users.find({ skills: { $size: 3 } })
+
+✔ Matches arrays with exactly 3 elements
+
+🔹 4️⃣ Match numeric conditions in array
+db.users.find({ scores: { $gt: 80 } })
+
+✔ Matches if any element is greater than 80
+
+🔹 5️⃣ Arrays of objects (basic match)
+db.users.find({ "orders.amount": { $gt: 2000 } })
+
+✔ Matches if any object has amount > 2000
+
+20. What is $elemMatch?
+
+$elemMatch is used to match multiple conditions on the SAME element of an array.
+
+🔹 Why $elemMatch is needed?
+
+Without $elemMatch, MongoDB may match conditions across different elements of the array.
+
+🔹 Example Document
+{
+  name: "Prem",
+  scores: [
+    { subject: "Math", marks: 75 },
+    { subject: "Science", marks: 90 }
+  ]
+}
+
+🔹 ❌ Without $elemMatch (Wrong Result)
+db.users.find({
+  "scores.subject": "Math",
+  "scores.marks": { $gt: 80 }
+})
+
+⚠️ This matches because:
+One element has subject: "Math"
+Another element has marks > 80
+But not the same element
+
+🔹 ✅ With $elemMatch (Correct)
+db.users.find({
+  scores: {
+    $elemMatch: {
+      subject: "Math",
+      marks: { $gt: 80 }
+    }
+  }
+})
+
+✔ Matches only if the same object has both conditions
+
+🔹 When to use $elemMatch?
+
+✔ Arrays of objects
+✔ Multiple conditions on same element
+✔ Prevent incorrect matches
+
+🎯 Interview-Ready Answer
+$elemMatch is used to match documents that contain an array element satisfying multiple conditions within the same array element.
+
+21. How to find documents with a specific field existing?
+
+You use the $exists operator.
+
+🔹 What does $exists do?
+
+Checks whether a field is present in the document, regardless of its value.
+
+🔹 Example Document
+{
+  name: "Prem",
+  phone: "9876543210"
+}
+
+{
+  name: "Sai"
+}
+
+🔹 Find documents where field exists
+db.users.find({ phone: { $exists: true } })
+
+✔ Returns only documents that have the phone field
+
+🔹 Find documents where field does NOT exist
+db.users.find({ phone: { $exists: false } })
+
+✔ Returns documents without the phone field
+
+🔹 Important Interview Point ⚠️
+$exists checks only presence, not value.
+
+{ phone: null }
+
+✔ $exists: true (field exists, value is null)
+
+🎯 Interview-Ready Answer
+Documents with a specific field can be found using the $exists operator, which checks whether a field is present in a document regardless of its value.
+
+22. Difference between null and field not present
+
+$exists is used to check whether a field is present in a document.
+
+🔹 Syntax
+{ fieldName: { $exists: true | false } }
+
+🔹 Example Documents
+{ name: "Prem", phone: "9876543210" }
+{ name: "Sai" }
+{ name: "Kiran", phone: null }
+
+🔹 Find documents where a field exists
+db.users.find({ phone: { $exists: true } })
+
+✔ Matches:
+
+{ phone: "9876543210" }
+
+{ phone: null }
+
+🔹 Find documents where a field does NOT exist
+db.users.find({ phone: { $exists: false } })
+
+✔ Matches:
+
+{ name: "Sai" }
+
+🔹 Important Interview Point ⚠️
+$exists checks presence, not value
+null still counts as existing
+
+🔹 Projection, Sorting & Pagination (Interview Favorite)
+
+23. What is projection in MongoDB?
+
+Projection is used to control which fields are included or excluded in the query result.
+
+👉 It helps in:
+
+Reducing data transfer
+Improving performance
+Returning only required fields
+
+🔹 Syntax
+db.collection.find(query, projection)
+
+🔹 Example
+Include specific fields
+db.users.find(
+  { age: { $gt: 22 } },
+  { name: 1, age: 1 }
+)
+
+✔ Returns only name and age
+✔ _id is included by default
+
+Exclude a field
+db.users.find(
+  {},
+  { password: 0 }
+)
+
+✔ Returns all fields except password
+
+🎯 Interview-Ready Answer
+Projection in MongoDB is used to specify which fields should be included or excluded in the result set of a query, helping optimize performance and reduce unnecessary data transfer.
+
+24. Rules of projection (1 vs 0)
+
+Projection follows strict rules about including (1) and excluding (0) fields.
+🔹 Rule 1: You cannot mix 1 and 0
+
+❌ Invalid
+db.users.find({}, { name: 1, age: 0 })
+
+✔ MongoDB throws an error
+
+🔹 Rule 2: All 1s → Include only specified fields
+db.users.find({}, { name: 1, age: 1 })
+
+✔ Returns only name and age
+✔ _id included by default
+
+🔹 Rule 3: All 0s → Exclude specified fields
+db.users.find({}, { password: 0 })
+
+✔ Returns all fields except password
+
+🔹 Rule 4: Exception – _id
+👉 _id can be excluded even when using 1
+
+db.users.find({}, { name: 1, _id: 0 })
+
+✔ Valid query
+
+🎯 Interview-Ready Answer
+In MongoDB projection, you must either include fields using 1 or exclude fields using 0, but not both at the same time. The only exception is the _id field, which can be excluded even when using inclusion projection.
+
+25. Why _id is returned by default?
+
+MongoDB returns _id by default because:
+_id is the primary key and unique identifier for every document.
+
+🔹 Key Reasons
+1️⃣ Uniquely identifies a document
+
+Every document must have an _id
+Used internally by MongoDB to identify records
+
+2️⃣ Indexed by default
+
+_id has an automatic index
+Makes document lookup fast and efficient
+
+26. How do you sort documents?
+
+You sort documents in MongoDB using the sort() method.
+
+🔹 Syntax
+db.collection.find(query).sort({ field: 1 | -1 })
+
+1 → Ascending order
+-1 → Descending order
+
+🔹 Example 1: Sort by age (Ascending)
+db.users.find().sort({ age: 1 })
+
+✔ Youngest → Oldest
+
+🔹 Example 2: Sort by salary (Descending)
+db.users.find().sort({ salary: -1 })
+
+✔ Highest salary first
+
+🔹 Sort by Multiple Fields (Interview Bonus)
+db.users.find().sort({ role: 1, age: -1 })
+
+✔ Sorted by role first
+✔ Within same role → age descending
+
+🔹 Performance Tip ⚠️
+Sorting is faster with indexes
+Sorting without index may cause in-memory sort
+
+🎯 Interview-Ready Answer
+Documents in MongoDB are sorted using the sort() method, where 1 specifies ascending order and -1 specifies descending order. Multiple fields can also be used for sorting.
+
+27. What is pagination?
+
+Pagination is the technique of dividing large sets of documents into smaller pages and fetching them page by page instead of all at once.
+
+🔹 Why pagination is needed?
+
+Improves performance
+Reduces memory usage
+Faster API responses
+Better user experience (page 1, page 2, etc.)
+
+🔹 Pagination using skip() and limit()
+db.users.find().skip(10).limit(5)
+
+What this means:
+skip(10) → skips first 10 documents
+limit(5) → returns next 5 documents
+
+👉 This is typically page 3 if page size is 5
+(page 1 → 0–4, page 2 → 5–9, page 3 → 10–14)
+
+🔹 Formula (Interview Tip)
+skip = (pageNumber - 1) * pageSize
+
+Example:
+
+pageNumber = 3
+pageSize = 5
+skip = (3 - 1) * 5 = 10
+
+🔹 MERN / Node.js Example
+const page = 3;
+const limit = 5;
+
+User.find()
+  .skip((page - 1) * limit)
+  .limit(limit);
+
+🎯 Interview-Ready Answer
+Pagination is the process of fetching data in smaller chunks instead of loading all documents at once. In MongoDB, pagination is commonly implemented using skip() and limit() to control which documents are returned for a specific page.
+
+Both are used mainly for pagination, but they serve different purposes.
+
+🔹 limit()
+Restricts how many documents are returned.
+
+Example
+db.users.find().limit(5)
+
+✔ Returns only 5 documents
+
+🔹 skip()
+Skips a specified number of documents before returning results.
+
+Example
+db.users.find().skip(10)
+
+✔ Skips first 10 documents
+
+🔹 Combined Example (Pagination)
+db.users.find().skip(10).limit(5)
+
+✔ Skips first 10
+✔ Returns next 5 documents
+
+28. How do you get top N records?
+
+You get Top N records by combining sort() and **`limit()``.
+
+🔹 General Syntax
+db.collection.find().sort({ field: -1 }).limit(N)
+
+🔹 Example: Top 5 highest paid users
+db.users.find().sort({ salary: -1 }).limit(5)
+
+✔ Sorts salaries in descending order
+✔ Returns top 5 records
+
+🔹 Example: Top 3 newest users
+db.users.find().sort({ createdAt: -1 }).limit(3)
+
+✔ Latest records first
+
+🔹 With Condition (Interview Bonus)
+db.users.find({ role: "user" })
+  .sort({ salary: -1 })
+  .limit(3)
+
+✔ Top 3 highest paid users with role = user
+
+🔹 Indexing & Performance (Highly Asked)
+
+29. What is an index? Why is it used?
+
+An index in MongoDB is a data structure that improves the speed of query operations on a collection.
+👉 It works similar to an index in a book — instead of scanning every page, you jump directly to the required page.
+
+🔹 What does an index do?
+
+Stores field values in sorted order
+Maintains pointers to documents
+Helps MongoDB find data faster without scanning all documents
+
+🔹 Example (Without Index)
+db.users.find({ email: "prem@gmail.com" })
+
+❌ MongoDB scans every document (collection scan)
+
+🔹 Example (With Index)
+db.users.createIndex({ email: 1 })
+
+✔ MongoDB directly jumps to matching document
+✔ Much faster
+
+🔹 Why is an index used?
+
+1️⃣ Faster query performance
+2️⃣ Efficient sorting
+3️⃣ Improves lookup speed
+4️⃣ Reduces disk I/O
+5️⃣ Essential for large collections
+
+🔹 Trade-off (Interview Bonus)
+
+⚠️ Indexes:
+Consume extra memory
+Slow down insert/update/delete operations
+
+🎯 Interview-Ready Answer
+An index in MongoDB is a data structure that improves query performance by allowing MongoDB to locate documents quickly without scanning the entire collection. It is used to speed up read operations and sorting on large datasets.
+
+30. Types of indexes in MongoDB
+Single, Compound, Multikey, Text, Hashed
+
+MongoDB supports several types of indexes, each optimized for different use cases.
+
+🔹 1️⃣ Single Field Index
+Index on one field
+db.users.createIndex({ email: 1 })
+
+✔ Used for simple lookups
+✔ Most commonly used
+
+🔹 2️⃣ Compound Index
+Index on multiple fields
+
+db.users.createIndex({ role: 1, age: -1 })
+
+✔ Useful for queries filtering/sorting on multiple fields
+✔ Order of fields matters
+
+🔹 3️⃣ Multikey Index
+Index on array fields
+
+db.users.createIndex({ skills: 1 })
+
+✔ MongoDB automatically creates multikey index
+✔ Used when field contains arrays
+
+🔹 4️⃣ Text Index
+Used for text search
+
+db.articles.createIndex({ content: "text" })
+
+✔ Supports full-text search
+✔ Uses $text operator
+
+🔹 5️⃣ Hashed Index
+
+Indexes a field using a hash of its value
+db.users.createIndex({ userId: "hashed" })
+
+✔ Used mainly for sharding
+✔ Ensures even data distribution
+
+🔹 Text Index in MongoDB
+👉 What is a Text Index?
+
+A Text Index is used to perform full-text search on string content.
+It allows searching for words and phrases, not exact matches.
+
+🔹 Why Text Index is needed?
+
+Normal indexes:
+Match exact values
+
+❌ Cannot search inside sentences
+
+Text index:
+Searches words inside text
+Supports relevance scoring
+
+🔹 How to create a Text Index
+db.articles.createIndex({ content: "text" })
+
+Multiple fields:
+
+db.articles.createIndex({
+  title: "text",
+  description: "text"
+})
+
+🔹 How to query using Text Index
+db.articles.find({
+  $text: { $search: "mongodb performance" }
+})
+
+✔ Matches documents containing mongodb OR performance
+
+🎯 Interview One-Liner (Text Index)
+A Text Index is used for full-text search in MongoDB, allowing efficient searching of words and phrases within string fields using the $text operator.
+
+🔹 Hashed Index in MongoDB
+👉 What is a Hashed Index?
+A Hashed Index stores the hash value of a field instead of the actual field value.
+
+🔹 Why Hashed Index is used?
+Ensures even data distribution
+Mainly used for sharding
+Avoids data skew
+
+🔹 How to create a Hashed Index
+db.users.createIndex({ userId: "hashed" })
+
+🔹 How it works (Concept)
+Actual Value	Stored in Index
+1001	hash(1001)
+1002	hash(1002)
+1003	hash(1003)
+
+✔ MongoDB uses the hash to decide which shard stores the data
+
+31. What is a compound index?
+
+A compound index is an index created on multiple fields in a document.
+It improves performance for queries that filter or sort on more than one field.
+
+🔹 Syntax
+db.collection.createIndex({ field1: 1, field2: -1 })
+
+1 → ascending
+-1 → descending
+
+⚠️ Order of fields matters
+
+🔹 Example Collection (users)
+{
+  name: "Prem",
+  role: "user",
+  age: 24
+}
+
+🔹 Create a Compound Index
+db.users.createIndex({ role: 1, age: -1 })
+
+🔹 Query that uses this index (✅ Efficient)
+db.users.find({ role: "user" }).sort({ age: -1 })
+
+✔ Uses compound index
+✔ Fast filtering + sorting
+
+32. What happens if indexes are not used?
+
+If indexes are not used, MongoDB performs a collection scan.
+Collection scan = MongoDB checks every document one by one
+
+🔹 What is a Collection Scan?
+
+MongoDB scans all documents
+Applies the filter condition
+Returns matching documents
+
+🔹 Example (No Index)
+db.users.find({ email: "prem@gmail.com" })
+❌ Without index → scans entire users collection
+
+🔹 Problems when indexes are not used
+
+1️⃣ Slow query performance
+2️⃣ High CPU usage
+3️⃣ More disk I/O
+4️⃣ Poor scalability
+5️⃣ Bad user experience
+
+33. When should you NOT use indexes?
+
+Indexes are powerful, but using them everywhere is a bad practice. Interviewers like this question to check balance.
+
+🔹 Situations where you should NOT use indexes
+1️⃣ Small collections
+
+If collection has very few documents
+Collection scan is already fast
+
+// 100 documents → index not needed
+db.smallCollection.find({ status: "active" })
+
+2️⃣ Fields that change frequently
+Indexes must be updated on:
+insert
+update
+delete
+
+❌ Causes performance overhead
+
+// status changes very often
+status: "online" | "offline"
+
+3️⃣ Low-selectivity fields
+
+Field with very few unique values
+
+❌ Index is not helpful
+
+gender: "male" | "female"
+isActive: true | false
+
+4️⃣ Write-heavy applications
+
+Too many indexes slow down writes
+❌ Bad for logging systems
+
+5️⃣ Indexes that are never used
+
+Wastes memory
+Slows write operations
+
+db.collection.getIndexes()
+
+🔹 Interview Tip ⚠️
+Indexes speed up reads, but slow down writes.
+
+34. How do indexes improve performance?
+
+Indexes improve performance by allowing MongoDB to find documents quickly without scanning the entire collection.
+
+🔹 Without Index (Collection Scan)
+db.users.find({ email: "prem@gmail.com" })
+
+❌ MongoDB checks every document
+❌ Time increases as data grows
+
+🔹 With Index (Index Scan)
+db.users.createIndex({ email: 1 })
+db.users.find({ email: "prem@gmail.com" })
+
+✔ MongoDB directly jumps to matching documents
+✔ Uses index pointer
+✔ Very fast
+
+🔹 How indexes work internally (Simple)
+Index stores sorted field values
+Each value points to document location
+MongoDB performs binary search instead of linear scan
+
+35. what is explain() in mongoDB.
+
+explain() is used to analyze how MongoDB executes a query.
+It helps you understand whether MongoDB is using an index or doing a collection scan, and how efficient the query is.
+
+🔹 Syntax
+db.collection.find(query).explain()
+
+Commonly used mode:
+db.collection.find(query).explain("executionStats")
+
+🔹 Example
+db.users.find({ email: "prem@gmail.com" }).explain("executionStats")
+
+🔹 What does explain() show?
+Key things interviewers expect you to mention:
+queryPlanner
+winningPlan
+stage
+executionStats
+
+🔹 Important stage values
+✅ Index Scan
+"stage": "IXSCAN"
+
+✔ Index is used
+✔ Fast query
+
+❌ Collection Scan
+"stage": "COLLSCAN"
+
+❌ No index used
+❌ Slow query
+
+🔹 Execution Stats (Very Important)
+"nReturned": 1,
+"totalDocsExamined": 1,
+"totalKeysExamined": 1
+
+✔ Fewer docs examined → better performance
+
+36. Difference between collection scan and index scan
+A collection scan scans every document in a collection to find matches, while an index scan uses an index to directly locate matching documents. Index scans are much faster and more efficient, especially for large datasets.
+
+🔹 Aggregation Framework (Very Important for 2+ Years)
+
+37. What is aggregation in MongoDB?
+
+Aggregation in MongoDB is used to process data and return computed results.
+It allows you to filter, group, transform, and analyze data, similar to SQL’s GROUP BY, SUM, AVG, etc.
+
+🔹 Why aggregation is used?
+
+Data analysis
+Reporting
+Calculations (totals, averages, counts)
+Transforming documents into new formats
+
+🔹 Simple Example
+Collection (orders)
+{
+  orderId: 1,
+  amount: 1000
+}
+{
+  orderId: 2,
+  amount: 2000
+}
+
+Aggregation Query
+db.orders.aggregate([
+  { $group: { _id: null, totalAmount: { $sum: "$amount" } } }
+])
+
+Result
+{ _id: null, totalAmount: 3000 }
+
+🔹 Key Point (Interview)
+Aggregation works by passing documents through stages, where each stage transforms the data.
+
+🎯 Interview-Ready Answer
+Aggregation in MongoDB is a data processing framework used to perform operations like filtering, grouping, and computing values on documents, returning aggregated results similar to SQL aggregation functions.
+
+38. What is aggregation pipeline?
+
+An aggregation pipeline is a sequence of stages where each stage transforms the documents and passes the result to the next stage.
+Think of it like an assembly line for data.
+
+🔹 How it works (Simple)
+Input documents
+   ↓
+$match
+   ↓
+$group
+   ↓
+$project
+   ↓
+Result
+
+Each stage:
+Takes input documents
+Performs an operation
+Outputs transformed documents to the next stage
+
+🔹 Basic Syntax
+db.collection.aggregate([
+  { stage1 },
+  { stage2 },
+  { stage3 }
+])
+
+🔹 Example: Total age of users above 20
+db.users.aggregate([
+  { $match: { age: { $gt: 20 } } },
+  { $group: { _id: null, totalAge: { $sum: "$age" } } }
+])
+
+What happens:
+1️⃣ $match → filters users with age > 20
+2️⃣ $group → sums their ages
+
+🔹 Common Aggregation Stages (Interview Must-Know)
+$match → filter documents
+$group → group & calculate
+$project → shape output
+$sort → sort results
+$limit → limit results
+$lookup → join collections
+$unwind → flatten arrays
+
+🎯 Interview-Ready Answer
+An aggregation pipeline is a framework in MongoDB where documents pass through multiple stages such as $match, $group, and $project, with each stage transforming the data and passing the result to the next stage.
+
+🔹 Example 1: Total age of all users
+db.users.aggregate([
+  {
+    $group: {
+      _id: null,
+      totalAge: { $sum: "$age" }
+    }
+  }
+])
+
+📌 Use case: Overall statistics
+
+🔹 Example 2: Average age of users
+db.users.aggregate([
+  {
+    $group: {
+      _id: null,
+      avgAge: { $avg: "$age" }
+    }
+  }
+])
+
+📌 Use case: Analytics dashboard
+
+🔹 Example 3: Total users by gender
+db.users.aggregate([
+  {
+    $group: {
+      _id: "$gender",
+      count: { $sum: 1 }
+    }
+  }
+])
+
+📌 Output:
+
+{ _id: "Male", count: 10 }
+{ _id: "Female", count: 8 }
+
+📌 Use case: Demographic analysis
+
+🔹 Example 4: Total age by gender
+db.users.aggregate([
+  {
+    $group: {
+      _id: "$gender",
+      totalAge: { $sum: "$age" }
+    }
+  }
+])
+
+📌 Use case: Group-wise calculations
+
+🔹 Example 5: Users older than 25 → total age
+db.users.aggregate([
+  { $match: { age: { $gt: 25 } } },
+  {
+    $group: {
+      _id: null,
+      totalAge: { $sum: "$age" }
+    }
+  }
+])
+
+📌 Shows why order matters ($match before $group)
+
+🔹 Example 6: Get only required fields ($project)
+db.users.aggregate([
+  {
+    $project: {
+      _id: 0,
+      fullName: { $concat: ["$firstName", " ", "$lastName"] },
+      age: 1
+    }
+  }
+])
+
+📌 Output:
+{ fullName: "Prem Sai Noolu", age: 22 }
+
+🔹 Example 7: Sort users by age (descending)
+db.users.aggregate([
+  { $sort: { age: -1 } }
+])
+
+📌 Use case: Oldest users first
+
+🔹 Example 8: Top 3 oldest users
+db.users.aggregate([
+  { $sort: { age: -1 } },
+  { $limit: 3 }
+])
+
+📌 Interview favorite ⭐
+
+🔹 Example 9: Handle missing age safely
+db.users.aggregate([
+  {
+    $group: {
+      _id: null,
+      totalAge: {
+        $sum: { $ifNull: ["$age", 0] }
+      }
+    }
+  }
+])
+
+📌 Prevents errors if age is missing
+
+🔹 Example 10: Multiple stages together (Real MERN API)
+db.users.aggregate([
+  { $match: { gender: "Male" } },
+  { $sort: { age: -1 } },
+  { $limit: 5 },
+  {
+    $project: {
+      _id: 0,
+      firstName: 1,
+      age: 1
+    }
+  }
+])
+
+🎯 Interview Tip (VERY IMPORTANT)
+
+If interviewer asks:
+“Why aggregation instead of find?”
+
+Aggregation allows transformation, grouping, and calculations across documents, which is not possible with simple find() queries.
+find() is used to retrieve documents with basic filtering,projection and sorting, while aggregation is used to process and transform data using multiple stages such as grouping, calculations, and joins. Aggregation is more powerful and suitable for analytics and reporting.
+
+39. Explain $match
+
+$match is used to filter documents in an aggregation pipeline.
+It works the same way as the find() query filter but is used inside aggregation.
+
+🔹 Why $match is important?
+
+Reduces the number of documents early
+Improves performance
+Makes aggregation faster
+
+🔹 Basic Syntax
+{ $match: { condition } }
+
+🔹 Example Collection (users)
+{
+  name: "Prem",
+  age: 24,
+  gender: "Male"
+}
+{
+  name: "Sai",
+  age: 19,
+  gender: "Male"
+}
+
+🔹 Example 1: Filter users above age 21
+db.users.aggregate([
+  { $match: { age: { $gt: 21 } } }
+])
+
+✔ Only users with age > 21 pass to next stage
+
+🔹 Example 2: $match + $group
+db.users.aggregate([
+  { $match: { gender: "Male" } },
+  {
+    $group: {
+      _id: "$gender",
+      totalAge: { $sum: "$age" }
+    }
+  }
+])
+
+✔ Filters first
+✔ Groups only filtered data
+
+🔹 Interview Tip ⚠️
+Always place $match as early as possible in the pipeline for better performance.
+
+🎯 Interview-Ready Answer
+$match is an aggregation stage used to filter documents based on specified conditions. It works like a find() filter and is usually placed early in the pipeline to improve performance.
+
+40. Explain $group
+
+$group is used to group documents by a key and perform aggregate calculations on each group.
+It’s similar to GROUP BY in SQL.
+
+41. Difference between $project and projection in find()
+
+Projection in find() only includes or excludes fields,
+while $project can transform, compute, and reshape data.
+
+🔹 Projection in find()
+What it can do
+
+Include fields (1)
+Exclude fields (0)
+
+❌ What it cannot do
+Cannot create new fields
+Cannot compute values
+Cannot rename fields
+
+Example
+db.users.find(
+  {},
+  { firstName: 1, age: 1, _id: 0 }
+)
+
+✔ Simple field selection only
+
+🔹 $project in Aggregation
+What it can do
+Include / exclude fields
+Rename fields
+Create computed fields
+Transform output structure
+
+Example
+db.users.aggregate([
+  {
+    $project: {
+      fullName: { $concat: ["$firstName", " ", "$lastName"] },
+      age: 1,
+      _id: 0
+    }
+  }
+])
+
+✔ Creates new field
+✔ Transforms data
+
+42. What is $lookup? (joins in MongoDB)
+
+$lookup is used to join data from another collection in MongoDB.
+It performs a LEFT OUTER JOIN between two collections and adds the matched documents as an array field.
+
+🔹 Basic Syntax
+{
+  $lookup: {
+    from: "<foreignCollection>",
+    localField: "<localField>",
+    foreignField: "<foreignField>",
+    as: "<outputArrayField>"
+  }
+}
+
+🔹 Example Collections
+users
+{ _id: 1, name: "Prem" }
+{ _id: 2, name: "Sai" }
+
+orders
+{ orderId: 101, userId: 1, amount: 2000 }
+{ orderId: 102, userId: 1, amount: 1500 }
+{ orderId: 103, userId: 2, amount: 3000 }
+
+🔹 $lookup Example
+db.users.aggregate([
+  {
+    $lookup: {
+      from: "orders",
+      localField: "_id",
+      foreignField: "userId",
+      as: "orders"
+    }
+  }
+])
+
+🔹 Output
+{
+  _id: 1,
+  name: "Prem",
+  orders: [
+    { orderId: 101, amount: 2000 },
+    { orderId: 102, amount: 1500 }
+  ]
+}
+
+✔ orders is an array
+✔ Users without orders get an empty array
+
+🔹 When to use $lookup?
+✔ When data is stored in separate collections
+✔ One-to-many relationships
+✔ Reporting & analytics
