@@ -1677,3 +1677,430 @@ db.users.aggregate([
 ✔ When data is stored in separate collections
 ✔ One-to-many relationships
 ✔ Reporting & analytics
+
+43. What is $unwind?
+
+$unwind is used to deconstruct an array field into multiple documents.
+One document with an array → multiple documents (one per array element)
+
+🔹 Example Document
+{
+  name: "Prem",
+  skills: ["React", "Node", "MongoDB"]
+}
+
+🔹 Without $unwind
+db.users.find()
+
+Output:
+
+{
+  name: "Prem",
+  skills: ["React", "Node", "MongoDB"]
+}
+
+🔹 With $unwind
+db.users.aggregate([
+  { $unwind: "$skills" }
+])
+
+🔹 Output
+{ name: "Prem", skills: "React" }
+{ name: "Prem", skills: "Node" }
+{ name: "Prem", skills: "MongoDB" }
+
+✔ Each array element becomes a separate document
+
+🔹 $unwind with $lookup (Very Common)
+db.users.aggregate([
+  {
+    $lookup: {
+      from: "orders",
+      localField: "_id",
+      foreignField: "userId",
+      as: "orders"
+    }
+  },
+  { $unwind: "$orders" }
+])
+
+✔ Converts orders array into individual order documents
+
+🔹 Handle empty arrays (Interview Bonus)
+{ $unwind: { path: "$orders", preserveNullAndEmptyArrays: true } }
+
+🎯 Interview-Ready Answer
+$unwind is an aggregation stage used to flatten an array field, creating a separate document for each element in the array.
+
+44. Order of aggregation stages – why important?
+
+The order of aggregation stages is important because each stage processes the output of the previous stage.
+A wrong order can lead to incorrect results or poor performance.
+
+🔹 Key Rule (Interview Must-Know)
+Filter early, reduce early, transform later
+
+🔹 Example Collection (users)
+{ name: "Prem", age: 24, gender: "Male" }
+{ name: "Sai", age: 19, gender: "Male" }
+{ name: "Anu", age: 22, gender: "Female" }
+
+🔹 ❌ Bad Order (Inefficient)
+db.users.aggregate([
+  {
+    $group: {
+      _id: "$gender",
+      totalAge: { $sum: "$age" }
+    }
+  },
+  { $match: { _id: "Male" } }
+])
+
+⚠️ Groups all users first, then filters
+⚠️ More computation, slower
+
+🔹 ✅ Correct Order (Efficient)
+db.users.aggregate([
+  { $match: { gender: "Male" } },
+  {
+    $group: {
+      _id: "$gender",
+      totalAge: { $sum: "$age" }
+    }
+  }
+])
+
+✔ Filters early
+✔ Groups fewer documents
+✔ Faster
+
+🔹 Common Recommended Order
+$match   → filter data early
+$sort    → if needed (with index)
+$group   → aggregate data
+$project → reshape output
+$limit   → restrict results
+
+🔹 Why order matters?
+
+1️⃣ Performance optimization
+2️⃣ Correct results
+3️⃣ Reduced memory usage
+4️⃣ Better index usage
+
+🎯 Interview-Ready Answer
+The order of aggregation stages is important because each stage processes the output of the previous one. Placing filtering stages like $match early improves performance and ensures correct and efficient aggregation results.
+
+🔹 Relationships & Data Modeling (MERN Focus)
+
+45. How do you model relationships in MongoDB?
+
+In MongoDB, relationships are modeled in two main ways:
+1️⃣ Embedding
+2️⃣ Referencing
+
+The choice depends on data size, access pattern, and relationship type.
+
+🔹 1️⃣ Embedding (Store data together)
+Related data is stored inside the same document.
+
+Example (User + Address)
+{
+  _id: 1,
+  name: "Prem",
+  address: {
+    city: "Hyderabad",
+    pincode: 500081
+  }
+}
+
+✔ Faster reads
+✔ No joins
+✔ Atomic updates
+
+🔹 2️⃣ Referencing (Store data separately)
+Related data is stored in different collections and linked using IDs.
+
+Example (User + Orders)
+users
+
+{ _id: 1, name: "Prem" }
+
+orders
+
+{ orderId: 101, userId: 1, amount: 2000 }
+
+✔ Avoids data duplication
+✔ Better for large or growing data
+
+🔹 How to choose? (Interview Key Point)
+Use Case	           Preferred
+One-to-one	          Embedding
+One-to-few	          Embedding
+One-to-many (large)	  Referencing
+Frequently accessed together	Embedding
+Data grows unbounded	Referencing
+
+🎯 Interview-Ready Answer
+Relationships in MongoDB are modeled using embedding or referencing. Embedding stores related data in the same document for fast access, while referencing stores related data in separate collections using IDs, which is suitable for large or growing datasets.
+
+46. How does MongoDB handle joins?
+
+MongoDB handles joins primarily using the $lookup stage in the aggregation framework.
+$lookup performs a LEFT OUTER JOIN between two collections.
+
+🔹 Using $lookup (Main Way)
+Syntax
+{
+  $lookup: {
+    from: "foreignCollection",
+    localField: "localKey",
+    foreignField: "foreignKey",
+    as: "resultArray"
+  }
+}
+
+Example
+
+users
+
+{ _id: 1, name: "Prem" }
+
+orders
+
+{ orderId: 101, userId: 1, amount: 2000 }
+
+db.users.aggregate([
+  {
+    $lookup: {
+      from: "orders",
+      localField: "_id",
+      foreignField: "userId",
+      as: "orders"
+    }
+  }
+])
+
+Result
+{
+  _id: 1,
+  name: "Prem",
+  orders: [{ orderId: 101, amount: 2000 }]
+}
+
+✔ Joined data appears as an array
+
+🔹 Important Points (Interview)
+$lookup = LEFT JOIN
+Matching docs go into an array
+Non-matching → empty array
+Index foreignField for performance
+Can be combined with $unwind, $match, $project
+
+🎯 Interview-Ready Answer
+MongoDB handles joins using the $lookup stage in the aggregation framework, which performs a left outer join between collections. The joined data is returned as an array, and for performance reasons, joins are used sparingly in favor of embedding or application-level joins.
+
+47. What is denormalization?
+
+Denormalization is the process of storing related data together (duplicating data) to reduce joins and improve read performance.
+MongoDB often prefers denormalization for faster reads.
+
+🔹 Denormalization vs Normalization (Quick)
+
+Normalization → data split into multiple collections (less duplication)
+Denormalization → data combined in one document (more duplication)
+
+🔹 Example
+Normalized (RDBMS-style)
+
+users
+
+{ _id: 1, name: "Prem" }
+
+orders
+
+{ orderId: 101, userId: 1, amount: 2000 }
+
+Requires join to get user + orders ❌
+
+Denormalized (MongoDB-style)
+{
+  _id: 1,
+  name: "Prem",
+  orders: [
+    { orderId: 101, amount: 2000 },
+    { orderId: 102, amount: 1500 }
+  ]
+}
+
+✔ No join needed
+✔ Faster reads
+
+🔹 Why MongoDB encourages denormalization?
+1️⃣ Faster read performance
+2️⃣ Fewer $lookup operations
+3️⃣ Better scalability
+4️⃣ Matches document-based design
+
+🔹 When to use denormalization?
+
+✔ Read-heavy applications
+✔ Data accessed together frequently
+✔ One-to-few relationships
+
+❌ Write-heavy systems
+❌ Frequently changing shared data
+
+🎯 Interview-Ready Answer
+Denormalization in MongoDB is the practice of embedding or duplicating related data within a single document to reduce joins and improve read performance. While it increases data redundancy, it is commonly used in read-heavy applications for better performance.
+
+48. One-to-one, One-to-many, Many-to-many in MongoDB
+
+✅ One-to-One, One-to-Many, Many-to-Many relationships in MongoDB
+
+MongoDB models relationships mainly using embedding or referencing, depending on how data is accessed and how much it grows.
+
+🔹 1️⃣ One-to-One Relationship
+
+👉 Best choice: Embedding
+
+Example: User ↔ Profile
+{
+  _id: 1,
+  name: "Prem",
+  profile: {
+    dob: "2000-05-10",
+    gender: "Male"
+  }
+}
+
+✔ Data accessed together
+✔ Fast reads
+✔ Atomic updates
+
+When to use
+Small, tightly coupled data
+
+Always fetched together
+
+🔹 2️⃣ One-to-Many Relationship
+Case A: One-to-Few → Embedding
+Example: User ↔ Addresses
+{
+  _id: 1,
+  name: "Prem",
+  addresses: [
+    { city: "Hyderabad" },
+    { city: "Vizag" }
+  ]
+}
+
+✔ Limited number of children
+✔ Read-optimized
+
+Case B: One-to-Many (Large) → Referencing
+Example: User ↔ Orders (many orders)
+
+users
+
+{ _id: 1, name: "Prem" }
+
+orders
+
+{ orderId: 101, userId: 1, amount: 2000 }
+
+✔ Orders can grow infinitely
+✔ Avoids large documents
+
+🔹 3️⃣ Many-to-Many Relationship
+
+👉 Best choice: Referencing (sometimes hybrid)
+
+Example: Students ↔ Courses
+
+students
+
+{ _id: 1, name: "Prem", courseIds: [101, 102] }
+
+courses
+
+{ _id: 101, name: "MongoDB" }
+{ _id: 102, name: "Node.js" }
+
+
+✔ Flexible
+✔ Scales well
+✔ Joined using $lookup or app logic
+
+🎯 Interview-Ready Answer
+In MongoDB, one-to-one and one-to-few relationships are usually modeled using embedding for fast access, while one-to-many (large) and many-to-many relationships are modeled using referencing to avoid large documents and improve scalability.
+
+🔹 MongoDB with Node.js / Mongoose (MERN Specific)
+
+49. What is Mongoose?
+
+Mongoose is an ODM (Object Data Modeling) library for MongoDB and Node.js.
+
+Key points:
+Provides a schema-based structure
+Helps with data validation
+Makes MongoDB queries easier and cleaner
+Used widely in MERN stack
+
+👉 Interview line:
+“Mongoose is an ODM library that provides schemas, models, and validation for MongoDB in Node.js applications.”
+
+50. What is a Schema in Mongoose?
+
+A Schema defines the structure of a document in a collection.
+
+It specifies:
+
+Fields and data types
+Required fields
+Default values
+Validation rules
+
+Example:
+const userSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  age: { type: Number, min: 18 },
+  email: { type: String, unique: true }
+});
+
+👉 Interview line:
+“Schema defines how data should look in MongoDB.”
+
+51. What are models in Mongoose?
+
+A Model is a compiled version of a schema.
+
+Purpose:
+Used to create, read, update, delete documents
+Represents a MongoDB collection
+
+Example:
+const User = mongoose.model("User", userSchema);
+
+👉 Interview line:
+“Schema is a blueprint, model is used to interact with the database.”
+
+52. What is validation in Mongoose?
+
+Validation ensures data correctness before saving to MongoDB.
+
+Types of validation:
+Required fields
+Min / Max values
+Match (regex)
+Custom validators
+
+Example:
+email: {
+  type: String,
+  required: true,
+  match: /.+\@.+\..+/
+}
+
+👉 Interview line:
+“Mongoose validation prevents invalid data from being saved.”
