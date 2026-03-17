@@ -349,3 +349,77 @@ componentWillUnmount is used to clean up resources like event listeners, timers,
 🎯 Final Interview Tip
 👉 Always say this line (very impactful):
 “We start side effects in componentDidMount and clean them up in componentWillUnmount to avoid memory leaks.”
+
+8. 📌 Why do we use super(props) in constructor?
+🧠 Core Idea
+When a class extends another class, it must call the parent class constructor.
+
+👉 In React:
+MyComponent extends React.Component
+So we must call parent constructor → super()
+
+🔥 Why specifically super(props)?
+✅ 1. Calls Parent (React.Component) Constructor
+super(props);
+
+👉 This ensures React sets up:
+this.props
+Component internals
+
+✅ 2. Makes this.props Available in Constructor
+❌ Without super(props)
+constructor(props) {
+  super();
+  console.log(this.props); // ❌ undefined
+}
+✅ With super(props)
+constructor(props) {
+  super(props);
+  console.log(this.props); // ✅ works
+}
+✅ 3. Required Before Using this
+
+👉 JavaScript rule:
+You cannot use this in a child class constructor until super() is called
+
+❌ Wrong
+constructor(props) {
+  this.state = {}; // ❌ Error
+  super(props);
+}
+✅ Correct
+constructor(props) {
+  super(props);
+  this.state = {}; // ✅
+}
+
+🧠 Simple Analogy
+React.Component → Parent 👨
+MyComponent → Child 👶
+
+👉 Before child uses anything (this),
+it must call parent → super(props)
+
+🧩 Full Example
+class MyComponent extends React.Component {
+  constructor(props) {
+    super(props); // Step 1: call parent constructor
+    this.state = { count: 0 }; // Step 2: initialize state
+  }
+
+  render() {
+    return <h1>{this.props.name}</h1>;
+  }
+}
+
+⚡ Important Note (Interview Trick)
+👉 If you don’t define a constructor, React handles it internally.
+👉 You only need super(props) when:
+
+You write your own constructor
+
+✅ One-line Interview Answer:
+super(props) is used to call the parent (React.Component) constructor so that this.props is initialized and we can use this inside the constructor.
+
+🎯 Best Interview Closing Line
+Without calling super(props), we cannot access this.props or use this inside the constructor.
