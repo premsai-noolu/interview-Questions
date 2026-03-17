@@ -1,0 +1,279 @@
+1. Tree Shaking:
+Tree shaking is a process of removing the unwanted code that
+we do not use while developing the application.
+In computing, tree shaking is a dead code elimination
+technique that is applied when optimizing code.
+
+Example Without Tree Shaking
+math.js
+export function add(a, b) {
+  return a + b;
+}
+
+export function subtract(a, b) {
+  return a - b;
+}
+
+export function multiply(a, b) {
+  return a * b;
+}
+
+app.js
+import { add } from "./math.js";
+
+console.log(add(2, 3));
+
+Here math.js has 3 functions:
+add
+subtract
+multiply
+
+But in app.js we are only using add().
+
+What Happens Without Tree Shaking
+The bundle will include all functions:
+
+add()
+subtract()
+multiply()
+
+Even though only add() is used.
+This makes the bundle larger.
+
+What Happens With Tree Shaking
+During build (Webpack/Vite production build):
+Unused functions are removed.
+Final bundle will contain only:
+
+function add(a, b) {
+  return a + b;
+}
+console.log(add(2, 3));
+
+subtract() and multiply() are removed.
+This reduces bundle size.
+
+2. Optional Chaining (?.) is a JavaScript feature used in React (and JavaScript) to safely access nested object properties without causing errors if something is null or undefined.
+
+Problem Without Optional Chaining
+
+Consider this object:
+
+const user = {
+  profile: {
+    name: "Prem"
+  }
+};
+
+If you try to access:
+console.log(user.profile.name);
+✅ Works fine.
+
+But if profile is undefined:
+
+const user = {};
+console.log(user.profile.name);
+
+❌ Error:
+Cannot read property 'name' of undefined
+Solution: Optional Chaining
+
+Using ?.
+
+console.log(user.profile?.name);
+
+Now if profile is undefined:
+✅ It does not throw an error
+It returns undefined.
+
+React Example (Very Common)
+
+In React we often get data from APIs.
+Example API response:
+
+const restaurant = {
+  info: {
+    name: "Pizza Hut"
+  }
+};
+
+Accessing data:
+restaurant.info.name
+
+But sometimes API data is not loaded yet.
+
+So we use:
+restaurant?.info?.name
+
+This prevents the app from crashing.
+
+Example in React Component
+function RestaurantCard({ data }) {
+  return (
+    <div>
+      <h2>{data?.info?.name}</h2>
+      <p>{data?.info?.rating}</p>
+    </div>
+  );
+}
+
+If data or info is missing, React won’t throw an error.
+
+How It Works
+object?.property
+
+Meaning:
+If object exists → access property
+If object is null/undefined → return undefined
+
+Interview Definition
+Optional chaining (?.) is a JavaScript feature that allows safe access to nested object properties without throwing errors if an intermediate property is null or undefined.
+
+3. Q ) How will useEffect behave if we don't add a
+dependency array?
+
+1️⃣ Without Dependency Array
+If no dependency array is provided, useEffect runs after every render of the component.
+Runs after initial render
+Runs after every re-render
+
+useEffect(() => {
+  console.log("Effect executed");
+});
+
+👉 Example: If state changes and component re-renders, the effect runs again.
+
+2️⃣ Empty Dependency Array []
+If the dependency array is empty, the effect runs only once after the initial render.
+
+useEffect(() => {
+  console.log("Effect executed");
+}, []);
+
+Runs only once
+Similar to componentDidMount in class components.
+
+⚠️ Note: It will run again only if the component unmounts and mounts again.
+
+3️⃣ With Dependencies [value]
+If you pass variables in the dependency array, the effect runs:
+After initial render
+Whenever those dependencies change
+
+useEffect(() => {
+  console.log("Effect executed");
+}, [count]);
+
+👉 Runs again only when count changes.
+
+✅ One-line interview answer:
+In React, useEffect without a dependency array runs after every render, with an empty array it runs only once after the initial render, and with dependencies it runs after the initial render and whenever those dependencies change.
+
+4. 📌 What is SPA in React?
+
+SPA (Single Page Application) is a type of web application that loads a single HTML page once and then dynamically updates the content without reloading the entire page.
+
+⚛️ In React:
+React is commonly used to build SPAs where:
+Only one HTML file is loaded (index.html)
+Navigation between pages happens using JavaScript (client-side routing)
+UI updates happen without full page refresh
+
+🔄 How it works:
+When you click a link (e.g., Home → About)
+React updates only the required component
+The browser does NOT reload the page
+
+🧠 Example:
+Using React Router:
+<Route path="/about" element={<About />} />
+
+👉 Clicking /about loads the About component without refreshing the page
+
+🚀 Advantages:
+
+Faster performance ⚡
+Smooth user experience (no reloads)
+Less server load
+Feels like a mobile app
+
+⚠️ Disadvantages:
+
+Initial load can be heavy
+SEO can be tricky (needs SSR or tools)
+More complex state management
+
+✅ One-line interview answer:
+A Single Page Application (SPA) in React is a web app that loads a single HTML page and dynamically updates content using client-side routing without reloading the page.
+
+5. 📌 Order of Lifecycle Methods (Class Components)
+
+🔄 Mounting Phase (when component is created)
+constructor()
+render()
+componentDidMount()
+
+🔁 Updating Phase (when state/props change)
+render()
+componentDidUpdate()
+
+❌ Unmounting Phase (when component is removed)
+componentWillUnmount()
+
+🧠 Simple Example
+import React from "react";
+
+class MyComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    console.log("1. Constructor called");
+    this.state = { count: 0 };
+  }
+
+  componentDidMount() {
+    console.log("3. Component Did Mount");
+  }
+
+  componentDidUpdate() {
+    console.log("5. Component Did Update");
+  }
+
+  componentWillUnmount() {
+    console.log("6. Component Will Unmount");
+  }
+
+  render() {
+    console.log("2. Render called");
+    return (
+      <div>
+        <h2>Count: {this.state.count}</h2>
+        <button onClick={() => this.setState({ count: this.state.count + 1 })}>
+          Increment
+        </button>
+      </div>
+    );
+  }
+}
+
+export default MyComponent;
+
+🔍 What happens step-by-step?
+🟢 Initial Load (Mounting)
+1. Constructor called
+2. Render called
+3. Component Did Mount
+🔵 When Button is Clicked (Update)
+4. Render called
+5. Component Did Update
+🔴 When Component is Removed
+6. Component Will Unmount
+
+🎯 Key Understanding
+constructor → initialize state
+render → returns UI (JSX)
+componentDidMount → API calls / setup
+componentDidUpdate → reacts to updates
+componentWillUnmount → cleanup (timers, subscriptions)
+
+✅ One-line Interview Answer:
+In class components, lifecycle order is: constructor → render → componentDidMount (mounting), then render → componentDidUpdate (updating), and finally componentWillUnmount during unmounting.

@@ -1,0 +1,111 @@
+1. What’s the difference between state and props?
+
+Difference Between State and Props in React
+Feature	                State	                                         Props
+Definition	State is data managed inside a component.	               Props are data passed from a parent component to a child component.
+Mutability	Mutable – can be changed using setState or useState.	   Immutable – cannot be modified by the receiving component.
+Ownership	Managed within the component itself.	                   Managed by the parent component.
+Purpose	    Used to store dynamic data that changes over time.	       Used to pass data and configuration to child components.
+Updates	    Updating state re-renders the component.	               When props change, the child component re-renders.
+
+Example
+Using Props
+
+function Greeting(props) {
+  return <h1>Hello {props.name}</h1>;
+}
+
+function App() {
+  return <Greeting name="Prem" />;
+}
+
+Here:
+name is a prop
+Passed from App (parent) → Greeting (child)
+
+Using State
+import { useState } from "react";
+
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <>
+      <p>{count}</p>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+    </>
+  );
+}
+
+Here:
+count is state
+Managed inside the Counter component
+Updated using setCount
+
+Simple Interview Answer (Best Way to Say)
+Props are read-only data passed from parent to child components, while state is mutable data managed within the component itself to handle dynamic changes.
+
+Common Follow-up Questions Interviewers Ask
+Can a child component modify props?
+❌ No. Props are read-only.
+
+How can a child update parent state?
+By passing a function from parent to child through props.
+
+What happens when state changes?
+React re-renders the component.
+
+*** In React, a child component cannot directly modify the parent’s state.
+Instead, the parent passes a function to the child via props, and the child calls that function to update the parent state.
+
+Example: Child Updating Parent State
+Parent Component
+import { useState } from "react";
+import Child from "./Child";
+
+function Parent() {
+  const [message, setMessage] = useState("Hello from Parent");
+
+  const updateMessage = () => {
+    setMessage("Message updated by Child");
+  };
+
+  return (
+    <div>
+      <h2>{message}</h2>
+      <Child changeMessage={updateMessage} />
+    </div>
+  );
+}
+
+export default Parent;
+Child Component
+function Child(props) {
+  return (
+    <div>
+      <button onClick={props.changeMessage}>
+        Update Parent Message
+      </button>
+    </div>
+  );
+}
+
+export default Child;
+
+How It Works
+Parent component
+Has state: message
+Defines a function: updateMessage
+Parent passes function as prop
+
+<Child changeMessage={updateMessage} />
+
+Child component calls the function
+
+props.changeMessage()
+
+Parent state updates → Parent re-renders
+
+Short Interview Answer
+
+A child component cannot directly update the parent state. Instead, the parent passes a function to the child via props, and the child calls that function to update the parent state.
