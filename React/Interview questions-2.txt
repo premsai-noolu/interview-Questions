@@ -277,3 +277,75 @@ componentWillUnmount → cleanup (timers, subscriptions)
 
 ✅ One-line Interview Answer:
 In class components, lifecycle order is: constructor → render → componentDidMount (mounting), then render → componentDidUpdate (updating), and finally componentWillUnmount during unmounting.
+
+6. 📌 Why do we use componentDidMount?
+🟢 Definition
+componentDidMount is called once after the component is added to the DOM.
+
+🎯 Why we use it?
+👉 Because at this point:
+The component is fully loaded in the DOM
+It is safe to perform side effects
+
+🔥 Common Uses
+API Calls (Most Important)
+DOM Manipulation
+Starting timers / subscriptions
+
+🧠 Example (API Call)
+componentDidMount() {
+  fetch("https://api.example.com/data")
+    .then(res => res.json())
+    .then(data => {
+      this.setState({ data });
+    });
+}
+
+👉 Data is fetched after UI is rendered once
+✅ One-line Interview Answer:
+componentDidMount is used to perform side effects like API calls after the component is mounted to the DOM.
+
+7. 📌 Why do we use componentWillUnmount?
+🔴 Definition
+componentWillUnmount is called just before the component is removed from the DOM.
+
+🎯 Why we use it?
+👉 To clean up things created earlier
+🔥 Common Uses
+Remove event listeners
+Clear timers (setInterval / setTimeout)
+Cancel API requests
+Cleanup subscriptions
+
+🧠 Example (Event Listener Cleanup)
+componentDidMount() {
+  window.addEventListener("resize", this.handleResize);
+}
+
+componentWillUnmount() {
+  window.removeEventListener("resize", this.handleResize);
+}
+⚠️ Why cleanup is important?
+❌ Without cleanup:
+Memory leaks
+Duplicate event calls
+Performance issues
+
+🧠 Simple Analogy
+
+componentDidMount → Start / Setup 🟢
+componentWillUnmount → Stop / Cleanup 🔴
+
+👉 Like:
+Start music when entering a room 🎵
+Stop music when leaving 🚪
+
+🔁 Flow Together
+Mount → componentDidMount (start things)
+Unmount → componentWillUnmount (stop things)
+✅ One-line Interview Answer:
+componentWillUnmount is used to clean up resources like event listeners, timers, or subscriptions before a component is removed from the DOM.
+
+🎯 Final Interview Tip
+👉 Always say this line (very impactful):
+“We start side effects in componentDidMount and clean them up in componentWillUnmount to avoid memory leaks.”
