@@ -423,3 +423,75 @@ super(props) is used to call the parent (React.Component) constructor so that th
 
 🎯 Best Interview Closing Line
 Without calling super(props), we cannot access this.props or use this inside the constructor.
+
+9. ✅ Why can’t the useEffect callback be async?
+
+In React, the callback function passed to useEffect cannot be async because of how React handles its return value.
+
+🔑 Core Reason
+1. Return Type Mismatch
+
+useEffect expects the callback to return
+Nothing (undefined), OR
+A cleanup function
+
+useEffect(() => {
+  return () => {
+    // cleanup
+  };
+}, []);
+
+But an async function always returns a Promise
+
+useEffect(async () => {
+  // ❌ This returns a Promise, not a cleanup function
+});
+
+👉 React cannot treat a Promise as a cleanup function → breaks expected behavior
+
+2. Cleanup Handling Problem
+
+React uses the returned function to:
+Clean up subscriptions
+Cancel timers
+Avoid memory leaks
+
+If the callback is async:
+React gets a Promise instead of a function
+It doesn’t know when or how to run cleanup
+
+3. Execution & Lifecycle Control
+
+React needs synchronous control over:
+When effects run
+When cleanup happens
+
+Async functions introduce:
+Delayed execution
+Unpredictable timing
+
+👉 This makes lifecycle management unreliable
+
+✅ Correct Pattern (Recommended Way)
+Instead of making useEffect async, define an async function inside it:
+
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const result = await fetch("/api/data");
+      const data = await result.json();
+      setData(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  fetchData();
+
+  return () => {
+    // cleanup if needed
+  };
+}, []);
+
+🎯 Interview One-Liner
+👉 “We cannot make useEffect async because it must return either a cleanup function or nothing, but async functions return a Promise, which React cannot use for cleanup.”
