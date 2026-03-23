@@ -733,3 +733,117 @@ Used with Tailwind for optimization
 CSS → cooking manually 🍳
 Tailwind → ready ingredients kit 🍱
 PostCSS → kitchen machine (auto-processing) ⚙️
+
+12. 📦 1. What is Prop Drilling?
+
+👉 Prop drilling = passing data through multiple components unnecessarily
+
+💡 Simple Idea
+App → Parent → Child → GrandChild
+
+👉 Data is needed in GrandChild, but we pass it through:
+
+Parent ❌ (doesn’t use it)
+Child ❌ (doesn’t use it)
+
+📦 Example
+function App() {
+  const data = "Hello";
+  return <Parent data={data} />;
+}
+
+function Parent({ data }) {
+  return <Child data={data} />;
+}
+
+function Child({ data }) {
+  return <h1>{data}</h1>;
+}
+
+❌ Problem
+Hard to maintain
+Too many props
+Messy code
+
+🎯 One-liner (Interview)
+👉Prop drilling is passing data through intermediate components that don’t use it.
+
+🔼 2. What is Lifting State Up?
+👉 Move state from child → parent
+
+💡 Why?
+When multiple components need same data
+
+📦 Example
+function Parent() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <>
+      <Child count={count} setCount={setCount} />
+    </>
+  );
+}
+
+🎯 Idea
+👉 Parent becomes source of truth
+
+🎯 One-liner
+Lifting state up means moving state to a common parent to share it between components.
+
+🌐 3. Context API (Solution for Prop Drilling)
+👉 Used to avoid prop drilling
+
+Instead of passing props:
+👉 Share data globally
+
+🧩 4. Context Provider & Consumer
+🟢 Provider
+👉 Sends data
+
+<MyContext.Provider value="Hello">
+  <App />
+</MyContext.Provider>
+🔵 Consumer
+
+👉 Receives data
+
+const data = useContext(MyContext);
+
+🎯 One-liner
+Provider → gives data
+Consumer → uses data
+
+❓ 5. Default Value in Context
+👉 YES ✅
+If no Provider value is passed:
+
+It uses default value
+const MyContext = createContext("Default");
+
+🎯 Example
+<MyContext.Provider>
+  <App />
+</MyContext.Provider>
+
+👉 Output = "Default"
+
+🔥 Final Interview Summary
+👉 Prop Drilling
+Passing data through unnecessary components
+👉 Lifting State Up
+Move state to parent
+Parent controls data
+👉 Context API
+Avoid prop drilling
+Share global data
+👉 Provider & Consumer
+Provider → gives data
+Consumer → uses data
+👉 Default Value
+Used when no provider value is given
+
+💡 Real-Life Analogy
+Prop drilling → Passing message through many people 📞
+Context → Group broadcast 📢
+Lifting state → Boss controls data 👨‍💼
