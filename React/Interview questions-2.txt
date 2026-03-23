@@ -847,3 +847,203 @@ Used when no provider value is given
 Prop drilling → Passing message through many people 📞
 Context → Group broadcast 📢
 Lifting state → Boss controls data 👨‍💼
+
+13. 🚀 Episode 12: Let’s Build Our Store (Full Detailed Explanation)
+
+🧠 1. Why Do We Need Redux?
+Before Redux, we use:
+props drilling
+useState / useContext
+
+Problem:
+Data becomes messy when app grows
+Passing props through many components is painful
+
+👉 Solution:
+Use a centralized store to manage state
+
+🏬 2. What is Redux?
+👉 Redux is a global state management library
+
+Think of it like:
+🧠 “A single brain (store) that holds all your app data”
+
+🧩 Redux Architecture (Core Flow)
+Component → dispatch(action) → reducer → store → UI updates
+Step-by-step:
+User clicks button
+Component dispatches an action
+Reducer updates state
+Store holds updated state
+UI re-renders automatically
+
+⚖️ 3. useContext vs Redux
+
+🔹 useContext
+Local state management
+Simple apps
+Less boilerplate
+
+🔹 Redux
+Global state
+Large applications
+Predictable flow
+
+📌 Key takeaway:
+
+👉 Use useContext for small apps
+👉 Use Redux for scalable apps
+
+🛠️ 4. Redux Toolkit (RTK) – Why It Exists?
+Old Redux problem:
+
+Too much boilerplate
+Complex setup
+
+👉 Redux Toolkit solves this
+
+Benefits:
+Less code
+Easy setup
+Built-in best practices
+Handles immutability (using Immer)
+Supports async easily
+
+📌 Interview line:
+“Redux Toolkit is the official recommended way to write Redux logic.”
+
+🧱 5. Store (The Brain)
+
+Store = central place where all state lives
+
+Example:
+import { configureStore } from '@reduxjs/toolkit';
+
+const store = configureStore({
+  reducer: {
+    cart: cartReducer,
+  },
+});
+
+📦 6. Slice (Most Important Concept)
+
+👉 Slice = A piece of Redux state + logic
+Think:
+🧩 “Each feature has its own slice”
+
+Example:
+import { createSlice } from '@reduxjs/toolkit';
+
+const cartSlice = createSlice({
+  name: 'cart',
+  initialState: {
+    items: [],
+  },
+  reducers: {
+    addItem: (state, action) => {
+      state.items.push(action.payload);
+    },
+    removeItem: (state) => {
+      state.items.pop();
+    },
+  },
+});
+
+export const { addItem, removeItem } = cartSlice.actions;
+export default cartSlice.reducer;
+
+🔑 Key Points:
+name → slice name
+initialState → starting state
+reducers → functions to update state
+
+👉 RTK automatically:
+
+Creates actions
+Creates reducer
+
+🔄 7. Reducer
+
+👉 Reducer = function that updates state
+📌 Rule:
+Always return new state (immutability)
+
+BUT:
+👉 In RTK, you can write like mutation:
+state.value += 1;
+
+📤 8. Dispatch (Very Important)
+👉 Dispatch = function used to send actions
+
+Example:
+dispatch(addItem("Pizza"));
+Flow:
+You dispatch action
+Reducer updates state
+
+📌 Interview definition:
+“Dispatch is used to send actions to Redux store.”
+
+🔍 9. Selector
+
+👉 Selector = function to read data from store
+
+Example:
+import { useSelector } from 'react-redux';
+
+const items = useSelector((store) => store.cart.items);
+
+Why selectors?
+Avoid direct state access
+Improve performance
+Reusable logic
+
+⚙️ 10. createSlice Configuration (Important for Interview)
+createSlice({
+  name: "cart",
+  initialState: {},
+  reducers: {},
+  extraReducers: {}
+});
+Explanation:
+Field	                         Meaning
+name	                         Slice name
+initialState	                 Initial data
+reducers	                     Actions + logic
+extraReducers	                 Handle external actions
+
+🔁 11. Complete Flow Example
+
+Step 1: User clicks button
+dispatch(addItem("Burger"));
+
+Step 2: Action sent
+{ type: "cart/addItem", payload: "Burger" }
+
+Step 3: Reducer runs
+state.items.push("Burger");
+
+Step 4: Store updates
+Step 5: UI updates automatically
+
+🔥 13. When to Use Redux?
+
+Use Redux when:
+Large application
+Shared data across many components
+Complex state logic
+
+🎯 14. Interview Summary (Must Remember)
+👉 Redux Toolkit is preferred over Redux
+👉 Slice contains:
+
+state
+reducer
+actions
+
+👉 Flow:
+dispatch → reducer → store → UI
+
+👉 Hooks:
+useDispatch()
+useSelector()
