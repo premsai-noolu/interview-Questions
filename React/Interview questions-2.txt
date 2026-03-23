@@ -495,3 +495,98 @@ useEffect(() => {
 
 🎯 Interview One-Liner
 👉 “We cannot make useEffect async because it must return either a cleanup function or nothing, but async functions return a Promise, which React cannot use for cleanup.”
+
+10. 🚀 1. What is lazy() in React?
+
+In React:
+👉 lazy() is used to load components only when needed (on demand)
+
+Normally:
+All components load at once ❌ (big bundle, slow app)
+
+With lazy():
+Components load only when required ✅
+
+📦 Example
+import React, { lazy, Suspense } from "react";
+
+const Grocery = lazy(() => import("./Grocery"));
+
+function App() {
+  return (
+    <Suspense fallback={<h1>Loading...</h1>}>
+      <Grocery />
+    </Suspense>
+  );
+}
+
+🎯 Why use lazy()?
+Reduce initial loading time
+Improve performance
+Load heavy components only when needed
+
+👉 Example:
+Login page loads first
+Dashboard loads later (lazy)
+
+⏳ 2. What is Suspense?
+👉 Suspense is used to handle loading state of lazy components
+
+💡 Simple Meaning
+When a component is loading:
+Show something like "Loading..."
+📦 Example
+<Suspense fallback={<h1>Loading...</h1>}>
+  <LazyComponent />
+</Suspense>
+
+👉 Until component loads → shows Loading...
+
+🎯 Why use Suspense?
+Better user experience
+No blank screen
+Handles async loading cleanly
+
+📊 4. Code Splitting (Big Concept)
+👉 Breaking big JS file into smaller chunks
+
+✅ Advantages
+Faster loading 🚀
+Better performance
+Saves bandwidth
+Good for mobile
+❌ Disadvantages
+Slight delay when loading component
+More complexity
+Need proper handling (Suspense)
+
+🎯 5. When to Use lazy() + Suspense?
+
+Use when:
+✅ Large apps
+Many components
+✅ Rarely used pages
+Admin panel
+Settings
+Reports
+✅ Heavy components
+Charts
+Maps
+Large UI
+
+🧠 Interview Summary (Very Important)
+👉 lazy()
+Used for code splitting — loads components only when needed
+
+👉 Suspense
+Shows fallback UI while lazy component is loading
+
+👉 Together
+Improve performance + user experience
+
+🔥 Real-Life Example
+Swiggy/Zomato:
+Home page loads fast
+Restaurant page loads later
+
+👉 That’s lazy loading in action
