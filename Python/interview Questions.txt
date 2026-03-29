@@ -1,28 +1,20 @@
 1. Is Python a compiled language or an interpreted language?
 
 Python is an interpreted language, not a compiled one — but with a small twist.
-
 Here’s the simple explanation 👇
-
 When you run a Python program, Python first compiles your code into bytecode (a lower-level, platform-independent code).
-
 Then, the Python interpreter (like CPython) reads and executes that bytecode line by line.
-
 So you can think of it like this:
-
 🧠 Python is compiled first (to bytecode) and then interpreted (executed line by line).
 
 ✅ Example:
 When you run
-
 python my_program.py
 
 Python converts my_program.py → my_program.pyc (bytecode).
-
 Then the interpreter runs that bytecode.
 
 In short:
-
 Python is interpreted because the code is executed by an interpreter, not directly by the machine.
 
 --------------
@@ -41,14 +33,9 @@ Statically typed languages are usually faster to execute due to type checking at
 
 In Python, built-in data types are the basic types of values that Python already knows how to work with — you don’t need to define them yourself.
 
-Here’s a simple breakdown 👇
-
 🧱 1. Numeric Types
-
 Used for numbers.
-
 int → Whole numbers (e.g., 5, -3)
-
 float → Decimal numbers (e.g., 3.14, -2.5)
 
 complex → Numbers with real and imaginary parts (e.g., 2 + 3j)

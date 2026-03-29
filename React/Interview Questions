@@ -24,11 +24,8 @@ Instead, it first creates a Virtual DOM — a lightweight copy of the real DOM.
 🔄 4. React updates efficiently
 
 When something changes (like data or state):
-
 React compares the new Virtual DOM with the old one (this is called reconciliation).
-
 It finds what has actually changed.
-
 Then it updates only that part of the real DOM — not the whole page.
 
 👉 This makes React fast and efficient.
@@ -41,15 +38,10 @@ This makes it easier to track and debug how data moves.
 ✅ In short:
 
 React works by:
-
 Building UI using components
-
 Using JSX to describe how it looks
-
 Maintaining a Virtual DOM
-
 Updating the real DOM efficiently when things change
-
 That’s how React makes web apps fast, modular, and easy to manage 🚀
 
 ---
@@ -57,7 +49,6 @@ That’s how React makes web apps fast, modular, and easy to manage 🚀
 2. What is state in React and how do you update it?
 
 State is like a component’s memory — it holds data that can change over time.
-
 When the state changes, React automatically re-renders the component to show the new data on the screen.
 
 🧠 Example:
@@ -76,25 +67,18 @@ return (
 }
 
 🧩 What’s happening here:
-
 count → is the state variable (current value).
-
 setCount → is the function to update that value.
-
 useState(0) → sets the initial state to 0.
 
 When you click the button:
-
 setCount(count + 1) updates the state.
-
 React sees the change → re-renders the component → and shows the new count.
 
----
-
+---------
 3. What are props and default props in React?
 
 🧩 Props in React
-
 Props (short for properties) are like function arguments — they let you pass data from one component to another (usually from a parent to a child).
 
 Think of them as the inputs to a component.
@@ -109,14 +93,11 @@ return <h1>Hello, {props.name}!</h1>;
 <Welcome name="Prem" />
 
 Here:
-
 name is a prop.
-
 The Welcome component gets props.name = "Prem" and displays:
 👉 Hello, Prem!
 
 ⚙️ Default Props
-
 Default props are fallback values that a component uses if no prop is passed.
 
 👉 Example:
@@ -134,22 +115,16 @@ name: "Guest"
 <Welcome name="Prem" /> // Output: Hello, Prem!
 
 So,
-
 If you don’t pass a prop → it uses the default value.
-
 If you do pass one → it uses your value instead.
 
 ---
-
 3. What is JSX and how is it converted into JavaScript?
-
-💡 What is JSX?
 
 JSX stands for JavaScript XML.
 It lets you write HTML-like code inside JavaScript when building React components.
 
 👉 Example:
-
 const element = <h1>Hello, Prem!</h1>;
 
 Even though it looks like HTML, it’s not HTML — it’s a special syntax that React understands.
@@ -159,31 +134,22 @@ JSX makes your code easier to write and read because it lets you describe what y
 ⚙️ How JSX is converted into JavaScript
 
 Browsers cannot understand JSX directly, so it must be converted (transpiled) into regular JavaScript before running in the browser.
-
 This conversion is done by Babel (a popular JavaScript compiler).
-
 🧠 Example of conversion
 
 JSX:
-
 const element = <h1>Hello, Prem!</h1>;
-
 After Babel converts it:
-
 const element = React.createElement("h1", null, "Hello, Prem!");
 
 ⚡ What happens next
 
 React.createElement() creates a virtual DOM object (not a real HTML element).
-
 React uses this virtual DOM to figure out what to render on the real web page efficiently.
 
 ✅ In short:
-
 JSX → A syntax to write HTML-like code in JavaScript.
-
 Babel → Converts JSX into React.createElement() JavaScript code.
-
 React → Uses that to build and update the virtual DOM, which updates the real DOM efficiently.
 
 ---
@@ -221,13 +187,11 @@ return (
 }
 
 ✨ Shortcut syntax
-
 You can use a short form for fragments:
 
 function App() {
 return (
 <>
-
 <h1>Hello</h1>
 <p>Welcome to React!</p>
 </>
@@ -237,24 +201,18 @@ return (
 This does the same thing but is cleaner and more common.
 
 ⚙️ What happens in the DOM
-
 Fragments don’t create an extra <div> or wrapper tag —
 React just renders the child elements directly, keeping the DOM clean.
 
 ---
-
 5. What is the difference between controlled and uncontrolled components?
 
 ⚙️ 1. Controlled Components
-
 A controlled component is a form element (like <input>, <textarea>, etc.) whose value is controlled by React state.
 
-That means:
-
+That means
 The form data is stored in React state, not in the DOM.
-
 You use useState() (or this.state in class components) to manage the input’s value.
-
 Every time the user types something, React updates the state → re-renders the input.
 
 👉 Example:
@@ -265,7 +223,6 @@ function ControlledInput() {
 const [name, setName] = useState("");
 
 return (
-
 <div>
 <input
 type="text"
@@ -282,7 +239,6 @@ onChange={(e) => setName(e.target.value)} // updates state
 ⚙️ 2. Uncontrolled Components
 
 An uncontrolled component is where the form data is handled by the DOM itself, not React state.
-
 You use a ref to directly access the DOM value when needed.
 
 👉 Example:
@@ -307,9 +263,13 @@ return (
 
 ✅ Key idea: The input manages its own value — React just reads it when needed.
 
+🔥 Interview-Level Explanation
+👉 You can say:
+“In uncontrolled components, the input value updates in the DOM as the user types, but React does not track it. We access it later using refs. In controlled components, React manages the value using state.”
+
 ---
 
-6. 12. How does the useState hook work?
+6. How does the useState hook work?
 
 The useState hook allows you to add state to functional components. It returns a state variable and a setter function to update that state. When the state changes, React re-renders the component with the updated value.
 
@@ -318,7 +278,7 @@ Example:
 import { useState } from 'react';
 
 function Counter() {
-const [count, setCount] = useState(0);
+const [count, setCount] = useState(0);-
 
 return (
 
@@ -338,18 +298,12 @@ setCount is the function used to update state.
 
 7. What is useEffect in React and what is the role of its dependency array?
 
-💡 What is useEffect in React?
-
 useEffect is a Hook that lets you perform side effects in your React components.
-
 🧠 Side effects mean anything that affects something outside the component, such as:
 
 Fetching data from an API
-
 Manipulating the DOM directly
-
 Setting up timers or intervals
-
 Subscribing/unsubscribing to events
 
 ⚙️ Syntax:
@@ -470,23 +424,16 @@ return <h1>Hello, {username}!</h1>;
 }
 
 ✅ Output:
-
 Hello, Prem!
 
 🧩 When to use useContext
-
 Use it when:
-
 You need to share data across multiple components, especially at different levels of the component tree.
 
 Example use cases:
-
 Current user info (login data)
-
 Theme (light/dark mode)
-
 Language or localization settings
-
 Global app settings or preferences
 
 ⚠️ When not to use it
