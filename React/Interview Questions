@@ -650,6 +650,32 @@ Typing in the input (text) won’t trigger it again.
 
 ✅ Result: Better performance 🚀
 
+🔍 Let’s break it step by step
+🟢 Step 1: Initial render
+useMemo runs
+"Calculating..." logs
+👉 Total runs = 1
+
+🟢 Step 2: Click Increment (count changes)
+Dependency [count] changed
+useMemo runs again
+👉 Total runs = 2
+
+🔴 Step 3: Type in input (text changes)
+Now:
+setText(e.target.value)
+Component re-renders ✅
+But count is still same ❗
+Dependency [count] did NOT change
+👉 So React says:
+“I already calculated this before… I’ll reuse it.”
+👉 No new execution happens
+So:
+Previous total is reused (cached)
+"Calculating..." is NOT printed
+
+👉 New runs added = 0
+
 ---
 
 12. 🧩 What is useCallback in React?
