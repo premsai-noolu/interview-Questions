@@ -988,81 +988,15 @@ The client controls how that data is displayed or filtered.
 
 ---
 
-19. 🧠 What is the Context API in React?
-
-➡️ The Context API is a feature in React that lets you share data between components — without having to pass props manually at every level.
-
-It helps you avoid "prop drilling" — that’s when you pass props from parent → child → grandchild → great-grandchild, just to get data to a deep component.
-
-🌐 Using Context API (Cleaner Way)
-import React, { createContext, useContext } from "react";
-
-// 1️⃣ Create Context
-const UserContext = createContext();
-
-function App() {
-return (
-// 2️⃣ Provide the data
-<UserContext.Provider value="Prem">
-<Parent />
-</UserContext.Provider>
-);
-}
-
-function Parent() {
-return <Child />;
-}
-
-function Child() {
-return <GrandChild />;
-}
-
-function GrandChild() {
-// 3️⃣ Consume the data
-const user = useContext(UserContext);
-return <h1>Hello, {user}</h1>;
-}
-
-export default App;
-
-🧠 How it works:
-
-createContext() → creates a Context object.
-
-Provider → makes the data available to all child components.
-
-useContext() → allows any child to access that data directly, without prop drilling.
-
-🎯 When to Use Context API
-
-✅ Use it when you want to share data that many components need, like:
-
-User authentication info (logged in user)
-Theme (dark/light mode)
-App language
-Global settings
-
-🧾 In short (Interview Answer)
-
-The Context API in React allows data to be shared globally across components without passing props manually through every level.
-It solves the problem of prop drilling by using a Provider to supply data and the useContext hook to consume it in child components.
-
----
-
 20. 🧠 What is Persistent State?
 
 Persistent state means data that stays saved even after the page is refreshed or the user closes and reopens the app.
-
 Normally, React’s state (useState, useReducer) is temporary — it’s lost when you refresh the page.
 
 So we need to store it somewhere permanent, like:
-
 Browser storage (LocalStorage, SessionStorage)
-
 IndexedDB (for large data)
-
 Backend/database (for user-specific data)
-
 Cookies (for small authentication data)
 
 💾 1. Using Local Storage (most common way)
