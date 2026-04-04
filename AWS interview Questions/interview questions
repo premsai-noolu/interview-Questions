@@ -183,71 +183,44 @@ Best for batch jobs or fault-tolerant workloads
 
 Amazon S3 (Simple Storage Service) is a fully managed object storage service used to store any amount of data—from a few bytes to petabytes.
 You can use S3 for:
-
 Backups
-
 Archives
-
 Data lakes
-
 Big data analytics
-
 Log storage
-
 Hosting static websites
-
 Storing images, videos, files, etc.
 
 S3 stores data as objects inside buckets (similar to folders).
 
 ✅ Durability vs Availability (Very Important in Interviews)
-
 S3 provides two strong guarantees:
-
 1️⃣ Durability – “Your data will not be lost.”
-
 S3 offers 11 nines durability, written as:
-
 99.999999999% durability (11 nines)
-
 This means:
-
 AWS almost guarantees your data will never be lost.
-
 Even if a disk fails or a server crashes, your data is safe.
 
 How S3 achieves durability:
-
 Automatically replicates your object across multiple AZs (Availability Zones)
-
 Constantly monitors and repairs data
-
-Performs checksum validations
-
 Even if one AZ completely fails, your data remains safe in another.
 
 2️⃣ Availability – “You can access your data when you need it.”
-
 S3 Standard provides ~99.99% availability.
 
 This means:
-
 You may face downtime for only a few minutes per year.
-
 This ensures your data is accessible almost all the time.
 
 Different S3 storage classes offer different availability:
-
 S3 Standard: 99.99%
-
 S3 Standard-IA: 99.9%
-
 S3 One Zone-IA: 99.5%
-
 Glacier: Lower availability (retrieval takes minutes to hours)
 
 🧠 Simple Example to Understand Durability vs Availability
-
 Imagine storing your important files in three different lockers across three buildings:
 
 ✔ Durability
@@ -256,15 +229,13 @@ Even if one building catches fire, your files still exist in the other buildings
 ✔ Availability
 If one building is temporarily closed, you can still access your files from other buildings → data is accessible.
 
----
-
+------------------
 5. ✅ What is a VPC (Virtual Private Cloud)?
 
 A VPC is your own private network inside AWS.
 It behaves like a traditional on-premises network but runs in the AWS cloud.
 
 With a VPC, you control:
-
 Your IP address ranges
 Subnets
 Routing
@@ -276,7 +247,6 @@ It gives complete control over how your AWS resources communicate inside and out
 ✅ Why do we use a VPC? (Purpose)
 
 A VPC lets you:
-
 Isolate your workloads
 Secure your applications
 Control incoming/outgoing traffic
@@ -286,74 +256,51 @@ Connect to on-premises networks
 In simple words → VPC = Your own secure network inside AWS.
 
 ✅ Core Components of a VPC (Explained Simply)
-
 Below are the most important parts:
 
 1️⃣ Subnets – Divide your VPC
-
 A subnet is a small section inside your VPC.
-
 There are two types:
 
 Public subnet:
-
 Has internet access
-
 Used for EC2, ALB, Bastion, etc.
 
 Private subnet:
-
 No direct internet access
-
 Used for databases, backend servers
 
 2️⃣ Route Tables – Define where traffic goes
-
 A route table tells the network where to send traffic.
 
 Examples:
-
 Route internet traffic to Internet Gateway
-
 Route private traffic to NAT Gateway
-
 Route internal traffic inside VPC
 
 Think of it as Google Maps for your VPC: it tells packets which path to take.
 
 3️⃣ Internet Gateway (IGW) – Enables public internet access
-
 Attached to the VPC to give public subnets:
-
 Inbound access from internet
-
 Outbound access to internet
-
 Without IGW → no internet.
 
 4️⃣ NAT Gateway – Internet for private subnets
-
 Private subnets cannot directly access the internet.
-
 So NAT Gateway allows:
-
 Outbound internet access (for patching, updates)
-
 But blocks inbound traffic
-
 Used mainly for backend servers and databases.
 
 5️⃣ Security Groups (SG) – Instance-level firewall
 
 Stateful
 (If you allow inbound, outbound is automatically allowed)
-
 Applied to EC2, RDS, etc.
-
 Controls what traffic can reach an instance.
 
 Example:
-
 Allow port 80 from anywhere
 Allow SSH only from your IP
 
@@ -361,15 +308,11 @@ Allow SSH only from your IP
 
 Stateless
 (Inbound and outbound rules must be added separately)
-
 Acts as a second layer of security
-
 Controls traffic for entire subnets
 
 Example:
-
 Allow all internal traffic
-
 Deny dangerous ports
 
 7️⃣ Additional Components (optional but common)
@@ -383,7 +326,6 @@ Elastic IP (EIP): Static public IP
 A VPC is a private, secure, customizable network inside AWS containing subnets, route tables, gateways, and firewalls to control how your resources communicate.
 
 ---
-
 6. What is IAM, and why is it critical for security? Differentiate between an IAM User, Group, and Role.
 
 IAM, or Identity and Access Management, is AWS’s central service for controlling who can access AWS resources and what actions they can perform.
