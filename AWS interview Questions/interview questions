@@ -1159,7 +1159,6 @@ Amazon ECS (Elastic Container Service) is a fully managed container orchestratio
 It helps you run and manage Docker containers at scale without having to install or operate container orchestration software yourself.
 
 Think of ECS as the AWS tool that:
-
 Runs your containers
 Starts/stops them automatically
 Handles scaling
@@ -1170,13 +1169,9 @@ Connects containers to networks, load balancers, and IAM roles
 1. Fully managed
 
 AWS handles:
-
 Infrastructure management
-
 Scheduling containers
-
 Scaling
-
 Health checks
 
 You just define how your app should run.
@@ -1184,15 +1179,11 @@ You just define how your app should run.
 2. Works with EC2 or Fargate
 
 You can choose:
-
 ECS on EC2
-
 You manage the EC2 servers that run containers.
 
 ECS on Fargate
-
 No servers at all; AWS runs containers for you.
-
 Serverless container compute.
 
 3. Deep AWS Integration
@@ -1200,13 +1191,9 @@ Serverless container compute.
 ECS integrates tightly with:
 
 IAM
-
 VPC & subnets
-
 CloudWatch
-
 Application Load Balancer
-
 ECR (Elastic Container Registry)
 
 This makes deployments smooth and secure.
@@ -1219,27 +1206,18 @@ AWS handles everything behind the scenes.
 🔹 Where ECS Is Used
 
 Running microservices
-
 Hosting backend APIs
-
 Batch processing jobs
-
 Containerizing old monolithic apps
-
 Running scalable web services
 
 🔹 Why Choose ECS?
 
 You choose ECS when you want:
-
 Simpler container orchestration
-
 Lower operational overhead
-
 AWS-native solution
-
 Fast setup
-
 Less complexity compared to Kubernetes (EKS)
 
 ⭐ Simple Explanation (One Line)
@@ -1259,63 +1237,42 @@ If one thing fails, traffic should automatically move to healthy resources witho
 Your design has 3 main layers:
 
 Load Balancer (ALB)
-
 Web/App Tier (EC2 + Auto Scaling Group)
-
 Database Tier (RDS Multi-AZ)
 
 Let’s break them down.
 
 🔹 1. Load Balancer (ALB)
-
 What it does:
-
 Sits in front of your EC2 instances.
-
 Receives all incoming traffic (HTTP/HTTPS).
-
 Distributes requests across instances in multiple AZs.
 
 Key features:
-
 Multi-AZ: ALB has nodes in more than one AZ. If one AZ LB node fails, others still serve traffic.
-
 Health checks: Regularly checks if EC2 instances are healthy.
-
 If an instance fails → ALB stops sending traffic to it.
 
 Path-based & host-based routing:
-
-/api/\* → API service target group
-
+/api/\* → API service target group\
 /images/\* → image service target group
-
 admin.example.com → admin backend
-
-👉 Result: No single instance or AZ is a bottleneck at the entry point.
 
 🔹 2. Web/App Tier – EC2 with Auto Scaling Group (ASG)
 
 What you’re doing:
-
 Run your web/app servers (EC2) in an Auto Scaling Group.
-
 Spread instances across at least 2 Availability Zones.
 
 Benefits:
-
 High Availability:
-
 If one AZ goes down, instances in the other AZ still serve traffic.
 
 Fault Tolerance:
-
 If an instance becomes unhealthy, ASG terminates and replaces it automatically.
 
 Auto Scaling:
-
 Scale out (add instances) on high load (CPU, requests).
-
 Scale in when traffic drops, saving cost.
 
 👉 Result: The app layer survives instance failures and even full AZ failures.
@@ -1323,31 +1280,20 @@ Scale in when traffic drops, saving cost.
 🔹 3. Database Tier – RDS Multi-AZ
 
 What RDS Multi-AZ gives you:
-
-You have:
-
+You have
 Primary DB instance in one AZ
-
 Synchronous standby replica in another AZ
-
 Writes are synchronously replicated:
-
 Data is safely stored in both AZs.
 
 Failover behavior:
-
 If the primary DB fails (instance, AZ, hardware):
-
 RDS automatically promotes the standby to primary.
-
 Uses the same DB endpoint (hostname).
-
 App usually needs no configuration change – reconnects to the same endpoint.
 
 Benefits:
-
 High durability: data is stored across AZs.
-
 Minimal downtime during DB failures.
 
 👉 Result: Your database is resilient to instance and AZ failures.
@@ -1355,11 +1301,8 @@ Minimal downtime during DB failures.
 🔁 Putting It All Together – Request Flow
 
 User hits https://yourapp.com.
-
 Route 53 (optional but common) sends traffic to the ALB.
-
 ALB distributes requests to healthy EC2 instances in multiple AZs (via ASG).
-
 EC2 instances access RDS Multi-AZ for data.
 
 If:
