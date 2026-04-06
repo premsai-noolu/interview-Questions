@@ -1,0 +1,319 @@
+1. What is TypeScript? Why do we use it?
+
+TypeScript is a superset of JavaScript that adds types.
+
+👉 Why we use it:
+Catches errors before running code
+Improves code readability
+Helps in large-scale applications
+
+“TypeScript helps me write safer and more maintainable code by adding static typing on top of JavaScript.”
+
+------------------------------
+2. any vs unknown vs never in TypeScript
+🟡 1. any (No type checking at all)
+
+👉 any means:
+“TypeScript, don’t check anything — I know what I’m doing.”
+
+✅ Example:
+let value: any = 10;
+
+value = "hello";
+value = true;
+
+value.toUpperCase(); // ✅ No error (but risky!)
+🚨 Problem:
+Type safety is completely lost
+Can cause runtime errors
+
+👉 Example:
+
+let value: any = 10;
+value.toUpperCase(); // ❌ Runtime error (number has no toUpperCase)
+
+🔵 2. unknown (Safe version of any)
+
+👉 unknown means:
+“I don’t know the type yet, but I will check before using it.”
+
+✅ Example:
+let value: unknown = "hello";
+
+value.toUpperCase(); // ❌ Error
+
+👉 You MUST check type first:
+
+if (typeof value === "string") {
+  console.log(value.toUpperCase()); // ✅ Safe
+}
+💡 Key Point:
+Forces type checking
+Prevents runtime errors
+
+🔴 3. never (Value never exists)
+
+👉 never means:
+“This will NEVER happen.”
+
+✅ Example 1: Function that never returns
+function throwError(msg: string): never {
+  throw new Error(msg);
+}
+✅ Example 2: Infinite loop
+function infinite(): never {
+  while (true) {}
+}
+
+----------------------------------------
+3. What is type in TypeScript?
+
+👉 type is used to create a custom name for any type
+(primitive, object, union, function, etc.)
+
+👉 Think of it like:
+“A label for any kind of data structure”
+
+🧱 1. Basic Type Alias (Simple)
+type Name = string;
+
+let userName: Name = "Prem";
+
+👉 Here:
+Name is just another name for string
+
+🧩 2. Object Type
+type User = {
+  name: string;
+  age: number;
+};
+
+const user: User = {
+  name: "Prem",
+  age: 22
+};
+
+👉 Same as interface, but written using type
+
+🔀 3. Union Types (VERY IMPORTANT 🔥)
+👉 Allows multiple possible values
+type Status = "success" | "error" | "loading";
+
+let currentStatus: Status = "success";
+
+👉 Also:
+
+type ID = string | number;
+
+let userId: ID = 101;
+userId = "abc123";
+
+🔗 4. Intersection Types (Combine types)
+
+👉 Combine multiple types into one
+
+type Person = {
+  name: string;
+};
+
+type Employee = {
+  salary: number;
+};
+
+type Staff = Person & Employee;
+
+const emp: Staff = {
+  name: "Prem",
+  salary: 50000
+};
+
+📦 5. Function Type
+type Add = (a: number, b: number) => number;
+
+const sum: Add = (a, b) => {
+  return a + b;
+};
+
+📚 6. Array Type
+type Numbers = number[];
+
+const nums: Numbers = [1, 2, 3];
+
+🎯 7. Tuple Type (Fixed structure)
+type UserTuple = [string, number];
+
+const user: UserTuple = ["Prem", 22];
+
+👉 Order matters!
+
+🧠 8. Advanced: Type Composition
+type Address = {
+  city: string;
+};
+
+type User = {
+  name: string;
+} & Address;
+
+const u: User = {
+  name: "Prem",
+  city: "Vijayawada"
+};
+
+⚡ Key Advantages of type
+✅ Can define:
+
+Primitives (string, number)
+Unions (A | B)
+Intersections (A & B)
+Functions
+Tuples
+
+👉 More flexible than interface
+🚫 Limitation
+
+❌ Cannot do declaration merging:
+
+type User = { name: string };
+type User = { age: number }; // ❌ Error
+🎯 Simple Way to Remember
+
+👉 type = “anything”
+👉 interface = “mainly objects”
+
+🔥 Interview Answer (Strong)
+
+“Type in TypeScript is used to create custom type aliases. It is very flexible because it can represent primitives, unions, intersections, objects, functions, and tuples. I usually use type when I need advanced type compositions like unions or combining multiple types.”
+
+-------------------------------------------
+4. What is interface?
+
+👉 An interface defines the structure (shape) of an object
+
+👉 Think of it like:
+
+“A contract — if you follow this interface, your object must have these properties”
+
+🧱 1. Basic Example
+interface User {
+  name: string;
+  age: number;
+}
+
+const user: User = {
+  name: "Prem",
+  age: 22
+};
+
+👉 Rule:
+
+Object must match the interface
+Missing or extra properties → ❌ error
+❌ Invalid Example
+const user: User = {
+  name: "Prem"
+  // ❌ age is missing
+};
+🧩 2. Optional Properties
+
+👉 Use ? when a property is not mandatory
+
+interface User {
+  name: string;
+  age?: number;
+}
+
+const user1: User = { name: "Prem" };        // ✅
+const user2: User = { name: "Sai", age: 22 } // ✅
+
+🔒 3. Readonly Properties
+
+👉 Cannot be changed after assignment
+
+interface User {
+  readonly id: number;
+  name: string;
+}
+
+const user: User = {
+  id: 1,
+  name: "Prem"
+};
+
+user.id = 2; // ❌ Error
+
+🔗 4. Extending Interfaces (Inheritance)
+
+👉 One interface can reuse another
+
+interface Person {
+  name: string;
+}
+
+interface Employee extends Person {
+  salary: number;
+}
+
+const emp: Employee = {
+  name: "Prem",
+  salary: 50000
+};
+
+🧠 5. Multiple Inheritance
+interface A {
+  a: number;
+}
+
+interface B {
+  b: number;
+}
+
+interface C extends A, B {
+  c: number;
+}
+
+const obj: C = {
+  a: 1,
+  b: 2,
+  c: 3
+};
+
+🔁 6. Declaration Merging (VERY IMPORTANT 🔥)
+
+👉 Same interface name → automatically combined
+
+interface User {
+  name: string;
+}
+
+interface User {
+  age: number;
+}
+
+const user: User = {
+  name: "Prem",
+  age: 22
+};
+
+👉 This is NOT possible with type
+
+⚙️ 7. Function Interface
+
+👉 Interface can define function structure
+
+interface Add {
+  (a: number, b: number): number;
+}
+
+const sum: Add = (a, b) => a + b;
+
+📦 8. Array Interface
+interface StringArray {
+  [index: number]: string;
+}
+
+const arr: StringArray = ["a", "b", "c"];
+
+🔥 Interview Answer (Perfect)
+
+“An interface in TypeScript is used to define the structure of an object. It acts like a contract that enforces what properties an object must have. It also supports features like optional properties, readonly fields, extension, and declaration merging, which makes it very useful in large-scale applications.”
