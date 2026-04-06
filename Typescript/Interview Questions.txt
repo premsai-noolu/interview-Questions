@@ -468,3 +468,153 @@ type Keys = keyof typeof user;
 
 👉 Result:
 // "name" | "age"
+
+------------------------------------------------------
+7. What is an Enum?
+
+👉 An enum (enumeration) is a way to define a set of named constants
+👉 Think:
+“A group of related fixed values with meaningful names”
+
+🧱 1. Numeric Enum (Default)
+enum Status {
+  Success,
+  Error,
+  Loading
+}
+
+👉 Behind the scenes:
+Success = 0
+Error = 1
+Loading = 2
+
+✅ Usage
+let currentStatus: Status = Status.Success;
+console.log(currentStatus); // 0
+
+🔤 2. String Enum
+
+👉 More readable (used in real projects)
+
+enum Status {
+  Success = "SUCCESS",
+  Error = "ERROR",
+  Loading = "LOADING"
+}
+✅ Usage
+let status: Status = Status.Success;
+console.log(status); // "SUCCESS"
+
+⚙️ 4. Custom Values
+enum Direction {
+  Up = 1,
+  Down = 5,
+  Left = 10,
+  Right = 20
+}
+
+🧠 5. Why Use Enums?
+Without enum ❌:
+
+let status = "success";
+
+👉 Problem:
+
+Typos possible
+No autocomplete
+
+With enum ✅:
+let status: Status = Status.Success;
+
+👉 Benefits:
+
+Type safety
+Auto-suggestions
+No typos
+
+🚀 6. Real-World Example
+enum Role {
+  Admin = "ADMIN",
+  User = "USER",
+  Guest = "GUEST"
+}
+
+function checkAccess(role: Role) {
+  if (role === Role.Admin) {
+    console.log("Full access");
+  }
+}
+
+--------------------------------
+8. What is Type Assertion?
+
+In short:
+👉 Tell TypeScript what type it is
+let value = "hello" as string;
+
+👉 Type Assertion means:
+“I know more about this value’s type than TypeScript does”
+👉 You are telling TypeScript the type manually
+
+🧠 Why do we need it?
+TypeScript sometimes can’t infer the exact type
+👉 Example:
+let value: unknown = "hello";
+
+👉 TS doesn’t know it’s a string → so this fails:
+value.toUpperCase(); // ❌ Error
+
+✅ Solution: Type Assertion
+(value as string).toUpperCase(); // ✅
+
+✌️ Two Syntaxes
+1. as syntax (MOST USED ✅)
+let value: unknown = "hello";
+let str = value as string;
+
+2. Angle-bracket syntax
+let value: unknown = "hello";
+let str = <string>value;
+
+👉 ⚠️ Not used in React (JSX conflict)
+
+📦 1. Example with DOM (VERY IMPORTANT 🔥)
+const input = document.getElementById("username") as HTMLInputElement;
+input.value = "Prem";
+
+🔄 2. Example with API Data
+type User = {
+  name: string;
+  age: number;
+};
+
+const data = JSON.parse('{"name":"Prem","age":22}') as User;
+console.log(data.name); // ✅
+
+--------------------------------------------
+9. ⚡ == vs === in JavaScript
+🟡 1. == (Loose Equality)
+
+👉 Compares values after type conversion (coercion)
+👉 JS tries to convert types automatically
+
+✅ Examples:
+5 == "5"        // true  (string → number)
+true == 1       // true
+false == 0      // true
+null == undefined // true
+
+👉 Why?
+
+JS converts "5" → 5
+Then compares → equal
+🔴 2. === (Strict Equality)
+
+👉 Compares value + type (NO conversion)
+👉 Types must be the same
+
+✅ Examples:
+5 === "5"       // false (number vs string)
+true === 1      // false
+false === 0     // false
+null === undefined // false
