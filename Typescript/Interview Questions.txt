@@ -317,3 +317,154 @@ const arr: StringArray = ["a", "b", "c"];
 🔥 Interview Answer (Perfect)
 
 “An interface in TypeScript is used to define the structure of an object. It acts like a contract that enforces what properties an object must have. It also supports features like optional properties, readonly fields, extension, and declaration merging, which makes it very useful in large-scale applications.”
+
+-----------------------------------------------
+5. 🔥 What are Generics?
+
+👉 Generics allow you to write flexible and reusable code
+👉 Instead of fixing a type, you use a placeholder type
+
+👉 Think:
+“I don’t know the type yet, but I’ll decide it later”
+
+🧠 Why Generics?
+
+Without generics ❌:
+
+function identity(value: any) {
+  return value;
+}
+
+👉 Problem:
+
+Loses type safety
+Returns any
+
+With generics ✅:
+
+function identity<T>(value: T): T {
+  return value;
+}
+
+👉 Now:
+
+Type is preserved
+Fully safe
+🧱 1. Basic Generic Function
+function identity<T>(value: T): T {
+  return value;
+}
+
+identity<string>("Hello"); // T = string
+identity<number>(10);      // T = number
+
+👉 T = placeholder (can be any type)
+
+📦 2. Generic with Arrays
+function getFirst<T>(arr: T[]): T {
+  return arr[0];
+}
+
+getFirst<number>([1, 2, 3]);     // number
+getFirst<string>(["a", "b"]);    // string
+
+🔗 3. Multiple Generics
+function pair<T, U>(a: T, b: U): [T, U] {
+  return [a, b];
+}
+
+pair<string, number>("age", 22);
+
+🧩 4. Generic with Interfaces
+interface ApiResponse<T> {
+  data: T;
+  success: boolean;
+}
+
+const response: ApiResponse<string> = {
+  data: "User data",
+  success: true
+};
+
+👉 Real-world use: API responses
+
+🏗️ 5. Generic with Classes
+class Box<T> {
+  content: T;
+
+  constructor(value: T) {
+    this.content = value;
+  }
+}
+
+const numberBox = new Box<number>(10);
+const stringBox = new Box<string>("Hello");
+
+🎯 Interview Answer (Perfect 🔥)
+
+“Generics in TypeScript allow us to create reusable and type-safe components by using placeholders for types. 
+Instead of using any, generics preserve the actual type of data, making the code safer and more flexible. 
+They are commonly used in functions, interfaces, classes, and API handling.”
+
+----------------------------------
+6. keyof in TypeScript
+
+👉 keyof gives you all keys of an object as a union type
+
+🧱 Basic Example
+type User = {
+  name: string;
+  age: number;
+};
+type UserKeys = keyof User;
+
+👉 Result:
+// "name" | "age"
+
+✅ Usage Example
+function printKey(key: keyof User) {
+  console.log(key);
+}
+
+printKey("name"); // ✅
+printKey("age");  // ✅
+// printKey("salary"); ❌ Error
+
+🧠 Why keyof?
+👉 It ensures:
+Only valid keys are used
+Prevents mistakes
+
+🔥 2. typeof in TypeScript
+👉 typeof is used to get the type of a variable
+
+🧱 Basic Example
+const user = {
+  name: "Prem",
+  age: 22
+};
+
+type UserType = typeof user;
+
+👉 Result:
+// {
+//   name: string;
+//   age: number;
+// }
+
+✅ Usage Example
+const count = 10;
+type CountType = typeof count; // number
+
+🚀 3. Combining keyof + typeof (VERY IMPORTANT 🔥)
+👉 This is what interviewers love!
+
+const user = {
+  name: "Prem",
+  age: 22
+};
+
+type Keys = keyof typeof user;
+
+👉 Result:
+// "name" | "age"
