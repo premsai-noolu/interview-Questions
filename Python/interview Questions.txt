@@ -870,6 +870,44 @@ For example, the len() function works for both strings and lists, and classes ca
 
 -----------
 
+Since Python doesn’t support true method overloading, we simulate it.
+
+🔥 ✅ Example 1: Using Type Checking (Best for Interviews)
+class Calculator:
+    def add(self, a, b):
+        # If both are integers → numeric addition
+        if isinstance(a, int) and isinstance(b, int):
+            return a + b
+        
+        # If both are strings → concatenation
+        elif isinstance(a, str) and isinstance(b, str):
+            return a + b
+        
+        else:
+            raise TypeError("Both arguments must be same type")
+
+obj = Calculator()
+
+print(obj.add(2, 3))          # Output: 5
+print(obj.add("Hello ", "World"))  # Output: Hello World
+💡 How to explain in interview:
+
+“Here I’m simulating method overloading by checking input types. If inputs are integers, I perform arithmetic addition; if strings, I perform concatenation.”
+
+🔥 ✅ Example 2: Pythonic Way (Duck Typing)
+class Calculator:
+    def add(self, a, b):
+        return a + b
+
+obj = Calculator()
+
+print(obj.add(2, 3))              # 5
+print(obj.add("Hello ", "World")) # Hello World
+💡 Interview explanation (VERY IMPORTANT):
+
+“Python supports operator overloading internally. The + operator behaves differently based on operand types—addition for integers and concatenation for strings. This is called polymorphism.”
+
+-------------------------------------------------------
 20. Define encapsulation in Python?
 
 Encapsulation means wrapping data (variables) and methods (functions) together into a single unit (class) and restricting direct access to some parts of the object.
