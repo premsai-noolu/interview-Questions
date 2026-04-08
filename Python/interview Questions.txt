@@ -71,11 +71,9 @@ bool → Only True or False
 NoneType → Represents the absence of a value, e.g., None
 
 ----------------
-
 4. What is a break, continue and pass in Python?
 
 1. break
-
 👉 Stops the loop completely and jumps out of it.
 
 Example:
@@ -92,37 +90,29 @@ for i in range(5):
 1
 2
 
-
 ➡️ When i becomes 3, the break stops the loop.
 
 🟨 2. continue
-
 👉 Skips the current iteration and goes to the next one.
 
 Example:
-
 for i in range(5):
     if i == 2:
         continue
     print(i)
 
-
 🧩 Output:
-
 0
 1
 3
 4
 
-
 ➡️ When i is 2, it skips print(i) and moves to the next loop.
 
 🟩 3. pass
-
 👉 Does nothing — it’s just a placeholder when you need a statement but don’t want any action yet.
 
 Example:
-
 for i in range(5):
     if i == 2:
         pass  # do nothing
@@ -130,13 +120,11 @@ for i in range(5):
 
 
 🧩 Output:
-
 0
 1
 2
 3
 4
-
 
 ➡️ pass is ignored by Python — useful when writing code you’ll fill in later.
 
@@ -154,40 +142,31 @@ Set: Only stores values, and all must be unique.
 my_set = {1, 2, 3, 3}
 print(my_set)   # {1, 2, 3}  → duplicates removed
 
-
 Dictionary: Stores key : value pairs.
 
 my_dict = {"name": "Prem", "age": 25}
 print(my_dict["name"])  # Output: Prem
 
 ⚙️ 3. Accessing Elements
-
 Set: You can’t access items using an index or key (only loop through).
 
 for x in my_set:
     print(x)
 
-
 Dictionary: You can access values using keys.
-
 print(my_dict["age"])  # 25
 
 🧮 4. Mutability
-
 Both are mutable, meaning you can add or remove elements.
 
 Set: my_set.add(4)
-
 Dict: my_dict["city"] = "Hyderabad"
 
 🚫 5. Duplicates
-
 Set: No duplicate values allowed.
-
 Dictionary: Keys must be unique, but values can repeat.
 
 -----------
-
 6. What is a lambda function?
 
 A lambda function in Python is a small, anonymous function — meaning it doesn’t have a name.
@@ -202,10 +181,8 @@ numbers = [1, 2, 3, 4, 5]
 even = list(filter(lambda x: x % 2 == 0, numbers))
 print(even)   
 
-----------
-
+------------------------
 7. What is a Variable Scope in Python?
-
 Variable Scope in Python means where a variable can be accessed or used in your code.
 
 In simple words — scope decides the “visibility” of a variable.
@@ -249,11 +226,9 @@ B – Built-in:
 Names that are already defined in Python (like len, print, etc.).
 
 -------------
-
 8. What is docstring in Python?
 
 A docstring in Python is a special type of comment used to explain what a function, class, or module does.
-
 It helps others (and you) understand your code easily.
 
 ✅ How to write a docstring:
@@ -274,9 +249,7 @@ You can see it using the __doc__ attribute:
 print(add.__doc__)
 # Output: This function adds two numbers and returns the result.
 
-
 👉 In simple words:
-
 A docstring is a short explanation written inside triple quotes that describes what a function or class does. It’s mainly used for documentation.
 
 ---------------
@@ -299,11 +272,8 @@ A list can hold anything (numbers, strings, etc.) and is used most of the time.
 An array can hold only one data type and is used when you need to handle lots of numbers efficiently.
 
 -----------------
-
 10. What are Modules and Packages in Python?
-
 Module
-
 A module in Python is just a file that contains Python code — like functions, classes, or variables — that you can reuse in other programs.
 
 ✅ Example:
@@ -313,16 +283,13 @@ Suppose you have a file math_utils.py:
 def add(a, b):
     return a + b
 
-
 You can use this code in another file:
 
 import math_utils
 
 print(math_utils.add(3, 5))  # Output: 8
 
-
 👉 In short:
-
 A module is a single Python file (.py) that you can import and use in other programs.
 
 📦 Package
@@ -338,16 +305,12 @@ my_package/
 ├── math_utils.py
 └── string_utils.py
 
-
-
 You can use it like this:
 
 from my_package import math_utils
 print(math_utils.add(2, 3))
 
-
 👉 In short:
-
 A package is a folder that contains multiple modules (and an __init__.py file).
 
 -------------
@@ -366,21 +329,18 @@ for i in xrange(5):
     print(i)
 # Creates numbers one by one (generator)
 
-
 ✅ In Python 3:
 
 for i in range(5):
     print(i)
 # Works like xrange — generates numbers one at a time
 
-
 👉 In simple words:
 
 In Python 2, xrange() was more memory-efficient than range().
 In Python 3, range() was improved to work like xrange(), so xrange() no longer exists.
 
-------------
-
+------------------------
 12. What is Dictionary Comprehension?
 
 Example 1 – Simple dictionary comprehension
@@ -388,9 +348,7 @@ squares = {x: x**2 for x in range(1, 6)}
 print(squares)
 
 Output:
-
 {1: 1, 2: 4, 3: 9, 4: 16, 5: 25}
-
 Here, each number x becomes a key, and its square x**2 becomes the value.
 
 ✅ Example 2 – Filtering items
@@ -398,19 +356,15 @@ even_squares = {x: x**2 for x in range(1, 6) if x % 2 == 0}
 print(even_squares)
 
 Output:
-
 {2: 4, 4: 16}
 
 👉 In simple words:
-
 Dictionary comprehension lets you create a new dictionary in one short line instead of writing long for loops.
 
 -------------
-
 13. What is the difference between a shallow copy and a deep copy?
 
 . Shallow Copy
-
 A shallow copy creates a new object, but it does not copy the inner objects — it just references them.
 
 ✅ Example:
@@ -428,11 +382,9 @@ print(list2)  # [[99, 2], [3, 4]]
 Both lists changed because they share the same inner lists.
 
 👉 In short:
-
 Shallow copy copies only the outer object, not the nested objects inside it.
 
 🧠 2. Deep Copy
-
 A deep copy creates a completely new copy of the object and all its nested elements.
 
 ✅ Example:
@@ -450,11 +402,9 @@ print(list2)  # [[99, 2], [3, 4]]
 Here, changes in list2 do not affect list1.
 
 👉 In short:
-
 Deep copy copies everything — the object and all nested objects — so they are completely independent.
 
 -----------------
-
 14. What are Decorators?
 
 Let’s say you have a function:
@@ -532,15 +482,12 @@ Python automatically does this:
 
 say_hello = add_message(say_hello)
 
-
 So the decorator “wraps” your function with new behavior — like a gift wrapper around a present 🎁.
 
 ✅ Step 5: Where decorators are used in real projects
 
 Logging – track when a function runs.
-
 Authentication – check if a user is logged in before running a function.
-
 Timing – measure how long a function takes to run.
 
 Flask/Django – for routes like @app.route('/').
@@ -561,7 +508,6 @@ Debugging means finding and fixing errors (bugs) in your Python code.
 Python gives you several tools and methods to do this easily.
 
 ✅ 1. Using print statements (most common way)
-
 You can use print() to check what your code is doing at each step.
 
 Example:
@@ -572,19 +518,14 @@ def divide(a, b):
 
 print(divide(10, 2))
 
-
 If something goes wrong, print statements help you see variable values and find where the issue is.
 
 🟡 Simple but not ideal for large programs.
 
 ✅ 2. Using the built-in pdb (Python Debugger)
-
 Python has a built-in debugger called pdb which allows you to:
-
 Stop the program at a specific line
-
 Check variable values
-
 Step through the code line by line
 
 Example:
@@ -597,31 +538,11 @@ def divide(a, b):
 
 divide(10, 0)
 
-
-Common pdb commands:
-
-n → go to next line
-
-s → step into a function
-
-c → continue execution
-
-q → quit debugger
-
-p variable → print variable value
-
-🧩 Best for serious debugging.
-
 ✅ 3. Using an IDE Debugger (like VS Code, PyCharm, or IDLE)
-
 Modern IDEs have a graphical debugger:
-
 You can set breakpoints (places where the program stops).
-
 You can inspect variables.
-
 You can step through the code line by line.
-
 💡 This is the easiest and most visual way for beginners.
 
 ✅ 4. Using Logging (for bigger projects)
@@ -641,13 +562,11 @@ def divide(a, b):
 Logging can record info, warnings, and errors in files — helpful for debugging after deployment.
 
 -----------------
-
 16. What are Iterators in Python?
 
 🧩 What is an Iterator?
 
 An iterator in Python is an object that allows you to go through (iterate over) elements one at a time.
-
 It remembers where it left off — so you can get the next item until there are no items left.
 
 ✅ Example:
@@ -659,33 +578,24 @@ print(next(it))  # Output: 2
 print(next(it))  # Output: 3
 # print(next(it))  # ❌ Raises StopIteration (no more items)
 
-
 Here:
-
 iter() → converts the list into an iterator object.
-
 next() → gives the next item from the iterator.
-
 When no items are left, it raises a StopIteration error.
 
 🧠 In simple words:
-
 An iterator is an object that lets you loop through data one element at a time.
 
 ✅ Example with a loop:
-
 You don’t usually use next() directly — you use a for loop:
 
 for num in [1, 2, 3]:
     print(num)
 
-
 Under the hood, Python automatically:
 
 Calls iter() on the list
-
 Repeatedly calls next() on the iterator
-
 Stops when StopIteration is raised
 
 💡 Interview Answer (simple):
@@ -699,7 +609,6 @@ A for loop internally uses iterators to go through items in a sequence.”
 17. What is a Generator?
 
 A generator in Python is a special type of function that lets you generate values one at a time, instead of returning them all at once.
-
 It’s used when you have a large amount of data and don’t want to store everything in memory.
 
 ✅ How to create a generator
@@ -723,11 +632,9 @@ print(next(numbers))  # 1
 print(next(numbers))  # 2
 print(next(numbers))  # 3
 
-
 Each time you call next(), the function resumes from where it left off — it doesn’t restart.
 
 🧠 In simple words:
-
 A generator is a function that remembers where it left off and gives you the next value when needed — it doesn’t store all values in memory.
 
 💡 Interview Answer (simple):
@@ -770,15 +677,11 @@ Mother knows cooking.
 Child loves playing football.
 
 🧠 Explanation:
-
 The Child class inherits from both Father and Mother.
-
 It automatically gets access to their methods (driving() and cooking()).
-
 You can also add the child’s own method (playing()).
 
 💡 In simple words:
-
 In multiple inheritance, the child class can use methods from all parent classes, along with its own methods.
 If parent methods have different names, they all work independently — no conflict.
 
@@ -812,12 +715,9 @@ class Cat:
 for animal in [Dog(), Cat()]:
     print(animal.sound())
 
-
 Output:
-
 Bark
 Meow
-
 
 🔹 Both classes have a method named sound(),
 but each one behaves differently for its object.
@@ -850,14 +750,12 @@ Most birds can fly.
 There are many types of birds.
 Penguins cannot fly.
 
-
 🔹 Here, the flight() method is overridden in the child class to behave differently —
 this is called runtime polymorphism or method overriding.
 
 ✅ Example 3 – Polymorphism with built-in functions
 print(len("Hello"))   # String → counts characters
 print(len([1, 2, 3])) # List → counts elements
-
 
 🔹 The same function len() behaves differently depending on the data type —
 that’s polymorphism too!
@@ -908,12 +806,11 @@ print(obj.add("Hello ", "World")) # Hello World
 “Python supports operator overloading internally. The + operator behaves differently based on operand types—addition for integers and concatenation for strings. This is called polymorphism.”
 
 -------------------------------------------------------
-20. Define encapsulation in Python?
 
+20. Define encapsulation in Python?
 Encapsulation means wrapping data (variables) and methods (functions) together into a single unit (class) and restricting direct access to some parts of the object.
 
 👉 In simple words:
-
 Encapsulation is like putting data inside a capsule so that it can’t be changed directly — only through controlled methods.
 
 ✅ Example:
@@ -938,40 +835,28 @@ print(car.get_speed())   # Access speed using method
 # Direct access will not work
 # print(car.__speed)  ❌ This will cause an error
 
-
 Output:
-
 20
 
 🧠 Explanation:
-
 __speed is a private variable (cannot be accessed directly outside the class).
-
 You can change or read it only through the methods (accelerate, brake, get_speed).
-
 This protects the data from being modified accidentally.
 
 🪄 Encapsulation helps:
-
 Protect data from direct access.
-
 Control how data is changed.
-
 Make code cleaner and safer.
 
 💡 Interview Answer (simple):
-
 “Encapsulation in Python means hiding the internal details of a class and only exposing necessary parts.
 It’s done by making variables private (using __) and accessing them through public methods like getters and setters.”
 
 --------------
-
 21. What is Data Abstraction?
-
 Data Abstraction means showing only the necessary details to the user and hiding the complex internal logic.
 
 👉 In simple words:
-
 Abstraction is about what an object does, not how it does it.
 
 ✅ Real-life Example:
@@ -1007,18 +892,14 @@ bike = Bike()
 car.start()
 bike.start()
 
-
 Output:
 
 Car engine started with key.
 Bike started with self-start button.
 
 🧠 Explanation:
-
 Vehicle is an abstract class — it provides a template for its subclasses.
-
 start() is an abstract method — every subclass must define it.
-
 This hides how the start mechanism works and only exposes what it does (the interface).
 
 💡 Interview Answer (simple):
@@ -1028,10 +909,7 @@ It can be achieved using abstract classes and abstract methods from the abc modu
 This helps in designing clean and reusable code where subclasses define their own specific behavior.”
 
 -----------------
-
 22. How is memory management done in Python?
-
-What is Memory Management?
 
 Memory management means how Python allocates, tracks, and frees up memory while your program runs — so that memory is used efficiently and no data is wasted.
 
@@ -1041,17 +919,13 @@ You don’t need to manually allocate or free memory (like in C or C++).
 Python’s memory manager and garbage collector handle it automatically.
 
 ✅ 2. Memory Allocation in Python
-
 Python divides memory into two parts:
-
 Stack memory → for local variables inside functions.
-
 Heap memory → for objects like lists, dictionaries, classes, etc.
 
 When you create a variable or an object, Python automatically allocates space for it in the heap.
 
 -----------------------------
-
 23. 🗂️ File Handling in Python
 
 File handling allows you to create, read, write, and delete files using Python.
@@ -1066,6 +940,7 @@ Mode	Description
 'r+'	Read and write mode.
 't'	Text mode (default).
 'b'	Binary mode (for images, etc.).
+
 📖 1. Reading a File
 # Open file in read mode
 file = open("example.txt", "r")
@@ -1076,7 +951,6 @@ print(content)
 
 # Close the file
 file.close()
-
 
 Or read line by line:
 
@@ -1097,7 +971,6 @@ file.write("\nThis line is added later.")
 file.close()
 
 ✅ 4. Using with Statement (Best Practice)
-
 Using with automatically closes the file after use.
 
 with open("example.txt", "r") as file:
@@ -1110,9 +983,7 @@ with open("example.txt", "r+") as file:
     file.write("\nNew content added after reading.")
 
 🧰 6. Deleting a File
-
 Use the os module:
-
 import os
 
 if os.path.exists("example.txt"):
@@ -1123,14 +994,12 @@ else:
 🧠 Summary
 
 open() → to open a file
-
 read(), write(), append() → to work with file data
-
 Always close the file (or use with)
-
 os → to handle file operations like delete or check existence
 
 🧾 Example: Copy Contents from One File to Another
+
 📁 Step 1: Create a file (source.txt)
 
 Let’s say source.txt contains:
@@ -1152,7 +1021,6 @@ with open("destination.txt", "w") as dest:
 print("File copied successfully!")
 
 🧠 Explanation:
-
 with open("source.txt", "r") as src: → Opens the source file for reading.
 content = src.read() → Reads the entire file content into a variable.
 with open("destination.txt", "w") as dest: → Opens or creates a new file for writing.
@@ -1168,19 +1036,18 @@ It will have the same content as source.txt.
 ---------------------------------
 
 24. 🧠 Understanding Multithreading in Python
+
 🔹 What is Multithreading?
 
 Multithreading means running multiple parts (threads) of a program concurrently.
-
 Each thread runs independently but shares the same memory space.
-
 In Python, threads are handled by the threading module.
 
 Threads are useful for:
 
 Downloading multiple files simultaneously
-
 Reading/writing files while doing other work
+
 💻 Example: Two Classes Inheriting from Thread
 
 Here we’ll define two custom thread classes, both doing different tasks — and they’ll run concurrently.
@@ -1249,19 +1116,14 @@ join()
 → Waits until the thread completes before continuing with the main thread.
 
 ⚙️ How Multithreading Works Here
-
 The main thread creates two child threads (t1, t2).
-
 Both run simultaneously — while one prints numbers, the other prints letters.
-
 The order may vary each time you run the program — this is the nature of concurrency.
 
 🧠 Key Takeaways
 
 Threads share the same memory space (unlike processes).
-
 Use Thread class and override run() to define custom thread behavior.
-
 start() launches a thread; join() waits for it to finish.
 
 Ideal for I/O-bound tasks like networking, database, file operations, etc.
@@ -1275,7 +1137,6 @@ Normally, Python executes code line by line — one task must finish before the 
 That’s called synchronous execution.
 
 But in asynchronous programming, Python can start a new task before the previous one finishes, allowing multiple tasks (like network calls or I/O operations) to run concurrently.
-
 This helps improve speed and efficiency, especially for I/O-heavy tasks like:
 
 Fetching data from APIs
@@ -1287,7 +1148,6 @@ Database queries
 These are the core keywords used to write asynchronous code in Python.
 
 🔹 async
-
 Used to define a function as asynchronous.
 
 Syntax:
@@ -1298,18 +1158,15 @@ async def my_function():
 An async function doesn’t run immediately — it returns a coroutine (an object that can be awaited).
 
 🔹 await
-
 Used inside an async function to pause the function until another asynchronous operation completes.
 
 Syntax:
 
 result = await some_async_function()
 
-
 It tells Python: “Wait here for this async task to finish before continuing.”
 
 🧠 Simple Example:
-
 Let’s compare normal (synchronous) vs asynchronous code 👇
 
 🚫 Normal Code (Synchronous):
@@ -1334,7 +1191,6 @@ Data fetched
 Fetching data...
 Data fetched
 
-
 ➡ Total time = 4 seconds (runs one after another)
 
 ✅ Asynchronous Version:
@@ -1351,15 +1207,12 @@ async def main():
 
 asyncio.run(main())
 
-
-
 🕒 Output:
 
 Fetching data...
 Fetching data...
 Data fetched
 Data fetched
-
 
 ➡ Total time = only 2 seconds (both run together!)
 
@@ -1467,7 +1320,6 @@ for index, value in enumerate(arr):
 15. How do you filter a list?
 
 Using lambda:
-
 result = list(filter(lambda x: x > 10, arr))
 
 16. How do you map a list (apply function to each element)?
@@ -1499,7 +1351,6 @@ arr = array.array('i', [10, 20, 30])
 
 27. ✅ How to Handle Exceptions in Python
 🔹 Use try–except
-
 You put the risky code in try, and if an error occurs, Python jumps to except.
 
 Example
@@ -1531,7 +1382,6 @@ try:
 except Exception as e:
     print("Error:", e)
 
-
 e shows the actual error message.
 
 🔹 Using else
@@ -1548,7 +1398,6 @@ else:
 🔹 Using finally
 
 Runs always — even if there is an exception.
-
 Useful for closing files, database connections, etc.
 
 try:
@@ -1597,7 +1446,6 @@ print(type(data))
 {'name': 'Prem', 'age': 25, 'language': 'Python'}
 <class 'dict'>
 
-
 ✔ The JSON string becomes a Python dictionary.
 
 ✅ 2. json.dumps() — Convert Python Dictionary → JSON STRING
@@ -1623,7 +1471,6 @@ print(type(json_output))
 ✅ Output:
 {"name": "Prem", "age": 25, "language": "Python"}
 <class 'str'>
-
 
 ✔ The Python dictionary becomes a JSON string.
 
