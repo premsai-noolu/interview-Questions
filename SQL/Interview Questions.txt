@@ -63,7 +63,6 @@ Example:
 GRANT SELECT ON Employee TO user1;
 
 👉 It gives permission to user1 to read data from the Employee table.user1 can run SELECT queries on the Employee table, but cannot insert, update, or delete data.
-
 👉 DCL ensures security.
 
 🔹 TCL – Transaction Control Language
@@ -101,20 +100,14 @@ Keeps all changes before sp1
 🔹 COMMIT;
 
 Permanently saves the current state of the transaction
-
 After COMMIT, changes cannot be undone
 
 Real Example (Very Important)
 BEGIN;
-
 INSERT INTO Employee VALUES (1, 'Tony', 50000);
-
 SAVEPOINT sp1;
-
 INSERT INTO Employee VALUES (2, 'Steve', 60000);
-
 ROLLBACK TO sp1;
-
 COMMIT;
 
 Final Result in Table:
@@ -264,6 +257,7 @@ What Foreign Key Prevents
 ❌ Inserting an employee with a non-existing department
 
 Example (Very Clear)
+
 Parent Table
 Department
 -----------
@@ -455,8 +449,8 @@ emp_id	name	dept_id
 Department
 
 dept_id	dept_name
-10	IT
-20	HR
+10	     IT
+20 	     HR
 Query
 SELECT e.name, d.dept_name
 FROM Employee e
@@ -546,9 +540,9 @@ Used when rows in a table are related to other rows in the same table.
 
 Example Table: Employee
 emp_id	name	manager_id
-1	Tony	NULL
-2	Steve	1
-3	Bruce	1
+1	    Tony	NULL
+2	    Steve	1
+3	    Bruce	1
 Query
 SELECT e.name AS Employee, m.name AS Manager
 FROM Employee e
@@ -1428,41 +1422,115 @@ CREATE INDEX idx_emp_id ON Employee(emp_id);
 Database directly jumps to the row
 Very fast lookup ✅
 
-Types of Indexes (Important for Interviews)
+📚 Types of Indexes in SQL
 1️⃣ Clustered Index
 
-Defines physical order of table data
-Only one per table
+👉 Definition:
 
-Example: Primary Key
-PRIMARY KEY (emp_id)
+Determines the physical order of data in a table
+Table data is stored in sorted order
+
+👉 Key Points:
+
+Only ONE clustered index per table
+Usually created on Primary Key
+
+👉 Example:
+
+CREATE CLUSTERED INDEX idx_emp_id
+ON Employee(emp_id);
+
+👉 Example Explanation:
+
+If clustered index is on emp_id
+Data will be physically stored like:
+1, 2, 3, 4, 5...
 
 2️⃣ Non-Clustered Index
-Separate structure from table data
 
-Multiple allowed per table
-CREATE INDEX idx_salary ON Employee(salary);
+👉 Definition:
 
+Separate structure from table
+Stores pointer/reference to actual data
+
+👉 Key Points:
+
+Can have multiple non-clustered indexes
+Does NOT change physical order
+
+👉 Example:
+
+CREATE NONCLUSTERED INDEX idx_name
+ON Employee(name);
+
+👉 How it works:
+
+Index: name → pointer → actual row
 3️⃣ Unique Index
 
-Prevents duplicate values
-CREATE UNIQUE INDEX idx_email ON Employee(email);
+👉 Definition:
 
-4️⃣ Composite Index
+Ensures all values in a column are unique
+
+👉 Key Points:
+
+Prevents duplicate values
+Automatically created for UNIQUE constraint
+
+👉 Example:
+
+CREATE UNIQUE INDEX idx_email
+ON Employee(email);
+4️⃣ Composite Index (Multi-column Index)
+
+👉 Definition:
 
 Index on multiple columns
-CREATE INDEX idx_dept_salary ON Employee(department, salary);
 
+👉 Example:
 
-📌 Column order matters!
+CREATE INDEX idx_name_dept
+ON Employee(name, department);
 
-5️⃣ Covering Index
+👉 Important:
 
-Index contains all columns needed by query
+Works best when queries use leftmost column
 
-No table lookup required
+✔ Good:
 
-CREATE INDEX idx_cover ON Employee(department, salary, name);
+WHERE name = 'John'
+
+❌ Not optimal:
+
+WHERE department = 'IT'
+5️⃣ Full-Text Index
+
+👉 Definition:
+
+Used for searching text data
+
+👉 Example:
+
+CREATE FULLTEXT INDEX idx_desc
+ON Employee(description);
+
+👉 Use case:
+
+SELECT * FROM Employee
+WHERE MATCH(description) AGAINST('developer');
+
+6️⃣ Bitmap Index (Mostly in Data Warehouses)
+
+👉 Definition:
+
+Uses bitmaps (0s and 1s) for indexing
+
+👉 Best for:
+
+Columns with low cardinality
+Gender (M/F)
+Status (Active/Inactive)
+
 
 27. When NOT to use index?
 
@@ -1543,7 +1611,6 @@ Transfer ₹1000 from Account A → Account B
 1. Deduct ₹1000 from Account A
 2. Add ₹1000 to Account B
 
-
 ✔ Both must succeed
 ❌ If one fails → rollback
 
@@ -1576,28 +1643,91 @@ Maintain data consistency
 Handle failures safely
 Support concurrent users
 
-ACID Properties (VERY IMPORTANT)
-1️⃣ Atomicity
+🧠 ACID Properties in SQL (with Simple Examples)
 
-All operations succeed or none
-No partial execution
+ACID properties ensure that database transactions are reliable and safe.
 
-📌 Example: Bank transfer
+👉 ACID stands for:
 
-2️⃣ Consistency
+A → Atomicity
+C → Consistency
+I → Isolation
+D → Durability
+1️⃣ Atomicity (All or Nothing)
 
-Database moves from one valid state to another
-Constraints are preserved
+👉 Definition:
+A transaction must either complete fully or not happen at all.
 
-3️⃣ Isolation
+💡 Example
+BEGIN TRANSACTION;
 
-Transactions do not interfere with each other
-Controlled by isolation levels
+UPDATE Accounts SET balance = balance - 1000 WHERE id = 1;
+UPDATE Accounts SET balance = balance + 1000 WHERE id = 2;
 
-4️⃣ Durability
+COMMIT;
 
-Once committed, data is permanent
-Survives crashes
+👉 Scenario:
+
+₹1000 is transferred from Account 1 → Account 2
+
+✔ If both queries succeed → COMMIT
+❌ If one fails → ROLLBACK (nothing happens)
+
+🔥 Real Meaning:
+“Partial updates are NOT allowed.”
+
+2️⃣ Consistency (Valid State)
+
+👉 Definition:
+After a transaction, the database must remain in a valid state (respecting rules, constraints).
+
+💡 Example
+UPDATE Accounts SET balance = balance - 5000 WHERE id = 1;
+
+👉 If balance becomes negative (not allowed by constraint):
+
+❌ Transaction fails
+✔ Database remains consistent
+
+🔥 Real Meaning:
+“Database rules (constraints, triggers) must always be satisfied.”
+
+3️⃣ Isolation (No Interference)
+
+👉 Definition:
+Multiple transactions should not interfere with each other.
+
+💡 Example
+Transaction 1:
+UPDATE Accounts SET balance = balance - 1000 WHERE id = 1;
+Transaction 2 (at same time):
+SELECT balance FROM Accounts WHERE id = 1;
+
+👉 Without isolation:
+Transaction 2 might read wrong/temporary value
+
+👉 With isolation:
+✔ Each transaction works independently
+
+🔥 Real Meaning:
+
+“Transactions behave as if they are executed one by one.”
+
+4️⃣ Durability (Permanent Changes)
+
+👉 Definition:
+Once a transaction is committed, changes are permanently saved, even if system crashes.
+
+💡 Example
+COMMIT;
+
+👉 After commit:
+
+Data is stored on disk
+Even if server crashes → data remains
+🔥 Real Meaning:
+
+“Committed data is never lost.”
 
 30. Difference between COMMIT and ROLLBACK and savepoint.
 
