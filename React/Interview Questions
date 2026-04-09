@@ -373,11 +373,9 @@ clearInterval(timer); // Cleanup when component unmounts or re-runs
 8. What is the useContext hook and when should you use it?
 
 useContext is a Hook that lets you access data from a React Context directly in a component — without having to pass props manually at every level.
-
 It helps you share data easily between components without "prop drilling".
 
 🧩 What is Prop Drilling?
-
 Prop drilling means passing data from a parent → to child → to grandchild, even when only the deepest child needs it.
 
 Example (without context):
@@ -520,9 +518,7 @@ The reducer returns {count: previousCount + 1}.
 10. 🧩 What is useRef in React?
 
 useRef is a React Hook that lets you:
-
 Access DOM elements directly, and
-
 Store mutable values that persist between renders without causing re-renders.
 
 👉 In simple words:
@@ -599,9 +595,7 @@ and it does not cause re-renders when updated.
 11. 🧩 What is useMemo in React?
 
 useMemo is a React Hook that helps you optimize performance by remembering (caching) the result of an expensive calculation — so React doesn’t have to redo it every time the component re-renders.
-
 👉 In simple terms:
-
 useMemo “remembers” the output of a function until its dependencies change.
 
 🧠 Syntax
@@ -728,7 +722,6 @@ Typing in the input won’t cause the Counter to re-render.
 A Custom Hook is your own hook — a reusable function that uses one or more built-in React hooks (useState, useEffect, etc.) to share logic between components.
 
 💬 In simple words:
-
 A custom hook lets you extract reusable logic from a component into a separate function so you can use it again and again.
 
 🧠 Why do we need them?
@@ -736,17 +729,13 @@ A custom hook lets you extract reusable logic from a component into a separate f
 Sometimes, you have the same logic repeated in multiple components — for example:
 
 fetching data from an API
-
 managing form input
-
 handling timers, scrolls, etc.
-
 Instead of copying the same code everywhere, you can put that logic inside a custom hook.
 
 🧱 How to create a custom hook
 
 A custom hook is just a normal JavaScript function.
-
 Its name must start with “use” (like useFetch, useCounter, useForm).
 
 Inside it, you can use other hooks like useState, useEffect, etc.
@@ -850,9 +839,7 @@ Always call them at the top of your component or custom hook.
 ✅ Rule 2: Only call hooks from React functions
 
 Call hooks only from:
-
 React functional components, or
-
 Custom hooks (your own hooks starting with use).
 
 ---

@@ -902,3 +902,88 @@ Prototype chain ends here
 Debouncing is a programming technique used to limit the rate at which a function is executed.
 Example: Imagine a search bar where a function fetches data and updates the frontend on each keypress. We don't want this function to be invoked for every single keystroke. Instead, we want it to trigger only after the user stops typing for at least 300 milliseconds. Debouncing achieves this by waiting for a pause in the user input before executing the function, reducing unnecessary API calls and improving performance.
 
+----------------------------------------------
+
+16. 🔹 What is Currying?
+
+👉 Currying means:
+Converting a function with multiple arguments into a sequence of functions, each taking one argument at a time.
+
+💡 Normal Function
+function add(a, b) {
+  return a + b;
+}
+
+add(2, 3); // 5
+🔥 Curried Version
+function add(a) {
+  return function(b) {
+    return a + b;
+  };
+}
+
+add(2)(3); // 5
+🧠 How it works
+add(2) → returns function(b)
+function(b) → returns 2 + b
+⚡ Real Use Case
+function multiply(a) {
+  return function(b) {
+    return a * b;
+  };
+}
+
+const double = multiply(2);
+double(5); // 10
+
+👉 Reusable functions (very powerful)
+
+🧠 Interview Line
+
+“Currying is a technique where a function is transformed into a sequence of functions, each taking one argument, enabling partial application and reusability.”
+
+🧠 2️⃣ Memoization in JavaScript
+🔹 What is Memoization?
+
+👉 Memoization means:
+
+Storing results of expensive function calls and returning the cached result when the same input occurs again.
+
+💡 Without Memoization
+function square(n) {
+  console.log("Calculating...");
+  return n * n;
+}
+
+square(5); // Calculating... → 25
+square(5); // Calculating again → 25
+🔥 With Memoization
+function memoizedSquare() {
+  let cache = {};
+
+  return function(n) {
+    if (cache[n]) {
+      console.log("From cache");
+      return cache[n];
+    } else {
+      console.log("Calculating...");
+      cache[n] = n * n;
+      return cache[n];
+    }
+  };
+}
+
+const square = memoizedSquare();
+
+square(5); // Calculating... → 25
+square(5); // From cache → 25
+🧠 How it works
+First call → calculate + store
+Next call → return from cache
+⚡ Real Use Cases
+API calls caching
+Expensive calculations
+React performance optimization
+🧠 Interview Line
+
+“Memoization is an optimization technique where we cache function results to avoid repeated calculations for the same inputs, improving performance.”

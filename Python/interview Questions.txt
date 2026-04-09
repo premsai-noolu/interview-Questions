@@ -1488,3 +1488,48 @@ Output:
     "age": 25,
     "language": "Python"
 }
+
+-----------------------------
+
+21. 🔹 What is __init__ in Python?
+__init__ is a constructor method in Python classes
+It is automatically called when you create an object
+
+👉 It is used to initialize (set up) object data
+
+Example:
+class Person:
+    def __init__(self, name):
+        self.name = name
+
+p1 = Person("John")
+print(p1.name)   # Output: John
+
+👉 Here:
+
+When Person("John") is created, __init__ runs automatically
+It sets name for that object
+🔹 What is self?
+self refers to the current object (instance) of the class
+It is used to access variables and methods inside the class
+
+👉 You must write self as the first parameter in class methods
+
+Example:
+class Person:
+    def __init__(self, name):
+        self.name = name   # instance variable
+
+    def greet(self):
+        print("Hello", self.name)
+
+p1 = Person("John")
+p1.greet()   # Output: Hello John
+
+👉 Here:
+
+self.name stores data specific to that object
+self connects the method to that object
+🧠 Easy way to remember:
+__init__ → runs when object is created
+self → means this current object
