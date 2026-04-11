@@ -1,7 +1,5 @@
 1. What is Node.js and how it works?
 
-🌟 What is Node.js?
-
 Node.js is a runtime environment that lets you run JavaScript outside the browser, mainly on the server side.
 
 ➡️ Normally, JavaScript runs only inside browsers (like Chrome).
@@ -10,25 +8,18 @@ Node.js is a runtime environment that lets you run JavaScript outside the browse
 It’s built on Google Chrome’s V8 engine, which makes it very fast at executing JavaScript code.
 
 ⚙️ How Node.js Works (Simple Explanation)
-
 Node.js uses a single-threaded, event-driven architecture — meaning it handles many requests at the same time without creating multiple threads.
 
 Here’s how it works step by step:
 
 📨 A client sends a request (for example, to fetch data or upload a file).
-
 🧠 Node.js puts this request in an event queue.
-
 ⚡ If it’s a simple task (like reading data from memory), Node.js handles it directly.
-
 🧩 If it’s a long-running task (like reading a file or querying a database), Node.js sends it to the worker threads via the event loop, and keeps handling other requests in the meantime.
-
 ✅ Once the task is done, the result is sent back to the main thread, and Node.js sends the response to the client.
 
 🔄 In Short:
-
 Node.js = JavaScript + V8 Engine + Event Loop (non-blocking I/O)
-
 It’s fast, lightweight, and great for real-time apps like chat apps, streaming services, or APIs.
 
 💬 Example to Remember Easily:
@@ -37,11 +28,8 @@ Think of Node.js as a chef who takes multiple orders (requests) at once.
 Instead of cooking each meal alone (blocking others), the chef gives some tasks to helpers (workers) — and keeps taking more orders.
 When helpers finish, the chef serves the dishes (responses) quickly. 🍽️
 
----
-
+-------
 2. How do you manage packages in your node.js project?
-
-📦 How I manage packages in a Node.js project
 
 In Node.js, packages are reusable pieces of code (like libraries or modules) that help add features easily — for example, Express for servers or Mongoose for MongoDB.
 
@@ -52,13 +40,11 @@ We manage these packages using npm (Node Package Manager) or yarn.
 🏗️ Initialize the project:
 
 npm init
-
 → This creates a package.json file — it stores all project details and dependencies.
 
 📥 Install packages:
 
 npm install express
-
 → This downloads the package into a node_modules folder and adds it to package.json.
 
 🧾 package.json:
@@ -71,19 +57,15 @@ Records exact versions of all installed packages — ensures consistency across 
 If someone else downloads your project, they can run:
 
 npm install
-
 → It reads package.json and installs everything automatically.
 
 🧹 Remove a package:
-
 npm uninstall express
 
 🪄 In short:
-
 I use npm to install, update, or remove packages, and manage them through package.json — which keeps my project organized and consistent.
 
----
-
+------------------
 3. How is Node.js better than other frameworks most popularly used?
 
 Why Node.js is better than other frameworks
@@ -107,11 +89,9 @@ Node.js is lightweight and scalable, great for building microservices and large-
 With tools like WebSockets, Node.js is perfect for real-time communication apps like chat, gaming, or live dashboards.
 
 🪄 In short:
-
 Node.js is fast, scalable, and uses the same language (JavaScript) on both frontend and backend — making development quicker and smoother than many other backend frameworks.
 
----
-
+-----------------
 4. Explain the steps how “Control Flow” controls the functions calls?
 
 ⚙️ What is Control Flow?
@@ -174,8 +154,7 @@ Node.js control flow means:
 2️⃣ Send async tasks to background →
 3️⃣ When they finish, the event loop runs their callbacks.
 
----
-
+--------------------
 5. What are some commonly used timing features of Node.js?
 
 1. setTimeout()
@@ -232,8 +211,6 @@ setImmediate(() => console.log("Runs immediately after current code"));
 
 6. What are the advantages of using promises instead of callbacks?
 
-💭 What are Promises?
-
 A Promise in Node.js is an object that represents the result of an asynchronous operation — it can be:
 
 ✅ Resolved (success)
@@ -283,7 +260,6 @@ console.log(err);
 }
 
 🪄 In short:
-
 Promises make asynchronous code cleaner, easier to read, and easier to handle errors — unlike callbacks, which can become messy (“callback hell”).
 
 ---
