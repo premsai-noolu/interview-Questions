@@ -504,13 +504,9 @@ module.exports is used to export code (functions, objects, variables) from one f
 13. what is libuv?
 
 libuv is a C library that Node.js uses under the hood to handle asynchronous (non-blocking) operations like:
-
 File system tasks (reading/writing files)
-
 Network requests
-
 Timers
-
 Child processes
 
 💡 In simple words:
@@ -528,3 +524,163 @@ Handles Async I/O → reads files, handles sockets, timers, etc.
 Manages Thread Pool → runs slow operations (like file access) in the background.
 
 Provides Cross-Platform Support → works on Windows, macOS, and Linux the same way.
+
+------------------------------------
+14. Suppose you have a server with many incoming requests, and users are hitting APIs. Do these APIs use the thread pool?
+
+👉 When many users hit a server, it does NOT create one thread per request.
+Instead, it uses a smart system from the OS (like epoll/kqueue) to handle everything efficiently.
+
+🏠 Real-Life Example (Very Easy)
+
+Imagine a restaurant 🍽️
+
+❌ Old Method (Bad Way)
+100 customers come
+You assign 1 waiter per customer
+So you need 100 waiters 😵
+
+👉 Problem:
+
+Too many waiters = expensive + slow + messy
+✅ Smart Method (Used in Node.js / libuv)
+You have just a few waiters (threads)
+They don’t stand with one customer
+Instead, they:
+Take order from one table
+Move to another table
+Come back when food is ready
+
+👉 This is how Node.js works
+
+💻 Now Map This to Your Question
+🔹 What are “requests”?
+Users calling APIs (like opening Instagram, YouTube, etc.)
+🔹 What is a “thread”?
+A worker that handles tasks
+❌ Does each API use a thread pool?
+
+👉 NO
+
+API requests (network calls) are handled differently
+They don’t use thread pool
+🤔 Then how are requests handled?
+
+Instead of creating many threads, Node.js uses:
+
+⚙️ OS Mechanisms (epoll / kqueue)
+
+Think of them like:
+👉 A smart watchman 👀 who watches all doors (connections)
+
+🧩 How it works step-by-step
+Many users send requests → come to server
+Each request connects via a socket (like a communication pipe)
+OS keeps track of all sockets using:
+epoll (Linux)
+kqueue (macOS)
+When something happens (data arrives):
+👉 OS says: “Hey! This socket is ready!”
+Node.js handles it without creating new threads
+🎯 Key Point
+
+👉 Instead of:
+❌ 1 thread per request
+
+👉 We use:
+
+✅ 1 system to monitor thousands of requests
+🔥 Why is this powerful?
+Handles thousands of users at once
+Uses very few resources
+Very fast and scalable
+🧠 Final Simple Summary
+
+👉 APIs (network requests)
+➡️ Do NOT use thread pool
+
+👉 Instead, they use:
+
+Sockets
+OS tools like epoll/kqueue
+
+👉 Which helps:
+
+Handle many users
+Without creating many threads
+
+--------------------------------
+
+15. 🌐 What is a REST API? (Simple Explanation)
+
+👉 A REST API is a way for two systems (like a mobile app and a server) to talk to each other over the internet.
+
+🧠 Very Simple Definition
+
+REST API = A set of rules to send and get data using HTTP (like GET, POST, etc.)
+
+📱 Real-Life Example
+
+Think about ordering food on an app 🍔
+
+You (client) → send request: “Give me menu”
+Server → sends menu (data)
+You → place order
+Server → confirms order
+
+👉 This communication happens using a REST API
+
+🔄 How It Works
+
+A REST API uses HTTP methods:
+
+🔹 1. GET (Read data)
+
+👉 “Give me data”
+
+Example:
+Get all users
+
+GET /users
+🔹 2. POST (Create data)
+
+👉 “Add new data”
+
+Example:
+Create a new user
+
+POST /users
+🔹 3. PUT (Update data)
+
+👉 “Update existing data”
+
+Example:
+Update user details
+
+PUT /users/1
+🔹 4. DELETE (Remove data)
+
+👉 “Delete data”
+
+Example:
+Delete a user
+
+DELETE /users/1
+📦 Data Format
+Mostly uses JSON (easy to read)
+
+Example:
+
+{
+  "name": "Prem",
+  "age": 22
+}
+🎯 Key Points (Important for Interviews)
+REST stands for Representational State Transfer
+Uses HTTP methods (GET, POST, PUT, DELETE)
+Works on client-server architecture
+Data is usually in JSON format
+It is stateless (server doesn’t remember previous request)
+🧠 1-Line Interview Answer
+
+👉 “A REST API is a way for client and server to communicate over HTTP using standard methods like GET, POST, PUT, and DELETE to perform operations on data.”
