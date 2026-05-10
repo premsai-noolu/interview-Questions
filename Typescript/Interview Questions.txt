@@ -191,10 +191,10 @@ type User = { age: number }; // ❌ Error
 👉 An interface defines the structure (shape) of an object
 
 👉 Think of it like:
-
 “A contract — if you follow this interface, your object must have these properties”
 
 🧱 1. Basic Example
+
 interface User {
   name: string;
   age: number;
@@ -336,7 +336,6 @@ function identity(value: any) {
 }
 
 👉 Problem:
-
 Loses type safety
 Returns any
 
