@@ -124,8 +124,8 @@ Customers secure their applications and data inside the cloud.
 3. What is an EC2 instance?
 
 An EC2 instance is a virtual server hosted in AWS that provides scalable compute capacity.
-You can choose your own:
 
+You can choose your own:
 Operating system
 Storage
 CPU and memory configuration
@@ -615,7 +615,7 @@ How the Traffic Flows
 EC2 (private IP) → sends request to NAT Gateway
 NAT Gateway → replaces private IP with its public IP (Elastic IP) and forwards to the internet
 Internet → sends response back to NAT’s public IP
-NAT Gateway → maps it back to the original private IP of the EC2 and sends it into the VPC
+NAT Gateway → maps it back to the original private IP of the EC2 and sends it into the EC2
 
 ✅ The key point:
 Connections must start from inside (from the EC2).
@@ -624,27 +624,19 @@ Outside systems cannot directly start a connection to the private EC2, because i
 🔐 Why is this secure?
 
 The EC2 instance is in a private subnet → no direct internet access, no public IP.
-
 Only outbound connections are allowed via NAT.
-
 Inbound connections from the internet are blocked by design, since:
-
 There’s no route from Internet Gateway → private subnet.
-
 NAT Gateway does not accept new connections initiated from outside.
 
 🆚 Alternative: NAT Instance
 
 You can also use a NAT Instance instead of a NAT Gateway:
-
 It’s just an EC2 instance configured to act like NAT.
 
 But:
-
 You must patch, scale, manage it yourself.
-
-Can be a single point of failure unless you handle HA.
-
+Can be a single point of failure unless you handle.
 NAT Gateway is managed, scalable, and more reliable, so it’s preferred in real projects and interviews.
 
 🔁 How to say it in one interview-style answer

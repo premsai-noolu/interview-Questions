@@ -677,44 +677,71 @@ Previous total is reused (cached)
 useCallback is a React Hook that lets you save (or memoize) a function, so that the same function instance is reused between re-renders — unless its dependencies change.
 
 💬 In simple words:
-
 useCallback remembers a function so that it doesn’t get recreated every time your component re-renders.
+useCallback is used to memoize a function, so React doesn't create a new function on every render unless its dependencies change.
 
-import React, { useState, useCallback } from "react";
-
-function Counter({ onClick }) {
-console.log("Child re-rendered");
-return <button onClick={onClick}>Increment</button>;
-}
+Without useCallback
+import { useState } from "react";
 
 function App() {
-const [count, setCount] = useState(0);
-const [text, setText] = useState("");
+  const [count, setCount] = useState(0);
 
-// ✅ useCallback memoizes the function
-const handleClick = useCallback(() => {
-setCount((prev) => prev + 1);
-}, []);
+  const handleClick = () => {
+    console.log("Button clicked");
+  };
 
-return (
+  return (
+    <div>
+      <p>Count: {count}</p>
 
-<div>
-<h2>Count: {count}</h2>
-<Counter onClick={handleClick} />
-<input value={text} onChange={(e) => setText(e.target.value)} />
-</div>
-);
+      <button onClick={() => setCount(count + 1)}>
+        Increment
+      </button>
+
+      <Child onClick={handleClick} />
+    </div>
+  );
 }
 
-export default App;
-🧠 Now:
+function Child({ onClick }) {
+  console.log("Child rendered");
+  return <button onClick={onClick}>Child Button</button>;
+}
 
-handleClick function is the same across re-renders.
+Every time count changes, App re-renders and a new handleClick function is created.
 
-Typing in the input won’t cause the Counter to re-render.
+With useCallback
+import { useState, useCallback } from "react";
 
+function App() {
+  const [count, setCount] = useState(0);
+
+  const handleClick = useCallback(() => {
+    console.log("Button clicked");
+  }, []);
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+
+      <button onClick={() => setCount(count + 1)}>
+        Increment
+      </button>
+
+      <Child onClick={handleClick} />
+    </div>
+  );
+}
+
+function Child({ onClick }) {
+  console.log("Child rendered");
+  return <button onClick={onClick}>Child Button</button>;
+}
+
+Now handleClick keeps the same reference across renders because the dependency array is empty ([]).
+Without useCallback → Child re-renders whenever parent re-renders because onClick is a new function.
+With useCallback → Child does not re-render if only count changes because onClick reference stays the same.
 ✅ Better performance!
-
 ---
 
 13. 🧩 What are Custom Hooks in React?
