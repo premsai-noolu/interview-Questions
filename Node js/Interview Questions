@@ -11,7 +11,6 @@ It’s built on Google Chrome’s V8 engine, which makes it very fast at executi
 Node.js uses a single-threaded, event-driven architecture — meaning it handles many requests at the same time without creating multiple threads.
 
 Here’s how it works step by step:
-
 📨 A client sends a request (for example, to fetch data or upload a file).
 🧠 Node.js puts this request in an event queue.
 ⚡ If it’s a simple task (like reading data from memory), Node.js handles it directly.
