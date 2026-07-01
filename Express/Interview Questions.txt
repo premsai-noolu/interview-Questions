@@ -1191,6 +1191,10 @@ Rate limiting restricts the number of API requests a client can make in a given 
 JWT (JSON Web Token) authentication is a stateless authentication mechanism where the server verifies a signed token instead of storing session data.
 In Express, JWT is commonly used to secure APIs in MERN applications.
 
+Stateless authentication means:
+
+The server does not store any information about the user's login session. Every request contains all the information needed to authenticate the user.
+
 🔹 High-Level Flow (Interview Ready ⭐)
 Client → Login → JWT Issued → Store Token → Send Token → Verify Token → Access API
 
