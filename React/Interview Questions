@@ -368,7 +368,147 @@ clearInterval(timer); // Cleanup when component unmounts or re-runs
 };
 }, []);
 
----
+-------------------
+
+very simple interview-friendly examples for each type of side effect using useEffect.
+
+1. Fetching data from an API
+import { useEffect, useState } from "react";
+
+function Users() {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    fetch("https://jsonplaceholder.typicode.com/users")
+      .then((response) => response.json())
+      .then((data) => setUsers(data));
+  }, []);
+
+  return (
+    <div>
+      {users.map((user) => (
+        <p key={user.id}>{user.name}</p>
+      ))}
+    </div>
+  );
+}
+Explanation
+useEffect(() => {
+  // API call
+}, []);
+
+The empty dependency array [] means:
+Run the effect only after the initial render.
+
+2. Manipulating the DOM directly
+
+Example: Change the page title.
+
+import { useEffect } from "react";
+
+function Home() {
+  useEffect(() => {
+    document.title = "Welcome to Home Page";
+  }, []);
+
+  return <h1>Home Page</h1>;
+}
+
+
+document.title exists outside the React component, so changing it is a side effect.
+
+Another simple example using useRef:
+
+import { useEffect, useRef } from "react";
+
+function InputBox() {
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
+
+  return <input ref={inputRef} />;
+}
+
+Here, after the component renders, the input automatically gets focus.
+
+3. Setting up timers or intervals
+import { useEffect } from "react";
+
+function Timer() {
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      console.log("Hello every 1 second");
+    }, 1000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
+
+  return <h1>Timer Running</h1>;
+}
+Explanation
+const intervalId = setInterval(...)
+Starts the interval.
+
+return () => {
+  clearInterval(intervalId);
+};
+
+This is the cleanup function. It runs when the component unmounts.
+This prevents unnecessary intervals and memory leaks.
+
+4. Subscribing and unsubscribing to events
+
+Example: Listen for window resize.
+
+import { useEffect } from "react";
+
+function WindowSize() {
+  useEffect(() => {
+    const handleResize = () => {
+      console.log("Window resized");
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  return <h1>Resize the window</h1>;
+}
+
+Subscribe:
+window.addEventListener("resize", handleResize);
+
+Unsubscribe during cleanup:
+return () => {
+  window.removeEventListener("resize", handleResize);
+};
+
+Easy way to remember for interviews
+Side Effect	            Simple Example
+API call	                fetch()
+DOM manipulation	       document.title or input focus
+Timer	                   setInterval()
+Event subscription	     addEventListener()
+
+The key idea is:
+
+useEffect(() => {
+  // perform side effect
+
+  return () => {
+    // cleanup if needed
+  };
+}, [dependencies]);
+
+Interview answer: useEffect is a React Hook used to perform side effects after rendering, such as API calls, DOM updates, timers, and event subscriptions. The dependency array controls when the effect runs. [] means after initial mount, [value] means when that value changes, and no dependency array means after every render.
+-------------------
 
 8. What is the useContext hook and when should you use it?
 
